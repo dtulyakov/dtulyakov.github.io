@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Redmine + Git + BitBucket + Webhooks"/>
+    <meta property="og:url" content="./rgb.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./rgb.html" />
+
+    <title>Redmine + Git + BitBucket + Webhooks | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li class="active"><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li ><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./rgb.html" rel="bookmark"
+             title="Permalink to Redmine + Git + BitBucket + Webhooks">Redmine + Git + BitBucket + Webhooks</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/devops.html">DevOps</a>
+
+    on 2016-06-27
+
+        |
+        tags:         <a href="./tag/webhooks.html">Webhooks</a>
+        <a href="./tag/redmine.html">Redmine</a>
+        <a href="./tag/git.html">Git</a>
+        <a href="./tag/bitbucket.html">BitBucket</a>
+
+
+        |
+        <a href="./rgb.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <h6>Шаг за шагом</h6>
+<p>Для начала надо в редмайне создать хранилище. Я это сделал банальным <strong>git clone</strong>.</p>
+<p>Затем указать в настройках где брать код</p>
+<p>У меня это выглядит так:</p>
+<p><a href="/images/redmine-git.png"><img src="/images/redmine-git.png" style="width: 750.0px;"></a></p>
+<p>Затем надо создать хук на обновление проекта</p>
+<p>Для хука нужен <strong>id</strong> проекта. Вот этот <strong>id</strong> брать надо из урла в редмайне http://r.example.org/projects/<id></p>
+<p>То есть для урла http://r.example.org/projects/example-org <strong>id=example-org</strong></p>
+<p>В итоге урл для хука должен быть такой <strong>http://r.example.org/github_hook?project_id=example-org</strong></p>
+<p><a href="/images/webhook-add.png"><img src="/images/webhook-add.png" style="width: 750.0px;"></a></p>
+<p>Жмакаю сохранить и вижу вот такую картину</p>
+<p><a href="/images/webhooks.png"><img src="/images/webhooks.png" style="width: 750.0px;"></a></p>
+<p>В последствии можно смотреть количество срабатываний хука но главное, что гит хранилище в редмайне будет обновляться только после пуша в битбакет а не каждый час или 5 минут по крону.</p>
+<p>Посмотреть за ходом выполнения можно (а при настройке даже нужно) в логе редмайна:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>tail -fn0 ~/redmine-3.2/log/production.log<span class="p">|</span>ccze -A
+</pre></div>
+</td></tr></table>
+
+<h6>Ссылки</h6>
+<ul>
+<li><a href="https://github.com/dtulyakov/redmine_github_hook/" rel="nofollow" target="_blank"><img alt="redmine_github_hook" src="https://img.shields.io/badge/gem-redmine_github_hook-brightgreen.svg"></a> под мой вариант я себе форкнул и переделал плагин</li>
+<li><a href="http://www.redmine.org/projects/redmine/wiki/RusGuide" rel="nofollow" target="_blank">Документация по Redmine</a> на русском языке.</li>
+<li><a href="https://bitbucket.org/" rel="nofollow" target="_blank">BitBucket</a></li>
+</ul>
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "rgb.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

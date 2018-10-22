@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Денис Туляков wiki - Web</title><link href="https://dtulyakov.github.io/" rel="alternate"></link><link href="http://www.dtulyakov.ru/feeds/web.atom.xml" rel="self"></link><id>https://dtulyakov.github.io/</id><updated>2016-07-17T20:40:00+03:00</updated><entry><title>Apache revers proxy и проброс IP клиента</title><link href="https://dtulyakov.github.io/apache_rproxy.html" rel="alternate"></link><published>2016-07-17T09:58:00+03:00</published><updated>2016-07-17T20:40:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:dtulyakov.github.io,2016-07-17:/apache_rproxy.html</id><summary type="html">&lt;p&gt;Как apache научить понимать ip клиента вместо ip адреса nginx&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;img src="/images/apache.svg" style="width: 50.0px;"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Apache в роле реверсивного прокси сервера&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Список модулей для проксирования&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://httpd.apache.org/docs/current/mod/mod_proxy.html" rel="nofollow" target="_blank"&gt;mod_proxy&lt;/a&gt; - основной модуль Apache&lt;/li&gt;
+&lt;li&gt;mod_proxy_ajp - для работы с протоколом &lt;a href="https://ru.wikipedia.org/wiki/Apache_JServ_Protocol" rel="nofollow" target="_blank"&gt;AJP&lt;/a&gt; (Apache JServe Protocol version 1.3)&lt;/li&gt;
+&lt;li&gt;mod_proxy_fcgi - для FastCGI&lt;/li&gt;
+&lt;li&gt;mod_proxy_wstunnel - для сокетов (WS, WSS)&lt;/li&gt;
+&lt;li&gt;mod_proxy_balancer - для балансировки&lt;/li&gt;
+&lt;li&gt;mod_proxy_http - для протоколов HTTP/0.9, HTTP/1.0, и HTTP/1.1&lt;/li&gt;
+&lt;li&gt;mod_proxy_hml - один из основных компонентов обратного прокси-сервера ProxyPassReverse&lt;/li&gt;
+&lt;li&gt;mod_proxy_ftp - для протокола FTP&lt;/li&gt;
+&lt;li&gt;mod_proxy_connect - для туннелирования SSL&lt;/li&gt;
+&lt;li&gt;mod_cache - для кеширование&lt;/li&gt;
+&lt;li&gt;mod_headers - для управление заголовками HTTP&lt;/li&gt;
+&lt;li&gt;mod_deflate - для сжатие&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://httpd.apache.org/docs/current/mod/mod_remoteip.html" rel="nofollow" target="_blank"&gt;mod_remoteip&lt;/a&gt; - для передачи IP адреса user agent через прокси&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Пример простого проксирования на внутренний серевр &lt;a href="https://ru.wikipedia.org/wiki/DMZ_(компьютерные_сети)" rel="nofollow" target="_blank"&gt;DMZ&lt;/a&gt;, Apache слушает на петле, порт 8080&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;VirtualHost&lt;/span&gt; &lt;span class="err"&gt;127.0.0.1:8080&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;Proxy&lt;/span&gt; &lt;span class="err"&gt;*&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+        Order deny,allow
+        Allow from all
+    &lt;span class="nt"&gt;&amp;lt;/Proxy&amp;gt;&lt;/span&gt;
+    ServerAdmin dtulyakov@example.org
+    ServerName lib.example.org
+    ServerAlias lib.example.org
+    ProxyPreserveHost On
+    ProxyRequests Off
+    ProxyPass / http://lib.local:80/
+    ProxyPassReverse / http://lib.local:80/
+    LogLevel warn
+&lt;span class="nt"&gt;&amp;lt;/VirtualHost&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Пример для кластера&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;VirtualHost&lt;/span&gt; &lt;span class="err"&gt;127.0.0.1:8080&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;Proxy&lt;/span&gt; &lt;span class="err"&gt;balancer://mycluster&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+        BalancerMember http://10.0.3.200:8080/
+        BalancerMember http://10.0.4.200:8080/
+        ProxyPass / balancer://mycluster
+    &lt;span class="nt"&gt;&amp;lt;/Proxy&amp;gt;&lt;/span&gt;
+    ServerAdmin dtulyakov@example.org
+    ServerName lib.example.org
+    ServerAlias lib.example.org
+    ProxyRequests Off
+    ProxyPass / balancer://mycluster
+    ProxyPassReverse / balancer://mycluster
+    LogLevel warn
+&lt;span class="nt"&gt;&amp;lt;/VirtualHost&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Пример SSL прокси&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;VirtualHost&lt;/span&gt; &lt;span class="err"&gt;*:443&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;Proxy&lt;/span&gt; &lt;span class="err"&gt;*&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+        Order deny,allow
+        Allow from all
+    &lt;span class="nt"&gt;&amp;lt;/Proxy&amp;gt;&lt;/span&gt;
+    SSLEngine on
+    SSLProtocol all -SSLv2
+    SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+    SSLCertificateFile /etc/ssl/example.org.crt
+    SSLCertificateKeyFile /etc/ssl/example.org.key
+    SSLProxyEngine on
+    ProxyPreserveHost On
+    ProxyRequests Off
+    ProxyPass / https://backend.example.org
+    ProxyPassReverse / https://backend.example.org
+    ProxyPass / balancer://balancer_cluster_name
+    LogLevel warn
+    ErrorLog ${APACHE_LOG_DIR}/example.org-ssl-error.log
+    TransferLog ${APACHE_LOG_DIR}/example.org-ssl-transfer.log
+    CustomLog ${APACHE_LOG_DIR}/example.org-ssl-access.log combined
+&lt;span class="nt"&gt;&amp;lt;/VirtualHost&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Необходимые пакеты для SSL прокси&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt install libapache2-mod-proxy-html libapache2-mod-gnutls
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;&lt;strong&gt;Apache за прокси сервером не важно за Nginx Varnish Apache или другим&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Что надо сделать для того, что бы приезжал IP адрес user agent а не шлюза на котором установлен прокси.&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt install libapache2-mod-rpaf
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Пример настройки одного форума&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vi /etc/apache2/mods-enabled/rpaf.conf
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3
+4
+5
+6
+7
+8&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;IfModule&lt;/span&gt; &lt;span class="err"&gt;rpaf_module&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    RPAFenable On
+    RPAFsethostname Off
+    # Можно указать несколько (своих) адресов которые не должны попадать
+    RPAFproxy_ips 127.0.0.1 10.0.3.1
+    # X-Forwarded-For to something of your choice:
+    RPAFheader X-Real-IP
+&lt;span class="nt"&gt;&amp;lt;/IfModule&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;У Apache есть свой модуль &lt;a href="https://httpd.apache.org/docs/trunk/mod/mod_remoteip.html" rel="nofollow" target="_blank"&gt;remoteip&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Но я его пока не пробовал использовать&lt;/p&gt;</content><category term="Apache"></category><category term="rpaf"></category><category term="proxy"></category><category term="remoteip"></category></entry><entry><title>Apache MPM (Multi-Processing Module)</title><link href="https://dtulyakov.github.io/apache_mpm.html" rel="alternate"></link><published>2016-07-17T08:58:00+03:00</published><updated>2016-07-17T09:02:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:dtulyakov.github.io,2016-07-17:/apache_mpm.html</id><summary type="html">&lt;p&gt;Какие бывают модули мультипроцессовой обработки и основные фантазии тех, кто настраивает связки Nginx + Apache&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;img src="/images/apache.svg" style="width: 50.0px;"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;О модулях мультипроцессовой обработки&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Из коробки в каталоге модулей &lt;strong&gt;apache2/mods-available/&lt;/strong&gt; для работы с мультипроцессовой обработкой доступны следующие модули:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://httpd.apache.org/docs/current/mod/prefork.html" rel="nofollow" target="_blank"&gt;mpm_prefork&lt;/a&gt; - рекомендуется для важных и критичных к отказу серверов (используется по умолчанию)&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://httpd.apache.org/docs/current/mod/worker.html" rel="nofollow" target="_blank"&gt;mpm_worker&lt;/a&gt; - рекомендуется для средне-нагруженных серверов&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://httpd.apache.org/docs/current/mod/event.html" rel="nofollow" target="_blank"&gt;mpm_event&lt;/a&gt; - рекомендуется для высоко-нагруженных проектов&lt;/li&gt;
+&lt;li&gt;Дополнительно доступен для установки пакет &lt;em&gt;apache2-mpm-itk&lt;/em&gt; обеспечивающий модуль mpm_itk - рекомендуется для хостинг провайдеров&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Теперь о каждом по отдельности&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Apache MPM PreFork&lt;/strong&gt; - каждый дочерний процесс обрабатывает один поток(thread) на одно соединение.
+После запуска модуль создает некоторое количество процессов.
+Запущенный процесс не требуют время на вызов во время запроса к серверу., и является наиболее быстрым, в сравнении с другими MPM.
+Производительность данного модуля эффективна при постоянном количестве соединений.
+При резком увеличении подключений будут запускаться дочерние процессы а это может очень отрицательно на памяти.
+Этот метод обеспечивает наибольшую защищённость каждого потока. Так как любой поток изолирован друг от других.
+Важный момент в том, что &lt;strong&gt;для работы с mod_php PreFork совместим&lt;/strong&gt; в отличии от следующих двух.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Apache MPM worker&lt;/strong&gt; - каждый дочерний процесс обрабатывает несколько потоков(thread).
+Такой подход менее ресурсоёмкий по сравнению с PreFork.
+В плане надёжности этот модуль имеет недостаток - если происходит ошибка в потоке то это затронит весь дочерний процесс.
+Так же Worker связывает каждое keep-alive соединение с потоком, то есть каждый поток будет выполняться пока соединение не будет окончательно разорвано.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Apache MPM Event&lt;/strong&gt; - похож на MPM Worker.
+Основное отличие Event от Worker - он выделяет поток для каждого соединения, и передает дочерним потокам запрос.
+После обработки запроса поток освобождается для следующего запроса.
+Обработка SSL-соединений будет аналогично как у модуля Worker.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Теперь о фантазиях "мега специалистов" относительно свзки Nginx + Apache&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Как было сказано выше по уолчанию активен mpm_prefork который имеет следующие параметры&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vi mpm_prefork.conf
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3
+4
+5
+6
+7&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;IfModule&lt;/span&gt; &lt;span class="err"&gt;mpm_prefork_module&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    StartServers            5
+    MinSpareServers         5
+    MaxSpareServers         10
+    MaxRequestWorkers       150
+    MaxConnectionsPerChild  0
+&lt;span class="nt"&gt;&amp;lt;/IfModule&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Что надо дабы развеять фантазии? Фантазии относительно того, что Apache находясь за Nginx не будет создавать дочерних процессов(демонов) - на каждое соединение. Надо утилита &lt;strong&gt;ab&lt;/strong&gt; ну и собвственно настроенный Nginx + Apache. Предположим что Nginx слушает соединение на порту 80 а Apache на порту 8080. Запускаем ab в 100 потоков на нулевую петлю и счиитам количество http выдаваемое netstat. Одновременно смотрим количество демонов через ps. Проделываем это всё для Nginx и для Apache.
+&lt;strong&gt;В обоих случаях у меня количество подключений и дочерних демонов (процессов) Apache было одинаковым&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Понятно, что Nginx кеширует запросы и очень быстро отаёт статику JS скрипты и прочие файлы. Но не надо фантазировать о том, что Apache перестанет плодить дочерние демоны после того как его спрячешь за Nginx!
+А самое главное то, что ресурс для работы Nginx, Varnish, HAProxy, Apache Traffic Server (TS) или Squid либо чего то ещё - тоже потребуется!&lt;/p&gt;</content><category term="Apache"></category><category term="MPM"></category><category term="Multi-Processing"></category></entry></feed>

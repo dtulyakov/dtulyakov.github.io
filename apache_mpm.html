@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Apache MPM (Multi-Processing Module)"/>
+    <meta property="og:url" content="./apache_mpm.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./apache_mpm.html" />
+
+    <title>Apache MPM (Multi-Processing Module) | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li class="active"><a href="./category/web.html">Web</a></li>
+                            <li ><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./apache_mpm.html" rel="bookmark"
+             title="Permalink to Apache MPM (Multi-Processing Module)">Apache MPM (Multi-Processing Module)</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/web.html">Web</a>
+
+    on 2016-07-17
+
+        |
+        tags:         <a href="./tag/apache.html">Apache</a>
+        <a href="./tag/mpm.html">MPM</a>
+        <a href="./tag/multi-processing.html">Multi-Processing</a>
+
+
+        |
+        <a href="./apache_mpm.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p><img src="/images/apache.svg" style="width: 50.0px;"></p>
+<p><strong>О модулях мультипроцессовой обработки</strong></p>
+<p>Из коробки в каталоге модулей <strong>apache2/mods-available/</strong> для работы с мультипроцессовой обработкой доступны следующие модули:</p>
+<ul>
+<li><a href="https://httpd.apache.org/docs/current/mod/prefork.html" rel="nofollow" target="_blank">mpm_prefork</a> - рекомендуется для важных и критичных к отказу серверов (используется по умолчанию)</li>
+<li><a href="https://httpd.apache.org/docs/current/mod/worker.html" rel="nofollow" target="_blank">mpm_worker</a> - рекомендуется для средне-нагруженных серверов</li>
+<li><a href="https://httpd.apache.org/docs/current/mod/event.html" rel="nofollow" target="_blank">mpm_event</a> - рекомендуется для высоко-нагруженных проектов</li>
+<li>Дополнительно доступен для установки пакет <em>apache2-mpm-itk</em> обеспечивающий модуль mpm_itk - рекомендуется для хостинг провайдеров</li>
+</ul>
+<p><strong>Теперь о каждом по отдельности</strong></p>
+<p><strong>Apache MPM PreFork</strong> - каждый дочерний процесс обрабатывает один поток(thread) на одно соединение.
+После запуска модуль создает некоторое количество процессов.
+Запущенный процесс не требуют время на вызов во время запроса к серверу., и является наиболее быстрым, в сравнении с другими MPM.
+Производительность данного модуля эффективна при постоянном количестве соединений.
+При резком увеличении подключений будут запускаться дочерние процессы а это может очень отрицательно на памяти.
+Этот метод обеспечивает наибольшую защищённость каждого потока. Так как любой поток изолирован друг от других.
+Важный момент в том, что <strong>для работы с mod_php PreFork совместим</strong> в отличии от следующих двух.</p>
+<p><strong>Apache MPM worker</strong> - каждый дочерний процесс обрабатывает несколько потоков(thread).
+Такой подход менее ресурсоёмкий по сравнению с PreFork.
+В плане надёжности этот модуль имеет недостаток - если происходит ошибка в потоке то это затронит весь дочерний процесс.
+Так же Worker связывает каждое keep-alive соединение с потоком, то есть каждый поток будет выполняться пока соединение не будет окончательно разорвано.</p>
+<p><strong>Apache MPM Event</strong> - похож на MPM Worker.
+Основное отличие Event от Worker - он выделяет поток для каждого соединения, и передает дочерним потокам запрос.
+После обработки запроса поток освобождается для следующего запроса.
+Обработка SSL-соединений будет аналогично как у модуля Worker.</p>
+<p><strong>Теперь о фантазиях "мега специалистов" относительно свзки Nginx + Apache</strong></p>
+<p>Как было сказано выше по уолчанию активен mpm_prefork который имеет следующие параметры</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>vi mpm_prefork.conf
+</pre></div>
+</td></tr></table>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="err">mpm_prefork_module</span><span class="nt">&gt;</span>
+    StartServers            5
+    MinSpareServers         5
+    MaxSpareServers         10
+    MaxRequestWorkers       150
+    MaxConnectionsPerChild  0
+<span class="nt">&lt;/IfModule&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<p>Что надо дабы развеять фантазии? Фантазии относительно того, что Apache находясь за Nginx не будет создавать дочерних процессов(демонов) - на каждое соединение. Надо утилита <strong>ab</strong> ну и собвственно настроенный Nginx + Apache. Предположим что Nginx слушает соединение на порту 80 а Apache на порту 8080. Запускаем ab в 100 потоков на нулевую петлю и счиитам количество http выдаваемое netstat. Одновременно смотрим количество демонов через ps. Проделываем это всё для Nginx и для Apache.
+<strong>В обоих случаях у меня количество подключений и дочерних демонов (процессов) Apache было одинаковым</strong></p>
+<p>Понятно, что Nginx кеширует запросы и очень быстро отаёт статику JS скрипты и прочие файлы. Но не надо фантазировать о том, что Apache перестанет плодить дочерние демоны после того как его спрячешь за Nginx!
+А самое главное то, что ресурс для работы Nginx, Varnish, HAProxy, Apache Traffic Server (TS) или Squid либо чего то ещё - тоже потребуется!</p>
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "apache_mpm.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

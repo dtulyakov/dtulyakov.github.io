@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Настройка vlan и bridge"/>
+    <meta property="og:url" content="./vlan.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./vlan.html" />
+
+    <title>Настройка vlan и bridge | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li class="active"><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./vlan.html" rel="bookmark"
+             title="Permalink to Настройка vlan и bridge">Настройка vlan и bridge</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/wiki.html">wiki</a>
+
+    on 2015-08-02
+
+        |
+        tags:         <a href="./tag/bridge.html">bridge</a>
+        <a href="./tag/vlan.html">vlan</a>
+        <a href="./tag/freebsd.html">FreeBSD</a>
+        <a href="./tag/ubuntu.html">Ubuntu</a>
+        <a href="./tag/linux.html">Linux</a>
+
+
+        |
+        <a href="./vlan.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p>Установка пакетов для работы с vlan и Bridge</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>sudo aptitude install vlan bridge-utils
+</pre></div>
+</td></tr></table>
+
+<p>Создать новые vlan и bridge интерфейсы в файле /etc/network/interfaces.
+В примере создам vlan 2 и 8 где физически работает на интерфейсе eth0, при этом созданный br0 будет забриджован с vlan id 8 - а сам vlan будет без ip адреса.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>vi /etc/network/interfaces
+</pre></div>
+</td></tr></table>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33</pre></div></td><td class="code"><div class="highlight"><pre><span></span>auto eth0
+iface eth0 inet manual
+  pre-up ifconfig <span class="nv">$IFACE</span> up
+  post-down ifconfig <span class="nv">$IFACE</span> down
+
+auto vlan2
+  iface vlan2 inet static
+  address <span class="m">192</span>.168.2.1
+  netmask <span class="m">255</span>.255.255.0
+  network <span class="m">192</span>.168.2.0
+  broadcast <span class="m">192</span>.168.2.255
+  mtu <span class="m">1500</span>
+  vlan_raw_device eth0
+
+auto eth0.8
+iface eth0.8 inet manual
+  vlan-raw-device eth0
+  pre-up ifconfig <span class="nv">$IFACE</span> up
+  post-down ifconfig <span class="nv">$IFACE</span> down
+
+auto br0
+iface br0 inet static
+  address <span class="m">195</span>.151.31.250
+  network <span class="m">195</span>.151.31.0
+  netmask <span class="m">255</span>.255.255.0
+  broadcast <span class="m">195</span>.151.31.255
+  gateway <span class="m">195</span>.151.31.1
+  bridge_ports eth0.8
+  bridge_stp off
+  bridge_fd <span class="m">0</span>
+  <span class="c1">#bridge_maxwait</span>
+  dns-nameservers <span class="m">192</span>.168.88.1
+  dns-search lxc
+</pre></div>
+</td></tr></table>
+
+<p>Перезапускаем сетевые интерфейсы и через команду ifconfig убеждаемся что vlan присутствуют в системе</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>sudo /etc/init.d/networking restart
+</pre></div>
+</td></tr></table>
+
+<p>Для некоторых дистрибутивов linux, (например Slackware) нет отдельных настроек в конфигурационных файлах для задания vlan
+Поэтому требуется знать как создавать vlan прямо из командной строки, а уже потом на основании этих команд написать простенький скрипт автозагрузки при старте системы
+Разберем создания vlan 10 с ip 192.168.10.1 на родительском интерфейсе eth0</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>ip link <span class="nb">set</span> up eth0
+vconfig add eth0 <span class="m">10</span>
+ip link <span class="nb">set</span> up eth0.10
+ip addr add <span class="m">192</span>.168.10.1/24 dev eth0.10 broadcast +
+</pre></div>
+</td></tr></table>
+
+<p>Удалить vlan 10</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>ip link <span class="nb">set</span> down eth0.10
+ip addr del <span class="m">192</span>.168.10.1/24 dev eth0.10 broadcast +
+vconfig  rem eth0.10
+</pre></div>
+</td></tr></table>
+
+<p>Ну а скрипт запуска для ОС получится примерно таким - rc.vlan</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>vi /etc/rc.d/rc.vlan
+</pre></div>
+</td></tr></table>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#</span>
+<span class="c1"># /etc/rc.d/rc.vlan</span>
+<span class="c1">#</span>
+<span class="c1"># Start/stop the vlan</span>
+<span class="c1">#</span>
+
+<span class="k">case</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> in
+<span class="s1">&#39;start&#39;</span><span class="o">)</span>
+        /sbin/ip link <span class="nb">set</span> up eth0
+        /sbin/vconfig add eth0 <span class="m">10</span>
+        /sbin/ip link <span class="nb">set</span> up eth0.10
+        /sbin/ip addr add <span class="m">192</span>.168.10.1/24 dev eth0.10 broadcast +
+      <span class="p">;;</span>
+<span class="s1">&#39;stop&#39;</span><span class="o">)</span>
+        /sbin/ip link <span class="nb">set</span> down eth0.10
+        /sbin/ip addr del <span class="m">192</span>.168.10.1/24 dev eth0.10 broadcast +
+        /sbin/vconfig  rem eth0.10
+      <span class="p">;;</span>
+     *<span class="o">)</span>
+<span class="nb">echo</span> <span class="s2">&quot;usage </span><span class="nv">$0</span><span class="s2"> start|stopt&quot;</span> <span class="p">;;</span>
+<span class="k">esac</span>
+</pre></div>
+</td></tr></table>
+
+<p><strong>Настройка vlan в OpenBSD</strong></p>
+<p>Работа с командами vlan в OpenBSD идентична FreeBSD системам. Команды консоли почти одинаковые. От root выполняем</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>ifconfig vlan2 create
+ifconfig vlan2 vlan <span class="m">2</span> vlandev xl0
+ifconfig vlan2 inet <span class="m">192</span>.168.17.3 netmask <span class="m">255</span>.255.255.0
+</pre></div>
+</td></tr></table>
+
+<p>Для автоматического старта vlan при старте ОС создаем конфигурационный файл /etc/hostname.vlan2 с таким содержимым</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>vi /etc/hostname.vlan2
+</pre></div>
+</td></tr></table>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>inet <span class="m">192</span>.168.17.3 <span class="m">255</span>.255.255.0 <span class="m">192</span>.168.17.255 vlandev xl0 description <span class="s2">&quot;Interface vlan 2&quot;</span>
+</pre></div>
+</td></tr></table>
+
+<p><strong>Настройка vlan в FreeBSD</strong></p>
+<p>Прописываем создание vlan в файл /etc/rc.conf. Например для 2 и 3 vlan при родительском интерфейсе «xl0» это будет выглядеть</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>vi /etc/rc.conf
+</pre></div>
+</td></tr></table>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nv">cloned_interfaces</span><span class="o">=</span><span class="s2">&quot;vlan2 vlan3&quot;</span>
+<span class="nv">ifconfig_vlan2</span><span class="o">=</span><span class="s2">&quot;inet 192.168.17.3 netmask 255.255.255.0 vlan 2 vlandev xl0&quot;</span>
+<span class="nv">ifconfig_vlan3</span><span class="o">=</span><span class="s2">&quot;inet 192.168.16.3 netmask 255.255.255.0 vlan 3 vlandev xl0&quot;</span>
+</pre></div>
+</td></tr></table>
+
+<p>Все, теперь vlan 2 и 3 появятся при следующей загрузке. Для избежания перезагрузки сервера, требуется оперировать командами (создаем 2 vlan от родительского интерфейса «xl0»)</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>ifconfig vlan2 create
+ifconfig vlan2 vlan <span class="m">2</span> vlandev xl0
+ifconfig vlan2 <span class="m">192</span>.168.17.3/24
+</pre></div>
+</td></tr></table>
+
+<p>Для удаления vlan 2 интерфейса выполните команду</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>ifconfig vlan2 destroy
+</pre></div>
+</td></tr></table>
+
+<p><strong>PS:</strong> во FreeBSD правильнее так же как и в OpenBSD запускать скриптом</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>vi /etc/start_if.lo0
+</pre></div>
+</td></tr></table>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>ifconfig lo0 <span class="m">127</span>.0.0.1 netmask 0xff000000
+ifconfig lo0 <span class="nb">alias</span> <span class="m">127</span>.0.0.2 netmask 0xffffffff
+ifconfig lo0 <span class="nb">alias</span> <span class="m">127</span>.0.0.3 netmask 0xffffffff
+</pre></div>
+</td></tr></table>
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "vlan.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Настройка lightsquid"/>
+    <meta property="og:url" content="./lightsquid.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./lightsquid.html" />
+
+    <title>Настройка lightsquid | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li class="active"><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li ><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./lightsquid.html" rel="bookmark"
+             title="Permalink to Настройка lightsquid">Настройка lightsquid</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/devops.html">DevOps</a>
+
+    on 2016-08-05
+
+        |
+        tags:         <a href="./tag/squid.html">Squid</a>
+        <a href="./tag/proxy.html">Proxy</a>
+        <a href="./tag/perl.html">Perl</a>
+
+
+        |
+        <a href="./lightsquid.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <h2>FreeBSD</h2>
+<p>На <strong>FreeBSD</strong> ставлю apache 2.4</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>pkg install apache24
+</pre></div>
+</td></tr></table>
+
+<p>В основном конфиге, если не активно - то активирую модуль cgi</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="err">mpm_prefork_module</span><span class="nt">&gt;</span>
+        LoadModule cgi_module libexec/apache24/mod_cgi.so
+<span class="nt">&lt;/IfModule&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<p>Делаю вхосты как в линухах (удобно запускать просто делая симлинки)</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span># Virtual hosts
+#Include etc/apache24/extra/httpd-vhosts.conf
+Include etc/apache24/sites-enabled/*
+</pre></div>
+</td></tr></table>
+
+<p>Создаю вхост lightsquid.conf</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nt">&lt;VirtualHost</span> <span class="err">*:80</span><span class="nt">&gt;</span>
+    ServerAdmin dtulyakov@example.org
+    DocumentRoot &quot;/usr/local/www/lightsquid&quot;
+    ServerName lightsquid.example.org
+    <span class="nt">&lt;Directory</span> <span class="err">&quot;/usr/local/www/lightsquid&quot;</span><span class="nt">&gt;</span> 
+        AddHandler cgi-script .cgi 
+        Options FollowSymLinks ExecCGI 
+        AllowOverride All 
+        Require all granted 
+    <span class="nt">&lt;/Directory&gt;</span> 
+    DirectoryIndex index.cgi 
+    ErrorLog &quot;/var/log/httpd-ls-error_log&quot; 
+    CustomLog &quot;/var/log/httpd-ls-access_log&quot; common 
+<span class="nt">&lt;/VirtualHost&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<p>Ставлю пакет lightsquid</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>pkg install lightsquid
+</pre></div>
+</td></tr></table>
+
+<p>Правлю конфиг lightsquid.cfg</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/local/bin/perl</span>
+<span class="c1"># -------------------- Глобальные переменные ---------------------------</span>
+
+<span class="c1">#путь к `cfg` файлам</span>
+<span class="nv">$cfgpath</span>             <span class="o">=</span><span class="s">&quot;/usr/local/etc/lightsquid&quot;</span><span class="p">;</span>
+<span class="c1">#путь `tpl` папке - шаблонам</span>
+<span class="nv">$tplpath</span>             <span class="o">=</span><span class="s">&quot;/usr/local/www/lightsquid/tpl&quot;</span><span class="p">;</span>
+<span class="c1">#путь к `lang` папке - языки</span>
+<span class="nv">$langpath</span>            <span class="o">=</span><span class="s">&quot;/usr/local/share/lightsquid/lang&quot;</span><span class="p">;</span>
+<span class="c1">#путь к `report` папке - отчеты</span>
+<span class="nv">$reportpath</span>          <span class="o">=</span><span class="s">&quot;/usr/local/www/lightsquid/report&quot;</span><span class="p">;</span>
+<span class="c1">#путь к access.log  - где логи squid, oops ...</span>
+<span class="nv">$logpath</span>             <span class="o">=</span><span class="s">&quot;/var/log/squid&quot;</span><span class="p">;</span>
+<span class="c1">#путь к `ip2name` папке - преобразование ip в имена</span>
+<span class="nv">$ip2namepath</span>         <span class="o">=</span><span class="s">&quot;/usr/local/libexec/lightsquid&quot;</span><span class="p">;</span>
+
+<span class="c1">#путь к `lockfile` ;-)</span>
+<span class="nv">$lockpath</span>            <span class="o">=</span><span class="nv">$reportpath</span><span class="p">;</span>
+
+<span class="c1"># если lockfile старше  $maxlocktime секунд, удалить старый lock file.</span>
+<span class="nv">$maxlocktime</span>         <span class="o">=</span> <span class="mi">30</span><span class="o">*</span><span class="mi">60</span><span class="p">;</span>
+
+<span class="c1">#if 1 - lightparser generate some statistic</span>
+<span class="nv">$debug</span>               <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
+<span class="c1">#if 1 - lightparser generate skip details, 2 ..., 3 ..., ....</span>
+<span class="nv">$debug2</span>              <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1"># -------------------- LightParser переменные  ---------------------------</span>
+<span class="c1">#lightsquid поддерживает 2 типа логов : родной и httpd</span>
+<span class="c1">#если родной squid-кий формат - должно быть 0</span>
+<span class="c1">#если EmulateHttpdLog ON - выставте 1</span>
+<span class="c1">#digit - for speed optimization</span>
+<span class="c1">#try it set to 1 if parser generate warning</span>
+<span class="c1">#</span>
+<span class="c1">#see also month2dec below !!!!</span>
+<span class="c1">#</span>
+<span class="nv">$squidlogtype</span>        <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">#если вы хотите не учитывать статистику с некоторых сайтов  - измените переменную</span>
+<span class="c1">#Предупреждение !!!, не оставляйте эту переменную пустой !!!</span>
+<span class="c1">#example, if you want skip LOCAL site, put it here</span>
+<span class="c1">#use &#39;&#39; instead of &quot;&quot; !!!!!!!!!!!</span>
+<span class="c1">#$skipurl             = &#39;zdd\.com|192\.168\.1\.|cnn\.com&#39;;</span>
+<span class="nv">$skipurl</span>             <span class="o">=</span> <span class="s">&#39;localhost|ls\.robo\.ru&#39;</span><span class="p">;</span>
+
+<span class="c1">#Использование ip2name - для преобразования ip в имена</span>
+<span class="c1">#if you want skip some ip from log - return &quot;SKIP THIS IP&quot; ;-)</span>
+<span class="c1">#detail see in ip2name folder, </span>
+
+<span class="nv">$ip2name</span><span class="o">=</span><span class="s">&quot;dns&quot;</span><span class="p">;</span>
+<span class="c1">#$ip2name=&quot;ip&quot;;</span>
+
+<span class="c1">#используется если нада конвертить text в число  - при EmualteHttpdLog</span>
+<span class="nv">%month2dec</span> <span class="o">=</span> <span class="p">(</span> <span class="n">Jan</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Feb</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="n">Mar</span> <span class="o">=&gt;</span> <span class="mi">3</span><span class="p">,</span> <span class="n">Apr</span> <span class="o">=&gt;</span> <span class="mi">4</span><span class="p">,</span> <span class="n">May</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">,</span><span class="n">Jun</span> <span class="o">=&gt;</span> <span class="mi">6</span><span class="p">,</span>
+               <span class="n">Jul</span> <span class="o">=&gt;</span> <span class="mi">7</span><span class="p">,</span> <span class="n">Aug</span> <span class="o">=&gt;</span> <span class="mi">8</span><span class="p">,</span> <span class="n">Sep</span> <span class="o">=&gt;</span> <span class="mi">9</span><span class="p">,</span> <span class="n">Oct</span> <span class="o">=&gt;</span> <span class="mi">10</span><span class="p">,</span> <span class="n">Nov</span> <span class="o">=&gt;</span> <span class="mi">11</span><span class="p">,</span><span class="n">Dec</span> <span class="o">=&gt;</span> <span class="mi">12</span><span class="p">);</span>
+
+<span class="c1"># -------------------- Общие (Парсер &amp; Веб) переменные  ----------------------</span>
+<span class="c1">#create &amp; use time report statistic (logsize = logsize*2) ;-))</span>
+<span class="nv">$timereport</span>          <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1"># -------------------- Веб переменные ----------------------------------------</span>
+
+<span class="c1"># язык (lдоступные: bg,eng,fr,hu,it,pt_br,ru,sp)</span>
+<span class="nv">$lang</span>                <span class="o">=</span><span class="s">&quot;ru-utf8&quot;</span><span class="p">;</span>
+
+<span class="c1">#имя html шаблонов</span>
+<span class="c1">#смотри `tpl/$templatename/`</span>
+<span class="nv">$templatename</span>        <span class="o">=</span><span class="s">&quot;base&quot;</span><span class="p">;</span>
+<span class="c1">#$templatename        =&quot;ric&quot;;</span>
+<span class="c1">#$templatename        =&quot;text&quot;;</span>
+
+<span class="c1">#определенные типы вывода чисел</span>
+<span class="c1">#fine  123456789 -&gt; 123,456,789</span>
+<span class="c1">#class 123456789 -&gt;       117.7 G</span>
+<span class="nv">$DecOutType</span><span class="o">=</span><span class="s">&quot;class&quot;</span><span class="p">;</span>
+
+<span class="c1"># define delimiter for thousands (in `fine` mode)</span>
+<span class="c1"># = &quot; &quot; -&gt; 12 345 678 </span>
+<span class="c1"># = &quot;,&quot; -&gt; 12,345,678</span>
+<span class="c1"># = &quot;&quot;  -&gt;   12345678</span>
+<span class="nv">$decdelimiter</span>        <span class="o">=</span> <span class="s">&quot; &quot;</span><span class="p">;</span>
+
+<span class="c1">#если надо Group режим установите =1</span>
+<span class="nv">$showgrouplink</span>       <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">#если не 0 - выглядит так &quot;01. Group1&quot;, если 0 - &quot;Group1&quot;</span>
+<span class="nv">$showgroupid</span>         <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">#if you dont need oversize report , do =0</span>
+<span class="nv">$showoversizelink</span>    <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">#show how many data user send to internet</span>
+<span class="nv">$showputpost</span>         <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="c1">#if putpost higer this variable (in percent), highlight it</span>
+<span class="nv">$putpostwarninglevel</span> <span class="o">=</span><span class="mi">15</span><span class="p">;</span>
+
+<span class="c1">#использование .realname файлов. См Дальше</span>
+<span class="c1">#.realname contain pair userid -&gt; Full User Name</span>
+<span class="nv">$userealname</span>         <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">#большие файлы  - с 300Мб</span>
+<span class="nv">$bigfilelimit</span>        <span class="o">=</span> <span class="mi">300</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">;</span> 
+
+<span class="c1">#лимит для пользователей - 1000Мб</span>
+<span class="nv">$perusertrafficlimit</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">;</span>
+
+<span class="c1"># недельный режим отображения</span>
+<span class="c1"># both - select sunday &amp; monday</span>
+<span class="c1"># monday - only monday </span>
+<span class="nv">$weekendmode</span><span class="o">=</span><span class="s">&quot;both&quot;</span><span class="p">;</span>
+
+<span class="c1">#как много сайтов показывать TopSites отчете</span>
+<span class="nv">$topsiteslimit</span>       <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
+
+<span class="c1">#как много сайтов показывать в user time отчете</span>
+<span class="nv">$usertimelimit</span>       <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
+
+
+<span class="c1">#если вам надо графический отчет установите =  1</span>
+<span class="c1">#WARNING !!!, нужна, GD.PM , ту которую мы отметили перед сборкой!!!</span>
+<span class="c1">#запустите check-setup.pl для определения библиотеки !!!!</span>
+<span class="nv">$graphreport</span>         <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">#максимальное значение на графике</span>
+<span class="c1"># для пользователя за месяц (0.05*(...) = 50mb)</span>
+<span class="nv">$graphmaxuser</span><span class="o">=</span><span class="mf">0.05</span><span class="o">*</span><span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">);</span>
+<span class="c1"># для всех пользователей за месяц (1.05*(...) = 1 Gb)</span>
+<span class="nv">$graphmaxall</span> <span class="o">=</span><span class="mf">1.05</span><span class="o">*</span><span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">);</span>
+
+<span class="c1"># темы для графиков, доступные :&quot;orange&quot;,&quot;blue&quot;,&quot;green&quot;,&quot;yellow&quot;,&quot;brown&quot;,&quot;red&quot;</span>
+<span class="nv">$barcolor</span><span class="o">=</span><span class="s">&quot;orange&quot;</span><span class="p">;</span>
+</pre></div>
+</td></tr></table>
+
+<p>Выкачиваю свой перевод для utf-8</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>/usr/local/bin/wget https://raw.githubusercontent.com/dtulyakov/lightsquid-1.8/master/lang/ru-utf8.lng -O /usr/local/share/lightsquid/lang/ru-utf8.lng
+</pre></div>
+</td></tr></table>
+
+<p>Ну и настраиваю cron</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>*/30    *   *   *   *   /usr/local/www/lightsquid/lightparser.pl &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</pre></div>
+</td></tr></table>
+
+<h2>Linux</h2>
+<p>Ставлю авкеты если небыло</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>sudo apt install apache2 libapache2-mod-fcgid
+</pre></div>
+</td></tr></table>
+
+<p>Включаю модуль</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>sudo a2enmod cgi
+</pre></div>
+</td></tr></table>
+
+<p>Настраиваю вхост</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nt">&lt;VirtualHost</span> <span class="err">*:80</span><span class="nt">&gt;</span> 
+    ServerAdmin dtulyakov@example.org
+    DocumentRoot &quot;/var/www/lightsquid&quot;
+    ServerName lightsquid.example.org
+    <span class="nt">&lt;Directory</span> <span class="err">&quot;/var/www/lightsquid&quot;</span><span class="nt">&gt;</span>
+        AddHandler cgi-script .cgi
+        AllowOverride All
+        Require all granted
+    <span class="nt">&lt;/Directory&gt;</span>
+    DirectoryIndex index.cgi
+<span class="nt">&lt;/VirtualHost&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<p>С самим пакетом lightsquid немного по другому - тут два пути</p>
+<ol>
+<li>Или ставить из пакета (но в отличии от FreeBSD в каждом линухе свой подход)</li>
+<li>Вытянуть свой вариант с гита</li>
+</ol>
+<p>Вытягиваю свой вариант</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git clone --recursive https://github.com/dtulyakov/lightsquid-1.8.git /var/www/lightsquid
+</pre></div>
+</td></tr></table>
+
+<p>Ну и cron</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>*/30    *   *   *   *   /var/www/lightsquid/lightparser.pl &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</pre></div>
+</td></tr></table>
+
+<h6>Ссылки</h6>
+<ul>
+<li><a href="https://github.com/dtulyakov/lightsquid-1.8" rel="nofollow" target="_blank"><img alt="GitHub" src="https://img.shields.io/github/tag/dtulyakov/lightsquid-1.8.svg"></a></li>
+</ul>
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "lightsquid.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

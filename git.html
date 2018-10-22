@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Шпаргалка по GIT"/>
+    <meta property="og:url" content="./git.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./git.html" />
+
+    <title>Шпаргалка по GIT | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li class="active"><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./git.html" rel="bookmark"
+             title="Permalink to Шпаргалка по GIT">Шпаргалка по GIT</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/wiki.html">wiki</a>
+
+    on 2016-06-03
+
+        |
+        tags:         <a href="./tag/cli.html">CLI</a>
+        <a href="./tag/git.html">Git</a>
+
+
+        |
+        <a href="./git.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p>Для начала надо понимать, что у гит нет главного репозитория. Все репозитории равнозначны и делятся на два типа локальные и удалённые.
+Подключать можно сколько угодно и пулятся и пушить во все сразу используя волшебный ключик <code>all</code></p>
+<p>Основная настройка имя и почта</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git config --global user.email <span class="s2">&quot;твояпочта@example.com&quot;</span>
+git config --global user.name <span class="s2">&quot;Имя&quot;</span>
+</pre></div>
+</td></tr></table>
+
+<p>Псевдонимы (Алиасы) задаются следующим образом</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.st status
+git config --global alias.l <span class="s2">&quot;log --oneline --graph&quot;</span>
+</pre></div>
+</td></tr></table>
+
+<p><strong>Если команда имеет пробелы то её необходимо взять в кавычки</strong></p>
+<p>Теперь вывод лога в графическом виде делается командой <code>git l</code></p>
+<h1>Пример работы</h1>
+<p>Для создания локального репозитория в каталоге проекта выполняем</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git init
+Инициализирован пустой репозиторий Git в ~/testttt/.git/
+</pre></div>
+</td></tr></table>
+
+<p>Смотрим статус локального репозитория сокращённый вариант</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git git status -sb
+<span class="c1">## Начальный коммит на master</span>
+?? README.md
+</pre></div>
+</td></tr></table>
+
+<p>Смотрим статус локального репозитория сокращённый вариант</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git status
+На ветке master
+
+Начальный коммит
+
+Неотслеживаемые файлы:
+  <span class="o">(</span>используйте «git add &lt;файл&gt;…», чтобы добавить в то, что будет включено в коммит<span class="o">)</span>
+
+    README.md
+
+ничего не добавлено в коммит, но есть неотслеживаемые файлы <span class="o">(</span>используйте «git add», чтобы отслеживать их<span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<p>Добавляем файл порекомендации</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git add --all                                                                                                                                            
+</pre></div>
+</td></tr></table>
+
+<p>Проверяем теперь статус</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git git status -sb
+
+<span class="c1">## Начальный коммит на master</span>
+A  README.md
+</pre></div>
+</td></tr></table>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git status
+
+На ветке master
+
+Начальный коммит
+
+Изменения, которые будут включены в коммит:
+  <span class="o">(</span>используйте «git rm --cached &lt;файл&gt;…», чтобы убрать из индекса<span class="o">)</span>
+
+    новый файл:    README.md
+</pre></div>
+</td></tr></table>
+
+<p>Комитим (закрепляем изменения)</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git commit -m<span class="s1">&#39;добавил прочтименя&#39;</span>
+<span class="o">[</span>master <span class="o">(</span>корневой коммит<span class="o">)</span> 7b56033<span class="o">]</span> добавил прочтименя
+ <span class="m">1</span> file changed, <span class="m">2</span> insertions<span class="o">(</span>+<span class="o">)</span>
+ create mode <span class="m">100644</span> README.md
+</pre></div>
+</td></tr></table>
+
+<p>И ещё раз проверяем статус</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git status
+На ветке master
+нечего коммитить, нет изменений в рабочем каталоге
+</pre></div>
+</td></tr></table>
+
+<p>Подключаем удалённый репозиторий</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git remote add origin git@example.org:testing.git
+</pre></div>
+</td></tr></table>
+
+<p>Вытягиваем все изменения которые уже есть на удалённом репозитории <strong>ЭТО НАДО ДЕЛАТЬ ВСЕГДА!!!</strong></p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git pull origin master
+Из example.org:testing
+ * branch            master     -&gt; FETCH_HEAD
+Merge made by the <span class="s1">&#39;recursive&#39;</span> strategy.
+ .gitignore <span class="p">|</span>  <span class="m">2</span> ++
+ index1.php <span class="p">|</span> <span class="m">12</span> ++++++++++++
+ <span class="m">2</span> files changed, <span class="m">14</span> insertions<span class="o">(</span>+<span class="o">)</span>
+ create mode <span class="m">100644</span> .gitignore
+ create mode <span class="m">100644</span> index1.php
+</pre></div>
+</td></tr></table>
+
+<p>При этом он автоматом смёржился без канфликтов т.к. небыло одинаковых файлов с разным содержимым</p>
+<p>Получается что мёрж это отдельный коммит</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git push origin master
+Подсчет объектов: <span class="m">5</span>, готово.
+Delta compression using up to <span class="m">4</span> threads.
+Сжатие объектов: <span class="m">100</span>% <span class="o">(</span><span class="m">3</span>/3<span class="o">)</span>, готово.
+Запись объектов: <span class="m">100</span>% <span class="o">(</span><span class="m">5</span>/5<span class="o">)</span>, <span class="m">639</span> bytes <span class="p">|</span> <span class="m">0</span> bytes/s, готово.
+Total <span class="m">5</span> <span class="o">(</span>delta <span class="m">0</span><span class="o">)</span>, reused <span class="m">0</span> <span class="o">(</span>delta <span class="m">0</span><span class="o">)</span>
+To git@example.org:testing.git
+   fd7eea4..8b771b4  master -&gt; master
+</pre></div>
+</td></tr></table>
+
+<p>Что бы не чесать репу и разбирать ошибки почему не запушилось я делаю так</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git pull origin master <span class="o">&amp;&amp;</span> git push origin master
+remote: Counting objects: <span class="m">6</span>, <span class="k">done</span>.
+remote: Compressing objects: <span class="m">100</span>% <span class="o">(</span><span class="m">3</span>/3<span class="o">)</span>, <span class="k">done</span>.
+remote: Total <span class="m">5</span> <span class="o">(</span>delta <span class="m">0</span><span class="o">)</span>, reused <span class="m">0</span> <span class="o">(</span>delta <span class="m">0</span><span class="o">)</span>
+Распаковка объектов: <span class="m">100</span>% <span class="o">(</span><span class="m">5</span>/5<span class="o">)</span>, готово.
+Из example.org:testing
+   fd7eea4..8b771b4  master     -&gt; origin/master
+Обновление fd7eea4..8b771b4
+Fast-forward
+ README.md <span class="p">|</span> <span class="m">2</span> ++
+ <span class="m">1</span> file changed, <span class="m">2</span> insertions<span class="o">(</span>+<span class="o">)</span>
+ create mode <span class="m">100644</span> README.md
+Everything up-to-date
+</pre></div>
+</td></tr></table>
+
+<p>Смотрим что там поменялось</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git log
+commit 8b771b424f9f8b1a056309dd3124899a8b3ed281
+Merge: 7b56033 fd7eea4
+Author: Денис Туляков &lt;dtulyakov@example.org&gt;
+Date:   Fri Aug <span class="m">12</span> <span class="m">09</span>:15:16 <span class="m">2016</span> +0300
+
+    Merge branch <span class="s1">&#39;master&#39;</span> of example.org:testing
+
+commit 7b5603380bd17873a258125454ead54a678b7fad
+Author: Денис Туляков &lt;dtulyakov@example.org&gt;
+Date:   Fri Aug <span class="m">12</span> <span class="m">09</span>:10:07 <span class="m">2016</span> +0300
+
+    добавил прочтименя
+
+commit fd7eea4d73069a66aa403ebfd4f57204c6f461e4
+Author: Денис Туляков &lt;dtulyakov@example.org&gt;
+Date:   Thu Aug <span class="m">11</span> <span class="m">15</span>:01:48 <span class="m">2016</span> +0300
+
+        новый файл:    .gitignore
+
+commit 1003563522071a7bf789b8ca1b5204ea59a47a93
+Author: Oleg Yxxxxxxx &lt;oleg@example.org&gt;
+Date:   Thu Aug <span class="m">11</span> <span class="m">14</span>:59:45 <span class="m">2016</span> +0300
+
+    <span class="s1">&#39;test&#39;</span>
+</pre></div>
+</td></tr></table>
+
+<p>Псевдо графика показывает, что мы смёржиди две ветки в одну</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git log --oneline --graph
+*   8b771b4 Merge branch <span class="s1">&#39;master&#39;</span> of example.org:testing
+<span class="p">|</span><span class="se">\ </span> 
+<span class="p">|</span> * fd7eea4     новый файл:    .gitignore
+<span class="p">|</span> * <span class="m">1003563</span> <span class="s1">&#39;test&#39;</span>
+* 7b56033 добавил прочтименя
+</pre></div>
+</td></tr></table>
+
+<p>Если мы хотим, что то наколдовать но не уверены в результате (может получится какаято кака).
+Делаем ветку</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git branch testdef
+</pre></div>
+</td></tr></table>
+
+<p>Смотрим в какой мы ветке и какие есть вообще</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git branch
+* master
+  testdef
+</pre></div>
+</td></tr></table>
+
+<p>Переключаемся в новую ветку</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git checkout testdef
+Переключено на ветку «testdef»
+</pre></div>
+</td></tr></table>
+
+<p>Теперь проверим где мы</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git branch
+  master
+* testdef
+</pre></div>
+</td></tr></table>
+
+<p>Я поправил файл "прочтименя" и закомитил его. Переодически надо пулятся из мастера что бы потом глаза на лоб не лезли при разрешении конфликтов.
+То есть находясь в своей ветке делать</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git pull origin master
+</pre></div>
+</td></tr></table>
+
+<p>После удачных тестов надо слить ветки, что бы всем было доступно наше "произведение искуства".
+Для этого комитим всё что хотим слить, переходим в мастер и мёржим ветки.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git checkout master
+Переключено на ветку «master»
+</pre></div>
+</td></tr></table>
+
+<p>А вдруг гит нас обманул и мы не в мастере</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git branch
+* master
+  testdef
+</pre></div>
+</td></tr></table>
+
+<p>Всё нормально можно мёржить</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git merge testdef
+Обновление 8b771b4..1d71990
+Fast-forward
+ README.md <span class="p">|</span> <span class="m">2</span> +-
+ <span class="m">1</span> file changed, <span class="m">1</span> insertion<span class="o">(</span>+<span class="o">)</span>, <span class="m">1</span> deletion<span class="o">(</span>-<span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git pull origin master <span class="o">&amp;&amp;</span> git push origin master
+Из example.org:testing
+ * branch            master     -&gt; FETCH_HEAD
+Already up-to-date.
+Подсчет объектов: <span class="m">3</span>, готово.
+Delta compression using up to <span class="m">4</span> threads.
+Сжатие объектов: <span class="m">100</span>% <span class="o">(</span><span class="m">2</span>/2<span class="o">)</span>, готово.
+Запись объектов: <span class="m">100</span>% <span class="o">(</span><span class="m">3</span>/3<span class="o">)</span>, <span class="m">423</span> bytes <span class="p">|</span> <span class="m">0</span> bytes/s, готово.
+Total <span class="m">3</span> <span class="o">(</span>delta <span class="m">0</span><span class="o">)</span>, reused <span class="m">0</span> <span class="o">(</span>delta <span class="m">0</span><span class="o">)</span>
+To git@example.org:testing.git
+   8b771b4..1d71990  master -&gt; master
+</pre></div>
+</td></tr></table>
+
+<p>Для того, что бы ещё кто то мог править нашу ветку её надо вытолкнуть на удалённый репозиторий</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git push origin testdef
+Total <span class="m">0</span> <span class="o">(</span>delta <span class="m">0</span><span class="o">)</span>, reused <span class="m">0</span> <span class="o">(</span>delta <span class="m">0</span><span class="o">)</span>
+To git@example.org:testing.git
+ * <span class="o">[</span>new branch<span class="o">]</span>      testdef -&gt; testdef
+</pre></div>
+</td></tr></table>
+
+<p>Ну а желающему можно просто пульнуть всё</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git pull --all     
+Извлечение из origin
+Из example.org:testing
+ * <span class="o">[</span>новая ветка<span class="o">]</span>     testdef    -&gt; origin/testdef
+Already up-to-date.
+</pre></div>
+</td></tr></table>
+
+<p>Или только ту ветку которая нужна</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git pull origin testdef
+Из example.org:testing
+ * branch            testdef    -&gt; FETCH_HEAD
+Already up-to-date.
+</pre></div>
+</td></tr></table>
+
+<p>Но создать её всё равно надо через команду <code>branch</code> или другой вариант (создание ветки и переключение в неё)</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git checkout -b testing
+Переключено на новую ветку «testing»
+</pre></div>
+</td></tr></table>
+
+<p>Для добавления ещё одного репозитория</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git remote add remotename git@example.org:testing2.git
+</pre></div>
+</td></tr></table>
+
+<p>Смотрим сколько репозиториев есть</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git remote -v
+origin  git@example.org:testing.git <span class="o">(</span>fetch<span class="o">)</span>
+origin  git@example.org:testing.git <span class="o">(</span>push<span class="o">)</span>
+remotename  git@example.org:testing2.git <span class="o">(</span>fetch<span class="o">)</span>
+remotename  git@example.org:testing2.git <span class="o">(</span>push<span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<p>Для того, что бы вытолкнуть в репозиорий <code>remotename</code> или в <code>origin</code> надо указать куда</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git pull remotename master <span class="o">&amp;&amp;</span> git push remotename master
+git pull origin master <span class="o">&amp;&amp;</span> git push remotename master
+</pre></div>
+</td></tr></table>
+
+<p>Понятно что если делать так</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git pull <span class="o">&amp;&amp;</span> git push
+</pre></div>
+</td></tr></table>
+
+<p>Есть репозиторий и ветка которые отмечены по умолчанию. НО они могут быть изменены! Поэтому, что бы не было сюрпризов - я рекомендую указывать явные пути откуда и куда пулять или пушить. Но это рекомендация. Как делать каждый решает для себя сам</p>
+<p>Например поправил файл и создал новый</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git status
+На ветке master
+Ваша ветка обновлена в соответствии с «origin/master».
+Изменения, которые не в индексе для коммита:
+  <span class="o">(</span>используйте «git add &lt;файл&gt;…», чтобы добавить файл в индекс<span class="o">)</span>
+  <span class="o">(</span>используйте «git checkout -- &lt;файл&gt;…», чтобы отменить изменения
+   в рабочем каталоге<span class="o">)</span>
+
+    изменено:      README.md
+
+Неотслеживаемые файлы:
+  <span class="o">(</span>используйте «git add &lt;файл&gt;…», чтобы добавить в то, что будет включено в коммит<span class="o">)</span>
+
+    test.txt
+
+нет изменений добавленных для коммита
+<span class="o">(</span>используйте «git add» и/или «git commit -a»<span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<p>Хочу отменить все изменения а новый не добавлять в не пушить его. Отменяем свои изменения.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git checkout README.md
+</pre></div>
+</td></tr></table>
+
+<p>Проверяем</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git status
+На ветке master
+Ваша ветка обновлена в соответствии с «origin/master».
+Неотслеживаемые файлы:
+  <span class="o">(</span>используйте «git add &lt;файл&gt;…», чтобы добавить в то, что будет включено в коммит<span class="o">)</span>
+
+    test.txt
+
+ничего не добавлено в коммит, но есть неотслеживаемые файлы <span class="o">(</span>используйте «git add», чтобы отслеживать их<span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<p>Пока файл не добавлен через <code>add</code> он не будет отслеждиваться.</p>
+<p>Удалить файл из гит но оставить локально</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git rm --cache README.md
+</pre></div>
+</td></tr></table>
+
+<p>Если сделать это без <code>--cache</code> то файл удалится локально и из индекса</p>
+<p>Есть ещё stash но о нём чуть позже</p>
+<p>Для того что бы "склеить" коммиты можно воспользоваться такоим приёмом</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git rebase --root -i
+</pre></div>
+</td></tr></table>
+
+<p>В редакторе напротив коммитов которые оставляем не трогаем ничего, там уже указано <code>pick</code>, а те которые надо "склеить" пишем <code>squash</code></p>
+<h2>Ссылки:</h2>
+<ul>
+<li>Что такое <a href="https://ru.wikipedia.org/wiki/Git" rel="nofollow" target="_blank"><strong>git</strong></a></li>
+<li>Онлайн книга <a href="https://git-scm.com/book/ru/v2/" rel="nofollow" target="_blank"><strong>Pro Gitk</strong></a></li>
+</ul>
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "git.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

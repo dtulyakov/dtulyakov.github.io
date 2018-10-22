@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Настройка vnc4server"/>
+    <meta property="og:url" content="./vnc4server.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./vnc4server.html" />
+
+    <title>Настройка vnc4server | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li class="active"><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./vnc4server.html" rel="bookmark"
+             title="Permalink to Настройка vnc4server">Настройка vnc4server</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/wiki.html">wiki</a>
+
+    on 2015-10-02
+
+        |
+        tags:         <a href="./tag/vnc.html">VNC</a>
+        <a href="./tag/ubuntu.html">Ubuntu</a>
+        <a href="./tag/linux.html">Linux</a>
+
+
+        |
+        <a href="./vnc4server.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p><a class="reference external" href="http://blog.dtulyakov.ru/">туполинк</a>
+Что делаем
+Сначала ставим всё что нам понадобится</p>
+<div class="highlight"><pre><span></span>sudo apt-get install xubuntu-desktop vnc4server
+</pre></div>
+<p>Затем создаём пользователя без возможности становится рутом т.к. у нас паранойа</p>
+<div class="highlight"><pre><span></span>adduser ttys
+</pre></div>
+<div class="highlight"><pre><span></span>Добавляется пользователь «ttys» ...
+Добавляется новая группа «ttys» <span class="o">(</span><span class="m">1001</span><span class="o">)</span> ...
+Добавляется новый пользователь «ttys» <span class="o">(</span><span class="m">1001</span><span class="o">)</span> в группу «ttys» ...
+Создаётся домашний каталог «/home/ttys» ...
+Копирование файлов из «/etc/skel» ...
+Введите новый пароль UNIX:
+Повторите ввод нового пароля UNIX:
+passwd: password updated successfully
+Changing the user information <span class="k">for</span> kaka
+Enter the new value, or press ENTER <span class="k">for</span> the default
+    Full Name <span class="o">[]</span>: Vnc User
+    Room Number <span class="o">[]</span>:
+    Work Phone <span class="o">[]</span>:
+    Home Phone <span class="o">[]</span>:
+    Other <span class="o">[]</span>:
+Данная информация корректна? <span class="o">[</span>Y/n<span class="o">]</span>
+</pre></div>
+<p>Дальше становимся этим юзером и пробуем запустить сервер</p>
+<div class="highlight"><pre><span></span>su - ttys
+</pre></div>
+<div class="highlight"><pre><span></span>vncserver
+</pre></div>
+<div class="highlight"><pre><span></span>You will require a password to access your desktops.
+
+Password:
+Verify:
+
+New <span class="s1">&#39;bit:1 (ttys)&#39;</span> desktop is bit:1
+
+Creating default startup script /home/ttys/.vnc/xstartup
+Starting applications specified in /home/ttys/.vnc/xstartup
+Log file is /home/ttys/.vnc/bit:1.log
+</pre></div>
+<p>Правим конфиг</p>
+<div class="highlight"><pre><span></span>nano ~/.vnc/xstartup
+</pre></div>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+<span class="c1"># Uncomment the following two lines for normal desktop:</span>
+<span class="c1"># unset SESSION_MANAGER</span>
+<span class="c1"># exec /etc/X11/xinit/xinitrc</span>
+
+<span class="o">[</span> -x /etc/vnc/xstartup <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">exec</span> /etc/vnc/xstartup
+<span class="o">[</span> -r <span class="nv">$HOME</span>/.Xresources <span class="o">]</span> <span class="o">&amp;&amp;</span> xrdb <span class="nv">$HOME</span>/.Xresources
+<span class="c1">#xsetroot -solid grey</span>
+<span class="c1">#vncconfig -iconic &amp;</span>
+<span class="c1">#x-terminal-emulator -geometry 80x24+10+10 -ls -title &quot;$VNCDESKTOP Desktop&quot; &amp;</span>
+<span class="c1">#x-window-manager &amp;</span>
+xfce4-session <span class="p">&amp;</span>
+<span class="c1">#EOF</span>
+</pre></div>
+<p>Если всё класс то можно настроить и автостарт (всё остальное делаем от рута)</p>
+<div class="highlight"><pre><span></span>nano /etc/init.d/vncserver
+</pre></div>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nb">unset</span> VNCSERVERARGS
+<span class="nv">VNCSERVERS</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="o">[</span> -f /etc/vncserver/vncservers.conf <span class="o">]</span> <span class="o">&amp;&amp;</span> . /etc/vncserver/vncservers.conf
+<span class="nv">prog</span><span class="o">=</span><span class="s2">$&quot;VNC server&quot;</span>
+start<span class="o">()</span> <span class="o">{</span>
+    . /lib/lsb/init-functions
+    <span class="nv">REQ_USER</span><span class="o">=</span><span class="nv">$2</span>
+    <span class="nb">echo</span> -n $<span class="s2">&quot;Starting </span><span class="nv">$prog</span><span class="s2">: &quot;</span>
+    <span class="nb">ulimit</span> -S -c <span class="m">0</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
+    <span class="k">for</span> display in <span class="si">${</span><span class="nv">VNCSERVERS</span><span class="si">}</span>
+    <span class="k">do</span>
+    <span class="nb">export</span> <span class="nv">USER</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">display</span><span class="p">##*:</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="nb">test</span> -z <span class="s2">&quot;</span><span class="si">${</span><span class="nv">REQ_USER</span><span class="si">}</span><span class="s2">&quot;</span> -o <span class="s2">&quot;</span><span class="si">${</span><span class="nv">REQ_USER</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="si">${</span><span class="nv">USER</span><span class="si">}</span> <span class="p">;</span> <span class="k">then</span>
+     <span class="nb">echo</span> -n <span class="s2">&quot;</span><span class="si">${</span><span class="nv">display</span><span class="si">}</span><span class="s2"> &quot;</span>
+     <span class="nb">unset</span> BASH_ENV ENV
+    <span class="nv">DISP</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">display</span><span class="p">%%:*</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="nb">export</span> <span class="nv">VNCUSERARGS</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VNCSERVERARGS</span><span class="p">[</span><span class="si">${</span><span class="nv">DISP</span><span class="si">}</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+    su <span class="si">${</span><span class="nv">USER</span><span class="si">}</span> -c <span class="s2">&quot;cd ~</span><span class="si">${</span><span class="nv">USER</span><span class="si">}</span><span class="s2"> &amp;&amp; [ -f .vnc/passwd ] &amp;&amp; vncserver -depth 24 :</span><span class="si">${</span><span class="nv">DISP</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">VNCUSERARGS</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">fi</span>
+    <span class="k">done</span>
+<span class="o">}</span>
+stop<span class="o">()</span> <span class="o">{</span>
+    . /lib/lsb/init-functions
+    <span class="nv">REQ_USER</span><span class="o">=</span><span class="nv">$2</span>
+    <span class="nb">echo</span> -n <span class="s2">$&quot;Shutting down VNCServer: &quot;</span>
+    <span class="k">for</span> display in <span class="si">${</span><span class="nv">VNCSERVERS</span><span class="si">}</span>
+    <span class="k">do</span>
+    <span class="nb">export</span> <span class="nv">USER</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">display</span><span class="p">##*:</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="nb">test</span> -z <span class="s2">&quot;</span><span class="si">${</span><span class="nv">REQ_USER</span><span class="si">}</span><span class="s2">&quot;</span> -o <span class="s2">&quot;</span><span class="si">${</span><span class="nv">REQ_USER</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="si">${</span><span class="nv">USER</span><span class="si">}</span> <span class="p">;</span> <span class="k">then</span>
+    <span class="nb">echo</span> -n <span class="s2">&quot;</span><span class="si">${</span><span class="nv">display</span><span class="si">}</span><span class="s2"> &quot;</span>
+    <span class="nb">unset</span> BASH_ENV ENV
+    <span class="nb">export</span> <span class="nv">USER</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">display</span><span class="p">##*:</span><span class="si">}</span><span class="s2">&quot;</span>
+    su <span class="si">${</span><span class="nv">USER</span><span class="si">}</span> -c <span class="s2">&quot;vncserver -kill :</span><span class="si">${</span><span class="nv">display</span><span class="p">%%:*</span><span class="si">}</span><span class="s2">&quot;</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+    <span class="k">fi</span>
+    <span class="k">done</span>
+    <span class="nb">echo</span> -e <span class="s2">&quot;\n&quot;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;VNCServer Stopped&quot;</span>
+<span class="o">}</span>
+<span class="k">case</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> in
+    start<span class="o">)</span>
+    start <span class="nv">$@</span>
+    <span class="p">;;</span>
+    stop<span class="o">)</span>
+    stop <span class="nv">$@</span>
+    <span class="p">;;</span>
+    restart<span class="p">|</span>reload<span class="o">)</span>
+    stop <span class="nv">$@</span>
+    sleep <span class="m">3</span>
+    start <span class="nv">$@</span>
+    <span class="p">;;</span>
+    condrestart<span class="o">)</span>
+    <span class="k">if</span> <span class="o">[</span> -f /var/lock/subsys/vncserver <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    stop <span class="nv">$@</span>
+    sleep <span class="m">3</span>
+    start <span class="nv">$@</span>
+    <span class="k">fi</span>
+    <span class="p">;;</span>
+    status<span class="o">)</span>
+    status Xvnc
+    <span class="p">;;</span>
+*<span class="o">)</span>
+<span class="nb">echo</span> $<span class="s2">&quot;Usage: </span><span class="nv">$0</span><span class="s2"> {start|stop|restart|condrestart|status}&quot;</span>
+<span class="nb">exit</span> <span class="m">1</span>
+<span class="k">esac</span>
+</pre></div>
+<div class="highlight"><pre><span></span>chmod +x /etc/init.d/vncserver
+</pre></div>
+<div class="highlight"><pre><span></span>mkdir /etc/vncserver
+nano /etc/vncserver/vncservers.conf
+</pre></div>
+<p>Содержимое конфига</p>
+<div class="highlight"><pre><span></span><span class="nv">VNCSERVERS</span><span class="o">=</span><span class="s2">&quot;1:ttys&quot;</span>
+VNCSERVERARGS<span class="o">[</span><span class="m">1</span><span class="o">]=</span><span class="s2">&quot;-geometry 1200x800&quot;</span>
+</pre></div>
+<div class="highlight"><pre><span></span>update-rc.d vncserver defaults <span class="m">99</span>
+</pre></div>
+<div class="highlight"><pre><span></span>Adding system startup <span class="k">for</span> /etc/init.d/vncserver ...
+   /etc/rc0.d/K99vncserver -&gt; ../init.d/vncserver
+   /etc/rc1.d/K99vncserver -&gt; ../init.d/vncserver
+   /etc/rc6.d/K99vncserver -&gt; ../init.d/vncserver
+   /etc/rc2.d/S99vncserver -&gt; ../init.d/vncserver
+   /etc/rc3.d/S99vncserver -&gt; ../init.d/vncserver
+   /etc/rc4.d/S99vncserver -&gt; ../init.d/vncserver
+   /etc/rc5.d/S99vncserver -&gt; ../init.d/vncserver
+</pre></div>
+<p>Перезагружаем и балдеем от того что всё работает</p>
+<div class="highlight"><pre><span></span>reboot
+</pre></div>
+
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "vnc4server.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

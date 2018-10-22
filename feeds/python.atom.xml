@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Денис Туляков wiki - Python</title><link href="https://dtulyakov.github.io/" rel="alternate"></link><link href="http://www.dtulyakov.ru/feeds/python.atom.xml" rel="self"></link><id>https://dtulyakov.github.io/</id><updated>2016-06-08T09:18:00+03:00</updated><entry><title>Ошибка "module named pkg resources"</title><link href="https://dtulyakov.github.io/python-module-named-pkg-resources.html" rel="alternate"></link><published>2016-06-08T09:17:00+03:00</published><updated>2016-06-08T09:18:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:dtulyakov.github.io,2016-06-08:/python-module-named-pkg-resources.html</id><summary type="html">&lt;p&gt;Как победить ошибку "module named pkg resources"&lt;/p&gt;</summary><content type="html">&lt;p&gt;При использовании pip версии python2 - лечится так&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt install --reinstall python-pkg-resources
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Сопутствующие пресидания&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install --upgrade setuptools
+pip install --upgrade distribute
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</content><category term="Ubuntu"></category><category term="Linux"></category><category term="CLI"></category><category term="Python"></category></entry><entry><title>Бесплатные Python курсы</title><link href="https://dtulyakov.github.io/python3-courses.html" rel="alternate"></link><published>2015-04-06T12:46:00+03:00</published><updated>2015-04-06T12:46:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:dtulyakov.github.io,2015-04-06:/python3-courses.html</id><summary type="html">&lt;p&gt;О халявных курсах&lt;/p&gt;</summary><content type="html">&lt;h1&gt;Бесплатные Python курсы&lt;/h1&gt;
+&lt;p&gt;Обзор различных бесплатных курсов программирования на языке Python.&lt;/p&gt;
+&lt;h2&gt;Бесплатные курсы на русском языке&lt;/h2&gt;
+&lt;p&gt;На русском языке бесплатных курсов не так уж и много, однако есть, из чего выбрать:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Курс Python от &lt;a href="https://stepic.org/course/%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BD%D0%B0-Python-67/syllabus"&gt;Stepic&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Курс Python от &lt;a href="https://www.lektorium.tv/lecture/13897"&gt;Lektorium&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Курс Python от &lt;a href="http://www.intuit.ru/studies/courses/49/49/info"&gt;Intuit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Курс Python от &lt;a href="https://ru.hexlet.io/tracks/languages/lesson_sets/python_101"&gt;Hexlet&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://uneex.ru/LecturesCMC/PythonIntro2014"&gt;Лекции ВМК МГУ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Бесплатные курсы на английском языке&lt;/h2&gt;
+&lt;p&gt;На английском языке курсов, безусловно, больше. Так что если вы знаете английский, можете попробовать послушать и их.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://pythonworld.ru/kursy/free.html" rel="nofollow"&gt;Бесплатные Python курсы орегинал&lt;/a&gt;&lt;/p&gt;</content><category term="Courses"></category><category term="Python"></category></entry></feed>

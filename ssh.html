@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Настройка ssh НЕЗАКОНЧЕНО....."/>
+    <meta property="og:url" content="./ssh.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./ssh.html" />
+
+    <title>Настройка ssh НЕЗАКОНЧЕНО..... | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li class="active"><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./ssh.html" rel="bookmark"
+             title="Permalink to Настройка ssh НЕЗАКОНЧЕНО.....">Настройка ssh НЕЗАКОНЧЕНО.....</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/wiki.html">wiki</a>
+
+    on 2015-08-02
+
+        |
+        tags:         <a href="./tag/ssh.html">ssh</a>
+        <a href="./tag/openssh.html">OpenSSH</a>
+        <a href="./tag/freebsd.html">FreeBSD</a>
+        <a href="./tag/ubuntu.html">Ubuntu</a>
+        <a href="./tag/linux.html">Linux</a>
+
+
+        |
+        <a href="./ssh.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p>Установка</p>
+<div class="highlight"><pre><span></span>sudo apt-get install openssh-server
+</pre></div>
+<p><strong>Настройка сервера</strong></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Для того что бы не тормозил вход по ssh в конфиге надо указать «UseDNS no»</p>
+</div>
+<p>При установке SSH-сервер автоматически прописывается в автозагрузку. Управлять его запуском, остановкой или перезапуском можно с помощью команд:</p>
+<div class="highlight"><pre><span></span>sudo service ssh stop<span class="p">|</span>start<span class="p">|</span>restart
+</pre></div>
+<p>Основной файл конфигурации SSH-сервера — файл /etc/ssh/sshd_config, доступный для чтения или редактирования только суперпользователю. После каждого изменения этого файла необходимо перезапустить ssh-сервер для применения таких изменений.</p>
+<p>Пример конфигурации SSH-сервера в Ubuntu по умолчанию2):</p>
+<div class="highlight"><pre><span></span><span class="c1">#     Пример конфигурации open-ssh сервера с русскими      #</span>
+<span class="c1">#                      комментариями.                      #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Условные обозначения:                                    #</span>
+<span class="c1"># Под &quot;по умолчанию&quot; - подразумевается поведение sshd при  #</span>
+<span class="c1"># неуказанной явно директиве. Стоит заметить, что в Ubuntu #</span>
+<span class="c1"># файл sshd_config уже содержит ряд настроек, которые      #</span>
+<span class="c1"># являются настройками по умолчанию для именно для Ubuntu. #</span>
+<span class="c1"># Такие настройки указаны в этом файле.                    #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">################ Настройки адресов/портов и т.д. ###########</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## Port ####################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Используемый порт. Можно указывать несколько, например:  #</span>
+<span class="c1"># Port 22                                                  #</span>
+<span class="c1"># Port 23                                                  #</span>
+<span class="c1"># Port 24                                                  #</span>
+<span class="c1"># Рекомендуется использовать нестандартный порт, т.к.      #</span>
+<span class="c1"># стандартный часто сканируется ботами на предмет          #</span>
+<span class="c1"># потенциальных &quot;дырок&quot;. Может быть опущен, если задан     #</span>
+<span class="c1"># через адрес. См. также параметр ListenAddress.           #</span>
+<span class="c1">#                                                          #</span>
+Port <span class="m">22</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## ListenAddress ###########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Сетевой адрес, на котором &quot;слушает&quot; сервер. Адрес можно  #</span>
+<span class="c1"># записывать так:                                          #</span>
+<span class="c1"># ListenAddress host|IPv4_addr|IPv6_addr                   #</span>
+<span class="c1"># ListenAddress host|IPv4_addr:port                        #</span>
+<span class="c1"># ListenAddress [host|IPv6_addr]:port                      #</span>
+<span class="c1"># Если порт не задан, sshd будет слушать на этом адресе и  #</span>
+<span class="c1"># на порту, указанному в опции Port. Если вы будете        #</span>
+<span class="c1"># использовать ListenAddress не указывая порт, то опция    #</span>
+<span class="c1"># Port должна предшествовать опции ListenAddress. Если не  #</span>
+<span class="c1"># указывать, то по умолчанию слушает на всех локальных     #</span>
+<span class="c1"># адресах. Можно указывать несколько адресов.              #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## AddressFamily ###########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, какое семейство IP адресов должно быть        #</span>
+<span class="c1"># использовано sshd. Возможные варианты:                   #</span>
+<span class="c1"># “any” - любые                                            #</span>
+<span class="c1"># “inet” (только IPv4)                                     #</span>
+<span class="c1"># “inet6” (только IPv6)                                    #</span>
+<span class="c1"># По умолчанию - “any”.                                    #</span>
+AddressFamily inet
+<span class="c1">#                                                          #</span>
+<span class="c1">## UseDNS ##################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, должен ли sshd проверять имя хоста и          #</span>
+<span class="c1"># используя это имя сверять IP адрес переданный клиентом с #</span>
+<span class="c1"># полученным от DNS.                                       #</span>
+<span class="c1"># Значение по умолчанию - “yes”.                           #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">############# Настройки доступа пользователей ##############</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Пустить/не пустить пользователя определяется директивами #</span>
+<span class="c1"># DenyUsers, AllowUsers, DenyGroups, и AllowGroups.        #</span>
+<span class="c1"># при этом, проверка проходит сверху - вниз по цепочке:    #</span>
+<span class="c1">#                   ## DenyUsers ##                        #</span>
+<span class="c1">#                          ||                              #</span>
+<span class="c1">#                   ## AllowUsers ##                       #</span>
+<span class="c1">#                          ||                              #</span>
+<span class="c1">#                   ## DenyGroups ##                       #</span>
+<span class="c1">#                          ||                              #</span>
+<span class="c1">#                   ## AllowGroups ##                      #</span>
+<span class="c1"># Принимаются только имена пользователей и групп, числовые #</span>
+<span class="c1"># идентификаторы (UserID) - не распознаются. Корректная    #</span>
+<span class="c1"># запись нескольких пользователей/групп по очереди, через  #</span>
+<span class="c1"># пробел. Если записано в виде пользователь@хост - то      #</span>
+<span class="c1"># пользователь и хост проверяются отдельно, это позволяет  #</span>
+<span class="c1"># разграничить доступ определенных пользователей с         #</span>
+<span class="c1"># определенных хостов. Стоит помнить, что директивы        #</span>
+<span class="c1"># DenyUsers и AllowUsers принимают в качестве параметра    #</span>
+<span class="c1"># имя пользователя, а DenyGroups и AllowGroups - имя       #</span>
+<span class="c1"># группы. См. PATTERNS в man ssh_config для дополнительной #</span>
+<span class="c1"># информации о формах записи имен пользователей и групп.   #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## DenyUsers ###############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Список ПОЛЬЗОВАТЕЛЕЙ, которым НЕЛЬЗЯ пользоваться sshd.  #</span>
+<span class="c1"># По умолчанию - не указан = не запрещен никто. Т.е. если  #</span>
+<span class="c1"># тут указан пользователь, то ему будет отказано в доступе #</span>
+<span class="c1"># к ssh серверу.                                           #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## AllowUsers ##############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Список ПОЛЬЗОВАТЕЛЕЙ, которым МОЖНО пользоваться sshd,   #</span>
+<span class="c1"># По умолчанию - не указан = разрешено всем. Т.е. если     #</span>
+<span class="c1"># указан хотя бы один пользователь, ssh доступ к серверу   #</span>
+<span class="c1"># доступен только для него.                                #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## DenyGroups ##############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Список ГРУПП, которым НЕЛЬЗЯ пользоваться sshd.          #</span>
+<span class="c1"># По умолчанию - не указан = не запрещена ни одна группа.  #</span>
+<span class="c1"># Т.е. если указана хотя бы одна группа, то пользователям, #</span>
+<span class="c1"># входящим в эту группу будет отказано в доступе к ssh     #</span>
+<span class="c1"># серверу.                                                 #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## AllowGroups #############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Список ГРУПП, которым МОЖНО пользоваться sshd.           #</span>
+<span class="c1"># По умолчанию - не указан = разрешено всем. Т.е. если     #</span>
+<span class="c1"># указана хотя бы одна группа, то только тем пользователям,#</span>
+<span class="c1"># которые в нее входят будет разрешен доступ к ssh серверу.#</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">######### Опции определения состояния соединения ###########</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## TCPKeepAlive ############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, нужно системе посылать TCP сообщения клиенту  #</span>
+<span class="c1"># с целью поддержания соединения. Если посылать эти пакеты,#</span>
+<span class="c1"># можно определить разрыв соединения. Однако это также     #</span>
+<span class="c1"># означает, что соединение может быть разорвано в случае   #</span>
+<span class="c1"># кратковременного перебоя в работе маршрутизации и        #</span>
+<span class="c1"># некоторых это сильно раздражает. С другой стороны, если  #</span>
+<span class="c1"># таких сообщений не посылать - сеансы на сервере могут    #</span>
+<span class="c1"># длиться бесконечно, порождая пользователей - &quot;призраков&quot;,#</span>
+<span class="c1"># и пожирая ресурсы сервера. Значение по умолчанию - “yes”,#</span>
+<span class="c1"># т.е. посылать такие сообщения. Для отключения отправки   #</span>
+<span class="c1"># таких сообщений нужно задать значение “no”. Ранее эта    #</span>
+<span class="c1"># опция называлась KeepAlive. Стоит заметить, что          #</span>
+<span class="c1"># существуют более защищенные способы проверки состояния   #</span>
+<span class="c1"># соединения (см. ниже).                                   #</span>
+<span class="c1">#                                                          #</span>
+TCPKeepAlive yes
+<span class="c1">#                                                          #</span>
+<span class="c1">## ClientAliveCountMax #####################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Задает количество сообщений к клиентам, которые sshd     #</span>
+<span class="c1"># посылает подряд, не получая какого либо ответа от        #</span>
+<span class="c1"># клиента. Если пороговое значение будет достигнуто, а     #</span>
+<span class="c1"># клиент так и не ответил - sshd отключит клиента, прервав #</span>
+<span class="c1"># ssh сессию. Стоит отметить, что использование таких      #</span>
+<span class="c1"># сообщений в корне отличается от директивы TCPKeepAlive.  #</span>
+<span class="c1"># Сообщения к/от клиентов посылаются по зашифрованному     #</span>
+<span class="c1"># каналу и поэтому не подвержены спуфингу. Сообщения же    #</span>
+<span class="c1"># TCPKeepAlive спуфингу подвержены. Механизм client alive  #</span>
+<span class="c1"># особо ценен в тех случаях, когда серверу и клиенту нужно #</span>
+<span class="c1"># знать когда соединение стало неактивным. По умолчанию    #</span>
+<span class="c1"># значение равно 3. В случае, если ClientAliveInterval     #</span>
+<span class="c1"># задан равным 15 и ClientAliveCountMax оставлен по        #</span>
+<span class="c1"># умолчанию, неотвечающие клиенты будут отключены примерно #</span>
+<span class="c1"># через 45 секунд. Эта директива работает только для       #</span>
+<span class="c1"># протокола ssh2.                                          #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## ClientAliveInterval #####################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Задает временной интервал в секундах. Если в течении     #</span>
+<span class="c1"># этого интервала не было обмена данными с клиентом, sshd  #</span>
+<span class="c1"># посылает сообщение по зашифрованному каналу,             #</span>
+<span class="c1"># запрашивающее ответ от клиента. По умолчанию - 0, т.е.   #</span>
+<span class="c1"># не посылать таких сообщений. Эта директива работает      #</span>
+<span class="c1"># только для протокола ssh2.                               #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">################ Общие опции аутентификации ################</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## AuthorizedKeysFile ######################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает файл, в котором содержатся публичные ключи,    #</span>
+<span class="c1"># используемые для аутентификации пользователей. Директива #</span>
+<span class="c1"># может содержать маркеры вида %М, которые подставляются в #</span>
+<span class="c1"># процессе установки соединения.                           #</span>
+<span class="c1"># Определены следующие маркеры:                            #</span>
+<span class="c1"># %% - заменяется литералом &#39;%&#39;                            #</span>
+<span class="c1"># %h - заменяется домашней директорией                     #</span>
+<span class="c1"># аутентифицируещегося пользователя                        #</span>
+<span class="c1"># %u - заменяется именем аутентифицируещегося пользователя #</span>
+<span class="c1"># Таким образом, файл с ключами может быть задан как       #</span>
+<span class="c1"># абсолютным путем (т.е. один общий файл с ключами), так и #</span>
+<span class="c1"># динамически - в зависимости от пользователя (т.е. по     #</span>
+<span class="c1"># файлу на каждого пользователя).                          #</span>
+<span class="c1"># По умолчанию - “.ssh/authorized_keys”.                   #</span>
+<span class="c1"># Пример для файла ключа в домашней папке пользователя:    #</span>
+<span class="c1"># AuthorizedKeysFile %h/.ssh/authorized_key                #</span>
+<span class="c1"># Пример для общего файла:                                 #</span>
+<span class="c1"># AuthorizedKeysFile /etc/ssh/authorized_keys              #</span>
+<span class="c1"># См. описание файла authorized_keys для большей           #</span>
+<span class="c1"># информации.                                              #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## ChallengeResponseAuthentication #########################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешить ли аутентификацию вида вопрос-ответ #</span>
+<span class="c1"># (challenge-response authentication). Поддерживаются все  #</span>
+<span class="c1"># виды аутентификации из login.conf По умолчанию - “yes”,  #</span>
+<span class="c1"># т.е. разрешить.                                          #</span>
+<span class="c1"># В Ubuntu - выключена по соображениям безопасности.       #</span>
+<span class="c1">#                                                          #</span>
+ChallengeResponseAuthentication no
+<span class="c1">#                                                          #</span>
+<span class="c1">## HostbasedUsesNameFromPacketOnly #########################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, как сервер должен получать имя хоста клиента  #</span>
+<span class="c1"># при схеме аутентификации, основанной на проверке хоста.  #</span>
+<span class="c1"># Если задать &quot;yes&quot; - при проверке соответствия в файлах   #</span>
+<span class="c1"># ~/.shosts, ~/.rhosts или /etc/hosts.equiv sshd будет     #</span>
+<span class="c1"># использовать имя хоста, предоставленное клиентом.        #</span>
+<span class="c1"># (выполняя реверсивное DNS распознование) Если задать &quot;no&quot;#</span>
+<span class="c1"># - sshd будет ресолвить имя из самого TCP соединения.     #</span>
+<span class="c1"># По умолчанию - &quot;no&quot;.                                     #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## IgnoreRhosts ############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Запрещает использование файлов .rhosts и .shosts         #</span>
+<span class="c1"># в процессе аутентификации, основанной на проверке хоста. #</span>
+<span class="c1"># (RhostsRSAAuthentication или HostbasedAuthentication).   #</span>
+<span class="c1"># Файлы /etc/hosts.equiv и /etc/ssh/shosts.equiv все еще   #</span>
+<span class="c1"># используются.                                            #</span>
+<span class="c1"># По умолчанию - “yes”.                                    #</span>
+<span class="c1">#                                                          #</span>
+IgnoreRhosts yes
+<span class="c1">#                                                          #</span>
+<span class="c1">## IgnoreUserKnownHosts ####################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает должен ли sshd игнорировать пользовательские   #</span>
+<span class="c1"># &quot;известные хосты&quot; - файл ~/.ssh/known_hosts в процессе   #</span>
+<span class="c1"># аутентификации, основанной на проверке хоста             #</span>
+<span class="c1"># (RhostsRSAAuthentication или HostbasedAuthentication).   #</span>
+<span class="c1"># По умолчанию - “no”.                                     #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## PermitBlacklistedKeys ###################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, стоит ли sshd принимать ключи, занесенные в   #</span>
+<span class="c1"># черный список как скомпрометированные (known-compromised #</span>
+<span class="c1"># keys (см. ssh-vulnkey)). Если задано значение “yes” -    #</span>
+<span class="c1"># попытки аутентификации с такими ключами будут занесены в #</span>
+<span class="c1"># журнал и приняты, если значение “no” - попытки           #</span>
+<span class="c1"># аутентификации будут отвергнуты.                         #</span>
+<span class="c1"># По умолчанию - “no”.                                     #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## PermitEmptyPasswords ####################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># В случае разрешенной аутентификации с помощью пароля,    #</span>
+<span class="c1"># указывает, возможен ли вход с пустым паролем.            #</span>
+<span class="c1"># По умолчанию - “no”.                                     #</span>
+<span class="c1">#                                                          #</span>
+PermitEmptyPasswords no
+<span class="c1">#                                                          #</span>
+<span class="c1">## PermitRootLogin #########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, возможен ли ssh-вход под суперпользователем   #</span>
+<span class="c1"># (root). Может принимать значения:                        #</span>
+<span class="c1"># “yes” - суперпользователь может зайти. Применяется       #</span>
+<span class="c1"># текущая глобальная схема аутентификации.                 #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># “without-password” - суперпользователь может зайти.      #</span>
+<span class="c1"># Парольная аутентификация для него будет отключена.       #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># “forced-commands-only” - суперпользователь сможет зайти, #</span>
+<span class="c1"># пользуясь аутентификацией на основе публичного ключа и   #</span>
+<span class="c1"># только если передаст необходимую к исполнению комнаду.   #</span>
+<span class="c1"># Это удобно для осуществления резервного копирования,     #</span>
+<span class="c1"># даже в том случае, когда нормальный (т.е. не через ssh)  #</span>
+<span class="c1"># вход суперпользователя запрещен. Все остальные методы    #</span>
+<span class="c1"># аутентификации для суперпользователя будут заблокированы.#</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># “no” - суперпользователь не может использовать ssh для   #</span>
+<span class="c1"># входа в систему.                                         #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Значение по умолчанию - “yes”.                           #</span>
+<span class="c1">#                                                          #</span>
+PermitRootLogin yes
+<span class="c1">#                                                          #</span>
+<span class="c1">## Protocol ################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, какой протокол должен использовать sshd.      #</span>
+<span class="c1"># Возможные значения ‘1’ и ‘2’ - ssh1 и ssh2               #</span>
+<span class="c1"># соответственно. Возможна одновременная запись, при       #</span>
+<span class="c1"># которой значения следует разделять запятыми.             #</span>
+<span class="c1"># По умолчанию - “2,1”.                                    #</span>
+<span class="c1"># Стоит отметить, что порядок следования протоколов в      #</span>
+<span class="c1"># записи не задает приоритет, т.к. клиент выбирает какой   #</span>
+<span class="c1"># из нескольких предложенных сервером протоколов ему       #</span>
+<span class="c1"># использовать.Запись &quot;2,1&quot; абсолютно идентична            #</span>
+<span class="c1"># записи &quot;1,2&quot;.                                            #</span>
+<span class="c1">#                                                          #</span>
+Protocol <span class="m">2</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## UsePAM ##################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Включает интерфейс PAM (Pluggable Authentication Module  #</span>
+<span class="c1"># interface).Если задано значение &quot;yes&quot; - для всех типов   #</span>
+<span class="c1"># аутентификации помимо обработки модуля сессии и аккаунта #</span>
+<span class="c1"># PAM будет использоваться аутентификация на основе        #</span>
+<span class="c1"># запроса-ответа (ChallengeResponseAuthentication и        #</span>
+<span class="c1"># PasswordAuthentication) Т.к. аутентификация              #</span>
+<span class="c1"># запросов-ответов в PAM обычно выполняет ту же роль,      #</span>
+<span class="c1"># что и парольная аутентификация, вам следует отключить    #</span>
+<span class="c1"># либо PasswordAuthentication, либо                        #</span>
+<span class="c1"># ChallengeResponseAuthentication. Стоит отметить, что     #</span>
+<span class="c1"># если директива UsePAM включена - вы не сможете запустить #</span>
+<span class="c1"># sshd от имени пользователя, отличного от root.           #</span>
+<span class="c1"># Значение по умолчанию - “no”.                            #</span>
+<span class="c1">#                                                          #</span>
+UsePAM yes
+<span class="c1">#                                                          #</span>
+<span class="c1">## PasswordAuthentication ##################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешена ли аутентификация с использованием  #</span>
+<span class="c1"># пароля.                                                  #</span>
+<span class="c1"># По умолчанию - “yes”.                                    #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## HostKey #################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает файл, содержащий закрытый хост-ключ,           #</span>
+<span class="c1"># используемый SSH. По умолчанию - /etc/ssh/ssh_host_key   #</span>
+<span class="c1"># для протокола ssh1 и /etc/ssh/ssh_host_rsa_key и         #</span>
+<span class="c1"># /etc/ssh/ssh_host_dsa_key для протокола ssh2. Стоит      #</span>
+<span class="c1"># отметить, что sshd не станет пользоваться файлом,        #</span>
+<span class="c1"># который доступен кому либо, кроме пользователя. Можно    #</span>
+<span class="c1"># использовать несколько файлов с ключами, ключи “rsa1” -  #</span>
+<span class="c1"># для протокола ssh1 и “dsa”/“rsa” для протокола ssh2.     #</span>
+<span class="c1">#                                                          #</span>
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_dsa_key
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">########## Опции протокола SSH версии 1 (ssh1) #############</span>
+<span class="c1">############################################################</span>
+<span class="c1"># Настоятельно НЕ РЕКОМЕНДУЕТСЯ использовать протокол ssh1.#</span>
+<span class="c1"># Протокол ssh2 намного более безопасен, чем ssh1          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## KeyRegenerationInterval #################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Для протокола ssh1 - раз в определенное время            #</span>
+<span class="c1"># автоматически генерируется новый временный ключ сервера  #</span>
+<span class="c1"># (если он был использован). Это сделано для               #</span>
+<span class="c1"># предотвращения расшифровки перехваченных сеансов,с целью #</span>
+<span class="c1"># позже зайти с параметрами этих сеансов на машину и       #</span>
+<span class="c1"># украсть ключи. Такой ключ нигде не хранится (хранится в  #</span>
+<span class="c1"># оперативной памяти). Данная директива указывает период   #</span>
+<span class="c1"># &quot;жизни&quot; ключа в секундах, после которого он будет        #</span>
+<span class="c1"># сгенерирован заново. Если значение задать равным 0 -     #</span>
+<span class="c1"># ключ не будет генерироваться заново.                     #</span>
+<span class="c1"># По умолчанию значение - 3600 (секунд).                   #</span>
+<span class="c1">#                                                          #</span>
+KeyRegenerationInterval <span class="m">3600</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## RhostsRSAAuthentication #################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, нужна ли аутентификация на основе файлов      #</span>
+<span class="c1"># rhosts или /etc/hosts.equiv совместно с успешной         #</span>
+<span class="c1"># аутентификацией хоста через RSA.                         #</span>
+<span class="c1"># Актуально только для протокола ssh1.                     #</span>
+<span class="c1"># По умолчанию - “no”.                                     #</span>
+<span class="c1">#                                                          #</span>
+RhostsRSAAuthentication no
+<span class="c1">#                                                          #</span>
+<span class="c1">## RSAAuthentication #######################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешена ли &quot;чистая&quot; RSA-аутентификация.     #</span>
+<span class="c1"># Актуально только для протокола ssh1.                     #</span>
+<span class="c1"># По умолчанию - “yes”.                                    #</span>
+<span class="c1">#                                                          #</span>
+RSAAuthentication yes
+<span class="c1">#                                                          #</span>
+<span class="c1">## ServerKeyBits ###########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Определяет число бит во временном ключе сервера для      #</span>
+<span class="c1"># протокола ssh1. Минимальное значение 512.                #</span>
+<span class="c1"># Значение по умолчанию - 1024.                            #</span>
+ServerKeyBits <span class="m">768</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">########### Опции протокола SSH версии 2 (ssh2) ############</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## Ciphers #################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает алгоритмы шифрования, разрешенные для          #</span>
+<span class="c1"># протокола ssh2. Несколько алгоритмов должны быть         #</span>
+<span class="c1"># разделены запятыми. Поддерживаемые алгоритмы:            #</span>
+<span class="c1"># “3des-cbc”, “aes128-cbc”, “aes192-cbc”, “aes256-cbc”,    #</span>
+<span class="c1"># “aes128-ctr”, “aes192-ctr”, “aes256-ctr”, “arcfour128”,  #</span>
+<span class="c1"># “arcfour256”, “arcfour”, “blowfish-cbc”, “cast128-cbc”.  #</span>
+<span class="c1"># По умолчанию используются:                               #</span>
+<span class="c1"># aes128-cbc,3des-cbc,blowfish-cbc,cast128-cbc,arcfour128, #</span>
+<span class="c1"># arcfour256,arcfour,aes192-cbc,aes256-cbc,aes128-ctr,     #</span>
+<span class="c1"># aes192-ctr,aes256-ctr                                    #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## HostbasedAuthentication #################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешена ли аутентификация, основанная на    #</span>
+<span class="c1"># проверке хоста. Проверяется rhosts или /etc/hosts.equiv, #</span>
+<span class="c1"># и в случае успеха, совместного с успешной проверкой      #</span>
+<span class="c1"># публичного ключа, доступ разрешается. Данная директива   #</span>
+<span class="c1"># одинакова с директивой RhostsRSAAuthentication и         #</span>
+<span class="c1"># подходит только для протокола ssh2.                      #</span>
+<span class="c1"># По умолчанию - &quot;no&quot;.                                     #</span>
+<span class="c1">#                                                          #</span>
+HostbasedAuthentication no
+<span class="c1">#                                                          #</span>
+<span class="c1">## MACs ####################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает допустимый алгоритм MAC (message               #</span>
+<span class="c1"># authentication code). Алгоритм MAC используется          #</span>
+<span class="c1"># протоколом ssh2 для защиты целостности данных. Несколько #</span>
+<span class="c1"># алгоритмов должны быть разделены запятыми.               #</span>
+<span class="c1"># По умолчанию используются:                               #</span>
+<span class="c1"># hmac-md5,hmac-sha1,umac-64@openssh.com,hmac-ripemd160,   #</span>
+<span class="c1"># hmac-sha1-96,hmac-md5-96                                 #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## PubkeyAuthentication ####################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешена ли аутентификация на основе         #</span>
+<span class="c1"># публичного ключа. Актуально только для протокола ssh2.   #</span>
+<span class="c1"># По умолчанию - “yes”.                                    #</span>
+<span class="c1">#                                                          #</span>
+PubkeyAuthentication yes
+<span class="c1">############################################################</span>
+<span class="c1">#################### Опции GSSAPI ##########################</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">############ Применимо только для протокола ssh2 ###########</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## GSSAPIAuthentication ####################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешена ли аутентификация пользователя на   #</span>
+<span class="c1"># основе GSSAPI. По умолчанию - &quot;no&quot;, т.е. запрещена.      #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## GSSAPIKeyExchange #######################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешен ли обмен ключами, основанный на      #</span>
+<span class="c1"># GSSAPI. Обмен ключам при помощи GSSAPI не полагается на  #</span>
+<span class="c1"># ssh ключи при верификации идентичности хоста.            #</span>
+<span class="c1"># По умолчанию - &quot;no&quot; - т.е. обмен запрещен.               #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## GSSAPICleanupCredentials ################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, нужно ли автоматически уничтожать             #</span>
+<span class="c1"># пользовательский кеш аутентификационных полномочий при   #</span>
+<span class="c1"># завершении сеанса.                                       #</span>
+<span class="c1"># По умолчанию - &quot;yes&quot; - т.е. нужно уничтожать.            #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## GSSAPIStrictAcceptorCheck ###############################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, насколько строгой должна быть проверка        #</span>
+<span class="c1"># идентичности клиента при аутентификации через GSSAPI.    #</span>
+<span class="c1"># Значение &quot;yes&quot; заставляет клиента аутентифицироваться в  #</span>
+<span class="c1"># принимающей хост-службе на текущем хосте. Значение &quot;no&quot;  #</span>
+<span class="c1"># позволяет клиенту аутентифицироваться при помощи любого  #</span>
+<span class="c1"># ключа служб.                                             #</span>
+<span class="c1"># Значение по умолчанию - &quot;yes&quot;.                           #</span>
+<span class="c1"># Стоит заметить, что задание значения &quot;no&quot; может          #</span>
+<span class="c1"># сработать только с редкими библиотеками Kerberos GSSAPI. #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">################### Опции Kerberos #########################</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## KerberosAuthentication ##################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, требует ли пароль, предоставленный            #</span>
+<span class="c1"># пользователем для аутентификации                         #</span>
+<span class="c1"># (PasswordAuthentication) валидации в Kerberos KDC.       #</span>
+<span class="c1"># Для использования этой опции серверу нужно               #</span>
+<span class="c1"># удостовериться в истинности KDC. (Тhe server needs a     #</span>
+<span class="c1"># Kerberos servtab which allows the verification of the    #</span>
+<span class="c1"># KDC’s identity)                                          #</span>
+<span class="c1"># По умолчанию - “no”.                                     #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## KerberosGetAFSToken #####################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Если активен AFS и пользователь получил Kerberos 5 TGT,  #</span>
+<span class="c1"># пытаться ли получить AFS токен до того, как пользователь #</span>
+<span class="c1"># получит доступ к своей домашней папке.                   #</span>
+<span class="c1"># По умолчанию - “no”.                                     #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## KerberosOrLocalPasswd ###################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, как поступать в случае, если аутентификация   #</span>
+<span class="c1"># через Kerberos завершилась неудачей. Если                #</span>
+<span class="c1"># значение = &quot;yes&quot; - пароль будет проверен при помощи      #</span>
+<span class="c1"># любого дополнительного локального механизма авторизации, #</span>
+<span class="c1"># например - /etc/passwd.                                  #</span>
+<span class="c1"># По умолчанию - “yes”.                                    #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## KerberosTicketCleanup ###################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, нужно ли автоматически уничтожать файл с      #</span>
+<span class="c1"># кешем тикета пользователя по завершению сеанса.          #</span>
+<span class="c1"># По умолчанию - “yes”.                                    #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">################# Опции перенаправления ####################</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## AllowAgentForwarding ####################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешить или запретить перенаправление       #</span>
+<span class="c1"># ssh-agent&#39;а. По умолчанию - “yes”, т.е. разрешить.       #</span>
+<span class="c1"># Стоит заметить, что отключение перенаправления не        #</span>
+<span class="c1"># увеличит безопасности пока пользователям также не будет  #</span>
+<span class="c1"># запрещен shell доступ, т.к. они всегда смогут установить #</span>
+<span class="c1"># свои собственные аналоги агента.                         #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## AllowTcpForwarding ######################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешить или запретить перенаправление TCP.  #</span>
+<span class="c1"># По умолчанию - “yes”, т.е. разрешить. Стоит заметить,    #</span>
+<span class="c1"># что как и в случае с AllowAgentForwarding отключение     #</span>
+<span class="c1"># перенаправления не увеличит безопасности, пока у         #</span>
+<span class="c1"># пользователей будет консольный доступ, т.к. они смогут   #</span>
+<span class="c1"># установить свои аналоги.                                 #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## GatewayPorts ############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешать ли удаленным хостам доступ к        #</span>
+<span class="c1"># перенаправленным портам. По умолчанию, sshd слушает      #</span>
+<span class="c1"># соединения к перенаправленным портам только на локальном #</span>
+<span class="c1"># интерфейсе (loopback). Это не дает другим удаленным      #</span>
+<span class="c1"># хостам подсоединяться к перенаправленным портам. Можно   #</span>
+<span class="c1"># использовать GatewayPorts, чтобы разрешить sshd это      #</span>
+<span class="c1"># делать. Директива может принимать 3 значения:            #</span>
+<span class="c1"># &quot;no&quot; - только loopback.                                  #</span>
+<span class="c1"># &quot;yes&quot;- любые адреса.                                     #</span>
+<span class="c1"># &quot;clientspecified&quot; - адреса указанные клиентом.           #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## PermitOpen ##############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает куда разрешено перенаправление TCP портов.     #</span>
+<span class="c1"># Указание перенаправления должно принимать одну из        #</span>
+<span class="c1"># следующих форм:                                          #</span>
+<span class="c1"># PermitOpen host:port                                     #</span>
+<span class="c1"># PermitOpen IPv4_addr:port                                #</span>
+<span class="c1"># PermitOpen [IPv6_addr]:port                              #</span>
+<span class="c1"># Несколько записей можно задать, разделяя их пробелами.   #</span>
+<span class="c1"># Аргумент “any” можно использовать для снятия всех        #</span>
+<span class="c1"># запретов на перенаправление портов. По умолчанию любое   #</span>
+<span class="c1"># перенаправление разрешено.                               #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## PermitTunnel ############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешено ли перенаправление tun-устройств.   #</span>
+<span class="c1"># Может принимать значения:                                #</span>
+<span class="c1"># “yes”                                                    #</span>
+<span class="c1"># “point-to-point” (3-й сетевой уровень)                   #</span>
+<span class="c1"># “ethernet” (2-й сетевой уровень)                         #</span>
+<span class="c1"># “no”                                                     #</span>
+<span class="c1"># Значение “yes” разрешает одновременно и “point-to-point” #</span>
+<span class="c1"># и “ethernet”. По умолчанию - “no”.                       #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">################## Опции журналирования ####################</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## SyslogFacility ##########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Задает код объекта журнала для записи сообщений в        #</span>
+<span class="c1"># системный журнал от sshd. Возможные значения:            #</span>
+<span class="c1"># DAEMON                                                   #</span>
+<span class="c1"># USER                                                     #</span>
+<span class="c1"># AUTH                                                     #</span>
+<span class="c1"># LOCAL0                                                   #</span>
+<span class="c1"># LOCAL1                                                   #</span>
+<span class="c1"># LOCAL2                                                   #</span>
+<span class="c1"># LOCAL3                                                   #</span>
+<span class="c1"># LOCAL4                                                   #</span>
+<span class="c1"># LOCAL5                                                   #</span>
+<span class="c1"># LOCAL6                                                   #</span>
+<span class="c1"># LOCAL7                                                   #</span>
+<span class="c1"># По умолчанию используется AUTH.                          #</span>
+<span class="c1">#                                                          #</span>
+SyslogFacility AUTH
+<span class="c1">#                                                          #</span>
+<span class="c1">## LogLevel ################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Задает уровень детальности журнала sshd.                 #</span>
+<span class="c1"># Возможные варианты:                                      #</span>
+<span class="c1"># SILENT                                                   #</span>
+<span class="c1"># QUIET                                                    #</span>
+<span class="c1"># FATAL                                                    #</span>
+<span class="c1"># ERROR                                                    #</span>
+<span class="c1"># INFO                                                     #</span>
+<span class="c1"># VERBOSE                                                  #</span>
+<span class="c1"># DEBUG                                                    #</span>
+<span class="c1"># DEBUG1                                                   #</span>
+<span class="c1"># DEBUG2                                                   #</span>
+<span class="c1"># DEBUG3                                                   #</span>
+<span class="c1"># По умолчанию - INFO.                                     #</span>
+<span class="c1"># DEBUG и DEBUG1 эквивалентны друг другу.                  #</span>
+<span class="c1"># DEBUG2 и DEBUG3 задают самые высокие уровни отладочного  #</span>
+<span class="c1"># вывода. Запись логов с уровнем DEBUG угрожает            #</span>
+<span class="c1"># приватности пользователей и не рекомендована.            #</span>
+<span class="c1">#                                                          #</span>
+LogLevel INFO
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">################### Перенаправление X11 ####################</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## X11Forwarding ###########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешено ли перенаправление графической      #</span>
+<span class="c1"># подсистемы X11. Может принимать значения “yes” или “no”. #</span>
+<span class="c1"># По умолчанию - “no”.                                     #</span>
+<span class="c1"># Внимание - включение простого перенаправления Х11 -      #</span>
+<span class="c1"># большой риск как для сервера, так и для клиентов, т.к. в #</span>
+<span class="c1"># случае такого перенаправления прокси-дисплей sshd        #</span>
+<span class="c1"># принимает соединения с любых адресов. Используйте        #</span>
+<span class="c1"># директиву X11UseLocalhost для ограничения доступа к      #</span>
+<span class="c1"># серверу перенаправления &quot;иксов&quot;. Стоит отметить, что     #</span>
+<span class="c1"># отключение перенаправления не даст гарантии, что         #</span>
+<span class="c1"># пользователи не смогут перенаправлять Х11, т.к. имея     #</span>
+<span class="c1"># консольный доступ они всегда установить свой             #</span>
+<span class="c1"># перенаправлятель. Перенаправление Х11 будет              #</span>
+<span class="c1"># автоматически отключено, если будет задействована        #</span>
+<span class="c1"># директива UseLogin.                                      #</span>
+<span class="c1">#                                                          #</span>
+X11Forwarding yes
+<span class="c1">#                                                          #</span>
+<span class="c1">## X11UseLocalhost #########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, должен ли sshd ограничить область             #</span>
+<span class="c1"># перенаправления Х11 локальным loopback адресом, или      #</span>
+<span class="c1"># должен разрешить любые адреса. По умолчанию - sshd       #</span>
+<span class="c1"># &quot;сажает&quot; сервер перенаправления Х11 на локальный адрес   #</span>
+<span class="c1"># и задает часть переменной окружения DISPLAY, отвечающую  #</span>
+<span class="c1"># за имя хоста как “localhost”. Стоит заметить, что        #</span>
+<span class="c1"># некоторые старые клиенты Х11 могут не работать с такими  #</span>
+<span class="c1"># настройками. По умолчанию - &quot;yes&quot;, т.е. перенаправление  #</span>
+<span class="c1"># ограничено локалхостом, значение - “no” - отключает      #</span>
+<span class="c1"># ограничения.                                             #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## XAuthLocation ###########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает полный путь к программе xauth.                 #</span>
+<span class="c1"># По умолчанию - /usr/bin/X11/xauth.                       #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## X11DisplayOffset ########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает номер первого дисплея, доступного sshd в       #</span>
+<span class="c1"># качестве перенаправления X11. Это сделано для того,      #</span>
+<span class="c1"># чтобы перенаправленные &quot;иксы&quot; не пересекались с          #</span>
+<span class="c1"># реальными. По умолчанию - 10.                            #</span>
+<span class="c1">#                                                          #</span>
+X11DisplayOffset <span class="m">10</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">################### Различные опции ########################</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## LoginGraceTime ##########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Время, по прошествии которого сервер отключает           #</span>
+<span class="c1"># пользователя, если тот не смог удовлетворительно         #</span>
+<span class="c1"># залогиниться. Значение 0 - разрешает пользователю        #</span>
+<span class="c1"># логиниться бесконечно. По умолчанию - 120 (секунд).      #</span>
+<span class="c1">#                                                          #</span>
+LoginGraceTime <span class="m">120</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## MaxAuthTries ############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает максимальное число попыток аутентификации,     #</span>
+<span class="c1"># разрешенное для одного соединения.                       #</span>
+<span class="c1"># Как только число неудачных попыток превысит половину     #</span>
+<span class="c1"># заданного значения, все последующие попытки будут        #</span>
+<span class="c1"># заноситься в журнал. Значение по умолчанию - 6.          #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## MaxSessions #############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает максимальное число одновременных подключений   #</span>
+<span class="c1"># для каждого сетевого соединения. По умолчанию - 10.      #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## MaxStartups #############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает максимальное число одновременных               #</span>
+<span class="c1"># неавторизованных подключений к sshd. В случае, если      #</span>
+<span class="c1"># число подключений превысит лимит - все дополнительные    #</span>
+<span class="c1"># подключения будут сброшены до тех пор, пока текущие      #</span>
+<span class="c1"># подключения не завершатся либо успешной авторизацией,    #</span>
+<span class="c1"># либо истечением периода времени указанного в директиве   #</span>
+<span class="c1"># LoginGraceTime. Значение по умолчанию - 10.              #</span>
+<span class="c1"># Дополнительно, можно задать ранний сброс соединений,     #</span>
+<span class="c1"># указав в качестве параметра три значения, разделенные    #</span>
+<span class="c1"># двоеточием “start:rate:full” (например: &quot;10:30:60&quot;).     #</span>
+<span class="c1"># sshd отклонит попытку соединения с вероятностью равной   #</span>
+<span class="c1"># “rate/100” (т.е. в нашем примере - 30%), если уже        #</span>
+<span class="c1"># имеется “start” (10) неавторизованных соединений.        #</span>
+<span class="c1"># Вероятность увеличивается линейно и любые попытки        #</span>
+<span class="c1"># соединения будут отклонены, если число неавторизованных  #</span>
+<span class="c1"># соединений достигнет значения “full” (60).               #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## Compression #############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, разрешено ли сжатие данных. Может быть        #</span>
+<span class="c1"># &quot;yes&quot; - сжатие разрешено.                                #</span>
+<span class="c1"># &quot;delayed&quot; - сжатие отложено до тех пор, пока             #</span>
+<span class="c1"># пользователь успешно не аутентифицируется.               #</span>
+<span class="c1"># &quot;no&quot; - сжатие запрещено.                                 #</span>
+<span class="c1"># По умолчанию - &quot;delayed&quot;.                                #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## UseLogin ################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, должен ли использоваться login для            #</span>
+<span class="c1"># интерактивного сеанса. Значение по умолчанию - “no”.     #</span>
+<span class="c1"># Стоит отметить, что login никогда не использовался для   #</span>
+<span class="c1"># выполнения удаленных команд. Так же заметим, что         #</span>
+<span class="c1"># использование login сделает невозможным использование    #</span>
+<span class="c1"># директивы X11Forwarding, потому что login не знает, что  #</span>
+<span class="c1"># ему делать с xauth. Если включена директива              #</span>
+<span class="c1"># UsePrivilegeSeparation - она будет отключена после       #</span>
+<span class="c1"># авторизации.                                             #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## UsePrivilegeSeparation ##################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, должен ли sshd разделять привилегии. Если да  #</span>
+<span class="c1"># - то сначала будет создан непривилегированный дочерний   #</span>
+<span class="c1"># процесс для входящего сетевого трафика. После успешной   #</span>
+<span class="c1"># авторизации будет создан другой процесс с привилегиями   #</span>
+<span class="c1"># вошедшего пользователя. Основная цель разделения         #</span>
+<span class="c1"># привилегий - предотвращение превышения прав доступа.     #</span>
+<span class="c1"># Значение по умолчанию - “yes”.                           #</span>
+<span class="c1">#                                                          #</span>
+UsePrivilegeSeparation yes
+<span class="c1">#                                                          #</span>
+<span class="c1">## StrictModes #############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает должен ли sshd проверить режимы доступа и      #</span>
+<span class="c1"># владения пользовательских папок и файлов перед тем, как  #</span>
+<span class="c1"># дать пользователю войти. Обычно это объясняется тем, что #</span>
+<span class="c1"># новички часто делают свои файлы доступными для записи    #</span>
+<span class="c1"># всем подряд.По умолчанию - “yes”.                        #</span>
+<span class="c1">#                                                          #</span>
+StrictModes yes
+<span class="c1">#                                                          #</span>
+<span class="c1">## AcceptEnv ###############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, какие переменные окружения, переданные        #</span>
+<span class="c1"># клиентом будут приняты. См. опцию SendEnv в клиенте.     #</span>
+<span class="c1"># Стоит заметить, что передача переменных возможна только  #</span>
+<span class="c1"># для протокола ssh2. Переменные указываются по имени,     #</span>
+<span class="c1"># можно использовать маски (‘*’ и ‘?’). Можно указывать    #</span>
+<span class="c1"># несколько переменных через пробел, или разбить на        #</span>
+<span class="c1"># несколько строк AcceptEnv. Будьте осторожны - некоторые  #</span>
+<span class="c1"># переменные окружения могут быть использованы для обхода  #</span>
+<span class="c1"># запрещенных пользовательских окружений. Пользуйтесь этой #</span>
+<span class="c1"># директивой аккуратно. По умолчанию никакие               #</span>
+<span class="c1"># пользовательские переменные окружения не принимаются.    #</span>
+<span class="c1">#                                                          #</span>
+AcceptEnv LANG LC_*
+<span class="c1">#                                                          #</span>
+<span class="c1">## PermitUserEnvironment ###################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, должен ли sshd воспринимать                   #</span>
+<span class="c1"># ~/.ssh/environment и опцию environment= в                #</span>
+<span class="c1"># ~/.ssh/authorized_keys. По умолчанию - “no”. Стоит       #</span>
+<span class="c1"># заметить, что разрешение обработки окружения может дать  #</span>
+<span class="c1"># пользователям возможность обойти ограничения в некоторых #</span>
+<span class="c1"># конфигурациях, использующих такие механизмы, как         #</span>
+<span class="c1"># LD_PRELOAD.                                              #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## PidFile #################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает файл, содержащий идентификатор процесса        #</span>
+<span class="c1"># (process ID, PID) демона SSH.                            #</span>
+<span class="c1"># По умолчанию - /var/run/sshd.pid                         #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## PrintLastLog ############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, должен ли sshd выводить на экран дату и время #</span>
+<span class="c1"># последнего севнса при интерактивном входе пользователя.  #</span>
+<span class="c1"># По умолчанию - “yes”.                                    #</span>
+<span class="c1">#                                                          #</span>
+PrintLastLog yes
+<span class="c1">#                                                          #</span>
+<span class="c1">## PrintMotd ###############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает, должен ли sshd выводить на экран /etc/motd    #</span>
+<span class="c1"># при интерактивном входе пользователя. На некоторых       #</span>
+<span class="c1"># системах (например в Ubuntu) эта информация так же       #</span>
+<span class="c1"># выводится на экран оболочкой.                            #</span>
+<span class="c1"># Значение по умолчанию - “yes”.                           #</span>
+<span class="c1">#                                                          #</span>
+PrintMotd no
+<span class="c1">#                                                          #</span>
+<span class="c1">## Banner ##################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Указывает какой файл содержит текстовый баннер, который  #</span>
+<span class="c1"># будет показан пользователю ПЕРЕД процедурой              #</span>
+<span class="c1"># аутентификации. Опция доступна только для протокола ssh2.#</span>
+<span class="c1"># По умолчанию - не показывает ничего.                     #</span>
+<span class="c1"># В Ubuntu файл issue.net содержит фразу Ubuntu {version}, #</span>
+<span class="c1"># например, для karmic это &quot;Ubuntu 9.10&quot;. Можно            #</span>
+<span class="c1"># использовать для дезориентации возможных атакующих,      #</span>
+<span class="c1"># написав туда например &quot;My D-Link Interet Router&quot; =)      #</span>
+<span class="c1">#                                                          #</span>
+Banner /etc/issue.net
+<span class="c1">#                                                          #</span>
+<span class="c1">## ChrootDirectory #########################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Если указан - предоставляет путь, по которому будет      #</span>
+<span class="c1"># выполнен chroot после аутентификации. Путь и все его     #</span>
+<span class="c1"># содержимое должны соответствовать принадлежащим          #</span>
+<span class="c1"># суперпользователю папкам и быть не доступными для        #</span>
+<span class="c1"># записи другими пользователями.                           #</span>
+<span class="c1"># В пути могут быть указаны метки, подставляемые в         #</span>
+<span class="c1"># процессе аутентификации:                                 #</span>
+<span class="c1"># %% - заменяется литералом &#39;%&#39;                            #</span>
+<span class="c1"># %h - заменяется домашней директорией                     #</span>
+<span class="c1"># аутентифицируещегося пользователя                        #</span>
+<span class="c1"># %u - заменяется именем аутентифицируещегося пользователя #</span>
+<span class="c1"># chroot-папка должна содержать все необходимые файлы и    #</span>
+<span class="c1"># папки для пользовательского сеанса. Для интерактивного   #</span>
+<span class="c1"># сеанса нужны как минимум:                                #</span>
+<span class="c1"># оболочка, обычно - sh                                    #</span>
+<span class="c1"># базовые устройства в /dev, такие как:                    #</span>
+<span class="c1"># null, zero, stdin, stdout, stderr, arandom и tty         #</span>
+<span class="c1"># для сеанса передачи данных при помощи sftp никаких       #</span>
+<span class="c1"># дополнительных настроек не нужно, если используется      #</span>
+<span class="c1"># внутренний процесс sftp сервера. См. Subsystem для       #</span>
+<span class="c1"># большей информации. По умолчанию chroot не выполняется.  #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## ForceCommand ############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Заставляет выполняться указанную команду. Игнорирует     #</span>
+<span class="c1"># любые команды переданные клиентом или записанные в       #</span>
+<span class="c1"># ~/.ssh/rc. Команда вызывается из пользовательской        #</span>
+<span class="c1"># оболочки с опцией -с. Подходит для запуска оболочки,     #</span>
+<span class="c1"># команды или подсистемы. Наиболее полезна внутри блока    #</span>
+<span class="c1"># Match. Команда, изначально переданная клиентом, хранится #</span>
+<span class="c1"># в переменной окружения SSH_ORIGINAL_COMMAND. Если        #</span>
+<span class="c1"># указать команду &quot;internal-sftp&quot;, будет запущен           #</span>
+<span class="c1"># внутренний sftp сервер, которому не нужны дополнительные #</span>
+<span class="c1"># файлы и папки, описанные в директиве ChrootDirectory.    #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1">## Subsystem ###############################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Определяет и настраивает внешнюю подсистему (например    #</span>
+<span class="c1"># демона передачи файлов - file transfer daemon).          #</span>
+<span class="c1"># Аргументами служат имя и команда (с возможными           #</span>
+<span class="c1"># аргументами), которая будет выполнена во время запроса   #</span>
+<span class="c1"># на подсистемы. Команда sftp-server  запускает “sftp” -   #</span>
+<span class="c1"># подсистему передачи файлов. Дополнительно можно указать  #</span>
+<span class="c1"># в качестве подсистемы “internal-sftp” - что запустит     #</span>
+<span class="c1"># внутренний sftp сервер. Это может значительно упростить  #</span>
+<span class="c1"># настройку в случае использования директивы               #</span>
+<span class="c1"># ChrootDirectory По умолчанию никаких подсистем           #</span>
+<span class="c1"># не вызывается. Актуально только для протокола ssh2.      #</span>
+<span class="c1">#                                                          #</span>
+Subsystem sftp /usr/lib/openssh/sftp-server
+<span class="c1">#                                                          #</span>
+<span class="c1">############################################################</span>
+<span class="c1">##################### Блок Match ###########################</span>
+<span class="c1">############################################################</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Специально вынес в конец файла, чтобы было удобнее       #</span>
+<span class="c1"># писать Match правила.                                    #</span>
+<span class="c1">#                                                  MadKox. #</span>
+<span class="c1">#                                                          #</span>
+<span class="c1"># Директива Match представляет собой начало условного      #</span>
+<span class="c1"># блока. Если выполнены все критерии, указанные в строке   #</span>
+<span class="c1"># Match, директивы в последующих строках блока выполняются,#</span>
+<span class="c1"># позволяя обойти значения глобальных директив файла       #</span>
+<span class="c1"># sshd_config для случая, являющегося критерием директивы  #</span>
+<span class="c1"># Match. Блоком считаются все строки, идущие после строки  #</span>
+<span class="c1"># с критерием (Match - строки) до следующей match-строки   #</span>
+<span class="c1"># или до конца файла. Аргумент директивы Match - одна или  #</span>
+<span class="c1"># несколько пар записей критериев. Возможные виды записей: #</span>
+<span class="c1"># User                                                     #</span>
+<span class="c1"># Group                                                    #</span>
+<span class="c1"># Host                                                     #</span>
+<span class="c1"># Address                                                  #</span>
+<span class="c1"># Записи могут содержать как одиночные значения            #</span>
+<span class="c1"># (например User=user), так и несколько значений,          #</span>
+<span class="c1"># разделенные запятыми (User=user1,user2). Так же могут    #</span>
+<span class="c1"># быть использованы регулярные выражения, описанные в      #</span>
+<span class="c1"># секции PATTERNS файла ssh_config. Записи в критерии      #</span>
+<span class="c1"># Address могут содержать адреса в нотации CIDR            #</span>
+<span class="c1"># (Адрес/Длинна маски, например “192.0.2.0/24” или         #</span>
+<span class="c1"># “3ffe:ffff::/32”). Стоит заметить, что представленная    #</span>
+<span class="c1"># длинна маски должна соответствовать адресу, и слишком    #</span>
+<span class="c1"># длинные/короткие для адреса не будут работать.           #</span>
+<span class="c1"># В качестве директив Match может использовать только      #</span>
+<span class="c1"># определенный набор директив:                             #</span>
+<span class="c1"># AllowTcpForwarding                                       #</span>
+<span class="c1"># Banner                                                   #</span>
+<span class="c1"># ChrootDirectory                                          #</span>
+<span class="c1"># ForceCommand                                             #</span>
+<span class="c1"># GatewayPorts                                             #</span>
+<span class="c1"># GSSAPIAuthentication                                     #</span>
+<span class="c1"># HostbasedAuthentication                                  #</span>
+<span class="c1"># KbdInteractiveAuthentication                             #</span>
+<span class="c1"># KerberosAuthentication                                   #</span>
+<span class="c1"># MaxAuthTries                                             #</span>
+<span class="c1"># MaxSessions                                              #</span>
+<span class="c1"># PasswordAuthentication                                   #</span>
+<span class="c1"># PermitOpen                                               #</span>
+<span class="c1"># PermitRootLogin                                          #</span>
+<span class="c1"># RhostsRSAAuthentication                                  #</span>
+<span class="c1"># RSAAuthentication                                        #</span>
+<span class="c1"># X11DisplayOffset                                         #</span>
+<span class="c1"># X11Forwarding                                            #</span>
+<span class="c1"># X11UseLocalHost                                          #</span>
+</pre></div>
+<p><strong>Port, ListenAddress и AddressFamily</strong></p>
+<p>Эти три параметра определяют, на каких портах и адресах ваш сервер будет ждать входящие соединения. Во-первых, имеет смысл по возможности ограничить семейство обрабатываемых адресов реально используемыми, т. е. если вы используете только IPv4 — отключите IРv6, и наоборот. Сделать это можно при помощи параметра AddressFamily, например (для разрешения IPv4 и запрета IPv6):</p>
+<div class="highlight"><pre><span></span>AddressFamily inet
+</pre></div>
+<p>Задать порт можно как абсолютным значением для всех интерфейсов при помощи директивы Port, так и конкретным значением для каждого интерфейса, при помощи директивы ListenAddress. Например:</p>
+<div class="highlight"><pre><span></span>Port <span class="m">2002</span>
+</pre></div>
+<p>или</p>
+<div class="highlight"><pre><span></span>ListenAddress <span class="m">192</span>.168.0.1:2003
+ListenAddress <span class="m">192</span>.168.1.1:2004
+</pre></div>
+<p><strong>Запрещение удаленного доступа для суперпользователя по паролю</strong></p>
+<div class="highlight"><pre><span></span>PermitRootLogin without-password
+</pre></div>
+<p><strong>Парольная аутентификация</strong></p>
+<p>Разрешенная по умолчанию парольная аутентификация является практически самым примитивным способом авторизации в sshd. С одной стороны это упрощает конфигурацию и подключение новых пользователей (пользователю достаточно знать свой системный логин/пароль), с другой стороны пароль всегда можно подобрать, а пользователи часто пренебрегают созданием сложных и длинных паролей. Специальные боты постоянно сканируют доступные из интернета ssh сервера и пытаются авторизоваться на них путем перебора логинов/паролей из своей базы. Настоятельно не рекомендуется использовать парольную аутентификацию. Отключить ее можно так:</p>
+<div class="highlight"><pre><span></span>PasswordAuthentication no
+</pre></div>
+<p>Если по каким либо причинам вам все таки хочется использовать парольную аутентификацию — позаботьтесь о том, чтобы никто не мог авторизоваться с пустым паролем. Для этого задайте директиву PermitEmptyPasswords:</p>
+<div class="highlight"><pre><span></span>PermitEmptyPasswords no
+</pre></div>
+<p>Протоколы SSH1 и SSH2</p>
+<p>Как уже было сказано, sshd может работать с протоколами SSH1 и SSH2. При этом использование небезопасного SSH1 крайне не рекомендуется. Заставить sshd работать только с протоколом SSH2 можно так:</p>
+<div class="highlight"><pre><span></span>Protocol <span class="m">2</span>
+</pre></div>
+<p><strong>Аутентификация на основе SSH2 RSA/DSA-ключей</strong></p>
+<p>Наиболее предпочтительным способом авторизации является аутентификация на основе SSH2 RSA, DSA, ECDSA, ED25519 ключей. При таком способе пользователь генерирует на своей стороне пару ключей, из которой один ключ является секретным, а другой публичным. Публичный ключ копируется на сервер и служит для проверки идентичности пользователя. Более подробно про создание пары ключей и способы размещения их на сервере см. в описании SSH-клиента. Включить аутентификацию по публичному ключу можно так:</p>
+<div class="highlight"><pre><span></span>PubkeyAuthentication yes
+</pre></div>
+<p>Сервер должен знать, где ему следует искать публичный ключ пользователя. Для этого применяется специальный файл authorized_keys. Синтаксис его может быть следующим:</p>
+<div class="highlight"><pre><span></span><span class="c1"># Коментарии записываются только с новой строки</span>
+<span class="c1"># общий вид записей в файле authorized_keys</span>
+<span class="c1"># [опции] тип_ключа(ssh-rsa или ssh-dss) очень_длинная_строка_непонятная_простому_человеку [логин@хост]</span>
+ssh-rsa AAAAB3Nza...LiPk<span class="o">==</span> user@example.net
+<span class="nv">from</span><span class="o">=</span><span class="s2">&quot;*.dtulyakov.ru,!pc.dtulyakov.rut&quot;</span> ssh-rsa AAAAB2...19Q<span class="o">==</span> john@example.net
+<span class="nv">command</span><span class="o">=</span><span class="s2">&quot;dump /home&quot;</span>,no-pty,no-port-forwarding ssh-dss AAAAC3...51R<span class="o">==</span> example.net
+<span class="nv">permitopen</span><span class="o">=</span><span class="s2">&quot;192.0.2.1:80&quot;</span>,permitopen<span class="o">=</span><span class="s2">&quot;192.0.2.2:25&quot;</span> ssh-dss AAAAB5...21S<span class="o">==</span>
+<span class="nv">tunnel</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>,command<span class="o">=</span><span class="s2">&quot;sh /etc/netstart tun0&quot;</span> ssh-rsa AAAA...<span class="o">==</span> jane@example.net
+</pre></div>
+<p>Можно указать как один общий файл с ключами, так и по файлу на каждого пользователя. Последний способ является более удобным и безопасным, т. к. можно во-первых указывать разные комбинации ключей для каждого пользователя4), а во-вторых ограничить доступ к публичному ключу пользователя. Задать файл с ключами можно при помощи директивы AuthorizedKeysFile:</p>
+<div class="highlight"><pre><span></span>AuthorizedKeysFile %h/.ssh/*.pub
+</pre></div>
+<p>для схемы пользователь - файл
+или</p>
+<div class="highlight"><pre><span></span>AuthorizedKeysFile /etc/ssh/authorized_keys
+</pre></div>
+
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "ssh.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

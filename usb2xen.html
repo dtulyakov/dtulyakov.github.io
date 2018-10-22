@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Проброс usb-key в гостевую ОС из гипервизора Xen"/>
+    <meta property="og:url" content="./usb2xen.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./usb2xen.html" />
+
+    <title>Проброс usb-key в гостевую ОС из гипервизора Xen | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li ><a href="./category/wiki.html">wiki</a></li>
+                            <li class="active"><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./usb2xen.html" rel="bookmark"
+             title="Permalink to Проброс usb-key в гостевую ОС из гипервизора Xen">Проброс usb-key в гостевую ОС из гипервизора Xen</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/xen.html">Xen</a>
+
+    on 2015-01-21
+
+        |
+        tags:         <a href="./tag/xen.html">Xen</a>
+        <a href="./tag/1c.html">1C</a>
+        <a href="./tag/linux.html">Linux</a>
+        <a href="./tag/virtualization.html">Virtualization</a>
+
+
+        |
+        <a href="./usb2xen.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p>Если вы ещё не успели вступить в каку под названием <strong>"1С 8"</strong> - <strong>подумайте пять раз прежде чем это делать!!!</strong></p>
+<p>Началось всё после очередного слёта (честно купленных) лицензионных ключей <strong>гавно-продукта</strong> "1с 8.2". На запрос причины слётов и возможного решения 1с-ники ответили, что слетел ключ лицензий из за изменения частоты процессора:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>вариант привязки защиты
+CPU4, Intel64 Family 6 Model 45 Stepping 7, 64, 64, **__2293__**, 0789FBFF000206D7, 11527, CPU 5
+</pre></div>
+</td></tr></table>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>вариант почему слетела защита
+CPU4, Intel64 Family 6 Model 45 Stepping 7, 64, 64, **__2294__**, 0789FBFF000206D7, 11527, CPU 5
+</pre></div>
+</td></tr></table>
+
+<p>Но самое интересное дальше - 1с заявила, что они не собираются, что либо делать и этоа проблема их особо не волнует., порекомендовали <strong>при каждом слёте заказывать новый пин</strong>!
+Отношение к этой <strong>гавно-конторе под названием "1с"</strong> у меня в край стало отрицательным, если не сказать "враждебным". Но уже деньги уплачены а работать как то надо. В связи с этим было найден один из вариантов решения этой проблемы. Как известно, что хардовые ключи не слетают (т.к. нечему там слетать) было решено попробовать пробросить их в ВМ. Но т.к. непонятно как себя поведёт этот самый ключ проброшенный в ВМ, я решил пробросить весь USB контролер.</p>
+<p>Вот сам ход эксперемента:</p>
+<p>Заходим на гипервизор и смотрим как у нас обстоит дело с USB</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>lspci <span class="p">|</span>grep -i usb
+<span class="m">00</span>:1a.0 USB controller: Intel Corporation C600/X79 series chipset USB2 Enhanced Host Controller <span class="c1">#2 (rev 05)</span>
+<span class="m">00</span>:1d.0 USB controller: Intel Corporation C600/X79 series chipset USB2 Enhanced Host Controller <span class="c1">#1 (rev 05)</span>
+<span class="m">01</span>:00.4 USB controller: Hewlett-Packard Company Integrated Lights-Out Standard Virtual USB Controller <span class="o">(</span>rev <span class="m">02</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<p>После чего выясняем какой <strong>uuid</strong> у нашей ВМ с "1с"</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span>xe vm-list
+uuid <span class="o">(</span> RO<span class="o">)</span>           : 716add21-05a2-b372-85ae-41c1d9a48fe1
+     name-label <span class="o">(</span> RW<span class="o">)</span>: 1cbuh.local
+    power-state <span class="o">(</span> RO<span class="o">)</span>: running
+
+
+uuid <span class="o">(</span> RO<span class="o">)</span>           : 7b26526e-fa5e-4fe0-a5ae-e0ef9d55c4b3
+     name-label <span class="o">(</span> RW<span class="o">)</span>: Control domain on host: localhost
+    power-state <span class="o">(</span> RO<span class="o">)</span>: running
+</pre></div>
+</td></tr></table>
+
+<p>Ну и теперь осталось пробросить в неё USB контролер</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>xe vm-param-set other-config:pci<span class="o">=</span><span class="m">0</span>/0000:00:1a.0 <span class="nv">uuid</span><span class="o">=</span>716add21-05a2-b372-85ae-41c1d9a48fe1
+</pre></div>
+</td></tr></table>
+
+<p>После всего ещё раз убедился в правильности выбора гипервизора <a href="http://www.xenproject.org/" rel="nofollow" target="_blank">Xen</a> а не VMware</p>
+<p>Рекомендую ознакомится со списком <a href="./ecmerpcrmdms.html">аналогов/конкурентов 1с</a> хотя для некоторых 1с не конкурент</p>
+<p>Ссылки:</p>
+<ul>
+<li><a href="http://habrahabr.ru/post/137327/" rel="nofollow" target="_blank">Проброс видеокарты в виртуальную машину</a></li>
+<li><a href="http://habrahabr.ru/post/151661/" rel="nofollow" target="_blank">Проброс видеокарты в гостевую ОС из гипервизора Xen</a></li>
+<li><a href="http://how-it.ru/public/virtual/258-xen__probros_usb_ustroistv_vnutr_hvm_virtualnoi_mashiny__windows__ili_usb_passthrough.html" rel="nofollow" target="_blank">Xen: проброс USB устройств внутрь HVM виртуальной машины (Windows) или USB passthrough</a></li>
+</ul>
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "usb2xen.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

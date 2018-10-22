@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Использование CRON и команды crontab"/>
+    <meta property="og:url" content="./cron.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./cron.html" />
+
+    <title>Использование CRON и команды crontab | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li class="active"><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./cron.html" rel="bookmark"
+             title="Permalink to Использование CRON и команды crontab">Использование CRON и команды crontab</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/wiki.html">wiki</a>
+
+    on 2016-01-18
+
+        |
+        tags:         <a href="./tag/cron.html">Cron</a>
+        <a href="./tag/linux.html">Linux</a>
+
+
+        |
+        <a href="./cron.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p>Что такое планировщик Cron можно прочесть из <a class="reference external" href="https://ru.wikipedia.org/wiki/Cron">wiki</a> либо из документации man cron</p>
+<p>Сам планировщик разбит на основной системный кронтаб и дополнительные
+Внимание основной системны файл расписаний нельзя править т.к. он затирается при каждом обновлении (по крайней мере просит это сделать и если рука дрогнет то ...)
+Выглядит это /etc/crontab примерно так</p>
+<p>Linnux</p>
+<div class="highlight"><pre><span></span><span class="nv">SHELL</span><span class="o">=</span>/bin/sh
+<span class="nv">PATH</span><span class="o">=</span>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+<span class="nv">MAILTO</span><span class="o">=</span>root
+<span class="nv">HOME</span><span class="o">=</span>/
+
+<span class="c1">#m  h       dom     mon     dow     user    command</span>
+<span class="m">17</span>  *       *       *       *       root    <span class="nb">cd</span> / <span class="o">&amp;&amp;</span> run-parts --report /etc/cron.hourly
+<span class="m">25</span>  <span class="m">6</span>       *       *       *       root    <span class="nb">test</span> -x /usr/sbin/anacron <span class="o">||</span> <span class="o">(</span> <span class="nb">cd</span> / <span class="o">&amp;&amp;</span> run-parts --report /etc/cron.daily <span class="o">)</span>
+<span class="m">47</span>  <span class="m">6</span>       *       *       <span class="m">7</span>       root    <span class="nb">test</span> -x /usr/sbin/anacron <span class="o">||</span> <span class="o">(</span> <span class="nb">cd</span> / <span class="o">&amp;&amp;</span> run-parts --report /etc/cron.weekly <span class="o">)</span>
+<span class="m">52</span>  <span class="m">6</span>       <span class="m">1</span>       *       *       root    <span class="nb">test</span> -x /usr/sbin/anacron <span class="o">||</span> <span class="o">(</span> <span class="nb">cd</span> / <span class="o">&amp;&amp;</span> run-parts --report /etc/cron.monthly <span class="o">)</span>
+<span class="c1">#</span>
+</pre></div>
+<p>Информация файла указывает, что:</p>
+<blockquote>
+содержимое каталога /etc/cron.hourly будет запускаться каждый час на первой минуте часа.
+содержимое каталога /etc/cron.daily будет запускаться каждый день на второй минуте четвертого часа.
+содержимое каталога /etc/cron.weekly будет запускаться каждое воскресенье на 22'ой минуте 4'го часа.
+содержимое каталога /etc/cron.monthly будет запускаться каждый первый день месяца на 42'ой минуте 4'го часа.</blockquote>
+<p>FreeBSD</p>
+<div class="highlight"><pre><span></span><span class="c1"># /etc/crontab - root&#39;s crontab for FreeBSD</span>
+<span class="c1">#</span>
+<span class="c1"># $FreeBSD: releng/10.2/etc/crontab 194170 2009-06-14 06:37:19Z brian $</span>
+<span class="c1">#</span>
+<span class="nv">SHELL</span><span class="o">=</span>/bin/sh
+<span class="nv">PATH</span><span class="o">=</span>/etc:/bin:/sbin:/usr/bin:/usr/sbin
+<span class="c1">#</span>
+<span class="c1">#minute     hour    mday    month   wday    who             command</span>
+<span class="c1">#</span>
+*/5         *       *       *       *       root            /usr/libexec/atrun
+<span class="c1">#</span>
+<span class="c1"># Save some entropy so that /dev/random can re-seed on boot.</span>
+*/11        *       *       *       *       operator        /usr/libexec/save-entropy
+<span class="c1">#</span>
+<span class="c1"># Ротация логов.</span>
+<span class="m">0</span>           *       *       *       *       root            newsyslog
+<span class="c1">#30         *       *       *       *       root            /usr/local/sbin/logrotate /usr/local/etc/logrotate.conf</span>
+<span class="c1">#Вот так делать ненадо :) и логротацию надо запихнуь через crontab -e</span>
+<span class="c1">#</span>
+<span class="c1"># Perform daily/weekly/monthly maintenance.</span>
+<span class="m">1</span>           <span class="m">3</span>       *       *       *       root            periodic daily
+<span class="m">15</span>          <span class="m">4</span>       *       *       <span class="m">6</span>       root            periodic weekly
+<span class="m">30</span>          <span class="m">5</span>       <span class="m">1</span>       *       *       root            periodic monthly
+<span class="c1">#</span>
+<span class="c1"># Adjust the time zone if the CMOS clock keeps local time, as opposed to</span>
+<span class="c1"># UTC time.  See adjkerntz(8) for details.</span>
+<span class="m">1</span>,31        <span class="m">0</span>-5     *       *       *       root    adjkerntz -a
+</pre></div>
+<p>Solaris немного не так как в остальных ОС</p>
+<div class="highlight"><pre><span></span>pkg search cron
+INDEX      ACTION VALUE            PACKAGE
+basename   dir    var/cron         pkg:/SUNWcs@0.5.11-2015.0.2.15440
+basename   dir    var/spool/cron   pkg:/SUNWcs@0.5.11-2015.0.2.15440
+basename   dir    var/spool/cron   pkg:/print/lp@0.5.11-2015.0.2.15440
+basename   dir    var/spool/cron   pkg:/system/accounting/legacy@0.5.11-2015.0.2.15440
+basename   file   etc/default/cron pkg:/SUNWcs@0.5.11-2015.0.2.15440
+basename   file   usr/sbin/cron    pkg:/SUNWcs@0.5.11-2015.0.2.15440
+basename   link   etc/cron         pkg:/SUNWcs@0.5.11-2015.0.2.15440
+basename   link   usr/lib/cron     pkg:/SUNWcs@0.5.11-2015.0.2.15440
+</pre></div>
+<ul class="simple">
+<li>SHELL=/bin/sh указываем какой shell использовать</li>
+<li>HOME=/ где запускать всё</li>
+<li>MAILTO=root кто будет получать письма счастья от крона</li>
+</ul>
+<div class="highlight"><pre><span></span>/etc/cron.hourly
+/etc/cron.daily
+/etc/cron.weekly
+/etc/cron.monthly
+</pre></div>
+<p>Для своего удобства я делаю так</p>
+<div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1">#[минуты] (0-59)</span>
+<span class="c1">#|  [часы] (0-23)</span>
+<span class="c1">#|  |       [числа месяца] (1-31)</span>
+<span class="c1">#|  |       |       [месяцы] (1-12)</span>
+<span class="c1">#|  |       |       |       [дни_недели] (0-6 with 0=Sun)</span>
+<span class="c1">#|  |       |       |       |       [юзер] (в системнок кроне)</span>
+<span class="c1">#|  |       |       |       |       |[команда]</span>
+<span class="c1">#|  |       |       |       |       ||</span>
+@reboot /bin/echo -e <span class="s2">&quot;P 1 F P 1 F P 1 F&quot;</span> &gt; /dev/speaker
+<span class="m">30</span>  *       *       *       *       /usr/local/sbin/logrotate /usr/local/etc/logrotate.conf
+<span class="c1">#0  3       *       *       *       /usr/sbin/freebsd-update cron install</span>
+<span class="m">0</span>   <span class="m">4</span>       *       *       *       /usr/sbin/portsnap cron update &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="c1">#30 4       *       *       *       /usr/sbin/pkg_version -vIL=</span>
+<span class="m">30</span>  *       *       *       *       /usr/local/www/lightsquid/lightparser.pl &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="c1">#30 6-20    *       *       *       /scripts/sarg.sh &gt; /dev/null 2&gt;&amp;1</span>
+<span class="m">35</span>  <span class="m">1</span>       *       *       *       /usr/local/sbin/squid -k rotate &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="c1">#EOF</span>
+
+
+
+Задача: запускать каждую минуту файл /home/user/mail, который будет отправлять почту
+
+<span class="c1">#содержимое файла mail (файл должен быть с правами на запуск! например -rwxr-xr-x)</span>
+<span class="c1">#!/bin/bash</span>
+<span class="nv">mess</span><span class="o">=</span><span class="s2">&quot;test cron&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$mess</span><span class="s2">&quot;</span> <span class="p">|</span>mutt -s <span class="s2">&quot;subj&quot;</span> -m application/octet-stream bob@server.ru
+
+<span class="m">1</span>.Создаем временный файл /home/user/test содержимое файла <span class="nb">test</span> такое:
+
+<span class="nv">SHELL</span><span class="o">=</span>/bin/bash
+<span class="nv">MAILTO</span><span class="o">=</span>user
+<span class="m">0</span>-59 * * * * /home/user/mail
+
+<span class="m">2</span>. Запускаем в терминале команду crontab /home/user/test
+
+Все. После этого в каталоге /var/spool/cron будет создан файл <span class="s2">&quot;user&quot;</span> примерно с таким содержимым
+
+<span class="c1"># DO NOT EDIT THIS FILE - edit the master and reinstall.</span>
+<span class="c1"># (/home/user/test installed on Mon Mar 29 02:31:34 2004)</span>
+<span class="c1"># (Cron version -- $Id: crontab.c,v 2.13 1994/01/17 03:20:37 vixie Exp $)</span>
+<span class="nv">SHELL</span><span class="o">=</span>/bin/bash
+<span class="nv">MAILTO</span><span class="o">=</span>user
+<span class="m">0</span>-59 * * * * /home/user/mail
+
+и файл /home/user/mail будет запускаться демоном cron каждую минуту.
+
+Доступ в каталог /var/spool/cron непривилегированому пользователю закрыт, что бы посмотреть юзером <span class="s2">&quot;user&quot;</span> есть ли у него файл crontab ,достаточно набрать команду crontab -l , если файл существует-будет показано его содержимое.
+
+Для удаления файла используется команда crontab -r
+
+Для редактирования crontab -e
+
+Для управления файлами crontab пользователем <span class="s2">&quot;root&quot;</span> используется синтаксис:
+
+-------------------------
+crontab -u user_name file       -создание файла crontab
+-------------------------        из файла <span class="s2">&quot;file&quot;</span> для
+юзера <span class="s2">&quot;user_name&quot;</span>
+
+-u означает чей crontab будет обработан, Если опция не задана, то будет обработан crontab того пользователя, который запустил команду crontab.
+
+-------------------------
+crontab -u user_name -l       -просмотр файла crontab
+-------------------------       юзера <span class="s2">&quot;user_name&quot;</span>
+
+-------------------------
+crontab -u user_name -r       -удаление файла crontab
+<span class="s2">&quot;-------------------------       юзера &quot;</span>user_name<span class="s2">&quot;</span>
+
+<span class="s2">-------------------------</span>
+<span class="s2">crontab -u user_name -e       -редактирование файла crontab</span>
+<span class="s2">&quot;</span>-------------------------      юзера <span class="s2">&quot;user_name&quot;</span> используя
+редактор, заданный переменной
+окружения VISUAL или EDITOR
+
+Формат и значения полей
+
+Каждая команда в пользовательском файле crontab занимает одну строку и состоит из шести полей. Пользовательские файлы crontab находятся в каталоге /var/spool/cron
+
+Общий формат команды:
+
+<span class="s2">&quot;------------------------------------------------</span>
+<span class="s2">минута час день_месяца месяц день_недели команда</span>
+<span class="s2">&quot;</span>------------------------------------------------
+
+Допустимые значения:
+минута        от <span class="m">0</span> до <span class="m">59</span>
+час           от <span class="m">0</span> до <span class="m">23</span>
+день_месяца   от <span class="m">1</span> до <span class="m">31</span>
+месяц         от <span class="m">1</span> до <span class="m">12</span> <span class="o">(</span>можно три буквы из названия месяца,
+регистр не имеет значения от jan до dec<span class="o">)</span>
+день_недели   от <span class="m">0</span> до <span class="m">6</span>  <span class="o">(</span><span class="m">0</span> это воскресенье,
+можно писать от sun до sat<span class="o">)</span>
+
+Каждое из полей даты и времени может быть обозначено символом * ,будет соответствовать любому возможному значению. Для этих полей можно указывать диапазоны значений, разделенных дефисом, например:
+
+* <span class="m">5</span> <span class="m">4</span>-10 <span class="m">0</span>-3 * <span class="nb">echo</span> <span class="s2">&quot;HELLO&quot;</span>    -печать HELLO в <span class="m">5</span>:00 на <span class="m">4</span>,5,6,7,8,9,10
+дни января, февраля, марта и апреля
+
+пошаговая запись
+
+* */2 * * sat <span class="nb">echo</span> <span class="s2">&quot;HELLO&quot;</span>     -печать HELLO каждый четный час,
+каждую субботу
+
+равнозначная предыдущему примеру запись <span class="o">(</span>списком<span class="o">)</span>
+
+* <span class="m">0</span>,2,4,6,8,10,12,14,16,18,20,22 * * sat <span class="nb">echo</span> <span class="s2">&quot;HELLO&quot;</span>
+-печать HELLO каждый четный
+час, каждую субботу
+
+то же самое с указанием диапазона
+
+* <span class="m">0</span>-23/2 * * sat <span class="nb">echo</span> <span class="s2">&quot;HELLO&quot;</span>  -печать HELLO каждый четный
+час, каждую субботу
+
+<span class="m">59</span> <span class="m">23</span> <span class="m">31</span> dec * <span class="nb">echo</span> <span class="s2">&quot;Happy new year&quot;</span> -без комментариев :<span class="o">)</span>,
+поздравит с новым годом
+
+Для отладки задания cron, можно перенаправить результат в файл
+
+Пример:
+
+<span class="m">0</span>-59 * * * * /home/user/mail <span class="m">2</span>&gt;/tmp/tmp.cron
+
+Если при запуске команды /home/user/mail возникнут ошибки, то они будут записаны в файл /tmp/tmp.cron и вы всегда сможете узнать причину. В случае перенаправления вывода в файл, письмо, юзеру указаному в переменной MAILTO отправлено не будет.
+
+Посмотреть информацию о всех командах запускаемых демоном cron можно в каталоге /var/log называются cron, cron1 и т.д.
+
+В файле /var/log/cron записано время запуска всех заданий cron за предыдущий день
+
+Mar <span class="m">29</span> <span class="m">04</span>:03:00 rst CROND<span class="o">[</span><span class="m">4434</span><span class="o">]</span>: <span class="o">(</span>user<span class="o">)</span> CMD <span class="o">(</span>/home/user/mail<span class="o">)</span>
+Mar <span class="m">29</span> <span class="m">04</span>:03:59 rst CROND<span class="o">[</span><span class="m">4493</span><span class="o">]</span>: <span class="o">(</span>user<span class="o">)</span> CMD <span class="o">(</span>/home/user/mail<span class="o">)</span>
+Mar <span class="m">29</span> <span class="m">04</span>:05:00 rst CROND<span class="o">[</span><span class="m">4507</span><span class="o">]</span>: <span class="o">(</span>user<span class="o">)</span> CMD <span class="o">(</span>/home/user/mail<span class="o">)</span>
+Mar <span class="m">29</span> <span class="m">04</span>:06:00 rst CROND<span class="o">[</span><span class="m">4549</span><span class="o">]</span>: <span class="o">(</span>user<span class="o">)</span> CMD <span class="o">(</span>/home/user/mail<span class="o">)</span>
+
+В остальных файлах cron1,cron2 находится подобная информация, но более старая чем в cron
+
+Вот практически и все, что требуется знать для использования cron и crontab.
+</pre></div>
+
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "cron.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

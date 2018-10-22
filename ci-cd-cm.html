@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Сравнение систем управления конфигураций"/>
+    <meta property="og:url" content="./ci-cd-cm.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./ci-cd-cm.html" />
+
+    <title>Сравнение систем управления конфигураций | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li class="active"><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./ci-cd-cm.html" rel="bookmark"
+             title="Permalink to Сравнение систем управления конфигураций">Сравнение систем управления конфигураций</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/wiki.html">wiki</a>
+
+    on 2016-03-11
+
+        |
+        tags:         <a href="./tag/chef.html">Chef</a>
+        <a href="./tag/puppet.html">Puppet</a>
+        <a href="./tag/salt.html">Salt</a>
+        <a href="./tag/ansible.html">Ansible</a>
+
+
+        |
+        <a href="./ci-cd-cm.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p><strong>Сервера интеграции</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://jenkins-ci.org/">Jenkins</a> инструмент непрерывной интеграции, написанный на Java. Запускается в контейнере сервлетов, таких как Apache Tomcat или GlassFish. Поддерживает инструментарий для работы с разными системами контроля версий, включая CVS, Subversion, Mercurial, Git и Clearcase, может собирать проекты Apache Ant и Apache Maven, а также исполнять shell-скрипты и команды Windows.</li>
+<li><a class="reference external" href="http://hudson-ci.org/">Hudson</a> форк Jenkins или наоборот но проект .................</li>
+<li><a class="reference external" href="http://cruisecontrol.sourceforge.net/">CruiseControl</a> инструмент непрерывной интеграции для Java - Последняя версия 2.8.4 (2010-09-15)</li>
+<li><a class="reference external" href="https://bitten.edgewall.org/">Bitten</a> инструмент непрерывной интеграции написанный на Python, интегрируется с <a class="reference external" href="https://trac.edgewall.org/">Trac</a> разрабатываемый этой же компанией</li>
+<li><a class="reference external" href="http://buildbot.net/">Buildbot</a> инструмент непрерывной интеграции написанный на Python, заявлен как продукт для автоматизации цикла компиляция-тестирование</li>
+<li><a class="reference external" href="https://www.jetbrains.com/teamcity/index.html">TeamCity</a> серверное программное обеспечение от компании <a class="reference external" href="https://www.jetbrains.com/">JetBrains</a> написанное на языке Java, билд-сервер для обеспечения непрерывной интеграции</li>
+</ul>
+<p><strong>Инструменты сборки/развёртывания</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.fabfile.org/">Fabric</a> средство автоматизации сборки и развёртывания приложений</li>
+<li><a class="reference external" href="http://www.buildout.org/">Buildout</a> средство автоматизации сборки для программного обеспечения с открытым исходным кодом, написанное на Python. Позволяет создавать, собирать и вводить в действие приложения из нескольких частей. Buildout помогает конфигурировать и в точности воспроизводить сборку программного обеспечения заданной конфигурации</li>
+<li><a class="reference external" href="https://ant.apache.org/">Ant</a> средство сборки для Java</li>
+<li><a class="reference external" href="https://maven.apache.org/">Maven</a> средство сборки для Java</li>
+<li><a class="reference external" href="http://gradle.org/">Gradle</a> система автоматической сборки, построенная на принципах Apache Ant и Apache Maven, но предоставляющая DSL на языке Groovy вместо традиционной XML-образной формы представления конфигурации проекта</li>
+<li><a class="reference external" href="http://rake.rubyforge.org/">Rake</a> (произносится «рэйк») — инструмент для автоматизации сборки программного кода. Он подобен SCons, Make и Apache Ant, но имеет несколько отличий. Этот инструмент написан на языке программирования Ruby, и Rakefiles (аналоги Makefiles в утилите make) используют синтаксис Ruby</li>
+<li><a class="reference external" href="http://gruntjs.com/">Grunt</a> система сборкиJavaScript пакетов</li>
+<li><a class="reference external" href="http://gulpjs.com/">Gulp</a> потоковый сборщик проектов на JavaScript</li>
+<li><a class="reference external" href="http://emmet.io/">Emmet</a> (ранее Zen Coding) — набор плагинов для текстовых редакторов, которые в некоторой степени ускоряют написание кода HTML, XML, XSL, а также кода на некоторых других языках</li>
+</ul>
+<p><strong>Системы управления конфигурациями</strong></p>
+<ul class="simple">
+<li>Ansible</li>
+<li>Salt</li>
+<li>Puppet</li>
+<li>Chef</li>
+<li>Capistrano</li>
+</ul>
+<p><strong>Инструменты доставки</strong></p>
+<p><a class="reference external" href="https://www.docker.com/">Docker</a>  программное обеспечение для автоматизации развёртывания и управления приложениями в среде виртуализации на уровне операционной системы, например LXC. Позволяет «упаковать» приложение со всем его окружением и зависимостями в контейнер, который может быть перенесён на любой Linux-системе с поддержкой cgroups в ядре, а также предоставляет среду по управлению контейнерами.
+<a class="reference external" href="https://www.vagrantup.com/">Vagrant</a> свободное и открытое программное обеспечение для создания и конфигурирования виртуальной среды разработки. Является обёрткой для программного обеспечения виртуализации, например VirtualBox, и средств управления конфигурациями, такими как Ansible, Salt Chef,и Puppet</p>
+<p><strong>Статический анализ</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://pmd.github.io/">PMD</a> анализ кода Java</li>
+<li><a class="reference external" href="http://findbugs.sourceforge.net/">Findbugs</a> анализ кода на типичные ошибки</li>
+<li><a class="reference external" href="http://www.redhillconsulting.com.au/products/simian/">Simian</a> поиск повторов (copу+paste) в коде Java</li>
+<li><a class="reference external" href="http://qalab.sourceforge.net/index.html">QALab</a> объединение логов нескольких инструментов анализа кода, сбор статистики</li>
+<li>logstash</li>
+</ul>
+<p><strong>Модульное тестирование и покрытие</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="http://junit.org/">JUnit</a> де-факто стандарт модульного тестирования Java</li>
+<li><a class="reference external" href="http://testng.org/doc/index.html">TestNG</a> инструмент нового поколения для модульного тестирования Java</li>
+<li><a class="reference external" href="https://cobertura.github.io/cobertura/">Cobertura</a> измерение покрытия кода модульными тестами для Java</li>
+<li><a class="reference external" href="https://www.atlassian.com/software/clover/overview">Clover</a> анализ покрытия кода тестами для Java, коммерчиский продукт компании <a class="reference external" href="https://www.atlassian.com">Atlassian</a></li>
+<li><a class="reference external" href="http://docs.seleniumhq.org/">Selenium</a> написан на Java, как проект был начат в июне 2004 года, а уже в декабре 2004 года он стал открытым. Изначально проект вела компания <a class="reference external" href="https://www.thoughtworks.com/">ThoughtWorks</a></li>
+<li><a class="reference external" href="http://getgauge.io/index.html">gauge</a> Test Automation you will actually like</li>
+</ul>
+<p><strong>Менеджеры пакетов</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://pip.pypa.io/">pip</a></li>
+<li><a class="reference external" href="https://pypi.python.org/pypi/setuptools/">EasyInstall</a> пакетный менеджер встроенный в Python как RubyGems для Ruby</li>
+<li><a class="reference external" href="https://rubygems.org/">RubyGems</a> пакетный менеджер встроенный в Ruby как EasyInstall для Python</li>
+<li><a class="reference external" href="http://bower.io/">Bower</a> пакетный менеджер</li>
+<li><a class="reference external" href="https://www.npmjs.com/">npm</a> пакетный менеджер встроенный в Nodejs как EasyInstall для Python</li>
+</ul>
+<p><strong>Менеджеры окружения</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://virtualenv.pypa.io/">Virtualenv</a> программа для создания и управления окружениями Python</li>
+<li><a class="reference external" href="http://rbenv.org/">rbenv</a></li>
+<li><a class="reference external" href="https://rvm.io/">rvm</a></li>
+<li><a class="reference external" href="https://www.brightbox.com/docs/ruby/ubuntu/">ruby-switch</a></li>
+<li><a class="reference external" href="http://perlbrew.pl/">perlbrew</a></li>
+</ul>
+<p><strong>Поисковые машинаы</strong></p>
+<p>Apache Solr
+Endeca
+Sphinx
+Elasticsearch</p>
+
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "ci-cd-cm.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

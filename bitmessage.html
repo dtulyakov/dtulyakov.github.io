@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Настройка BitMessage"/>
+    <meta property="og:url" content="./bitmessage.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./bitmessage.html" />
+
+    <title>Настройка BitMessage | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li class="active"><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./bitmessage.html" rel="bookmark"
+             title="Permalink to Настройка BitMessage">Настройка BitMessage</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/wiki.html">wiki</a>
+
+    on 2015-09-25
+
+        |
+        tags:         <a href="./tag/bitmessage.html">BitMessage</a>
+        <a href="./tag/ubuntu.html">Ubuntu</a>
+        <a href="./tag/linux.html">Linux</a>
+
+
+        |
+        <a href="./bitmessage.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p>После интервью Сноудена многие решили задуматься о частной переписке</p>
+<p>Можно скачать <a class="reference external" href="https://github.com/Dokument/PyBitmessage-Daemon">скрипт</a> для настройки конфига</p>
+<div class="highlight"><pre><span></span>wget -с https://raw.githubusercontent.com/Dokument/PyBitmessage-Daemon/master/daemon.py
+</pre></div>
+<p><a class="reference external" href="https://github.com/Arceliar/bmwrapper">https://github.com/Arceliar/bmwrapper</a></p>
+<p>Пример конфига для битмесседжера</p>
+<div class="highlight"><pre><span></span><span class="o">[</span>program:pybitmessage<span class="o">]</span>
+<span class="p">;</span>
+<span class="p">;</span> Имя программы в supervisor, например будет выводится в supervisorctl
+<span class="nv">process_name</span><span class="o">=</span>%<span class="o">(</span>program_name<span class="o">)</span>s
+<span class="p">;</span>
+<span class="p">;</span> Вы можете указать сколько таких процессов надо запустить, по умолчанию <span class="m">1</span>
+<span class="nv">numprocs</span><span class="o">=</span><span class="m">1</span>
+<span class="p">;</span>
+<span class="p">;</span> Путь до проекта <span class="o">(</span>chdir<span class="o">)</span>
+<span class="nv">directory</span><span class="o">=</span>/home/ttys/bin/PyBitmessage
+<span class="p">;</span>
+<span class="p">;</span> Команда для запуска программы
+<span class="p">;</span><span class="nv">command</span><span class="o">=</span>/home/ttys/bin/PyBitmessage/src/bitmessagemain.py
+<span class="nv">command</span><span class="o">=</span>/usr/bin/sudo -u ttys /home/ttys/bin/PyBitmessage/src/bitmessagemain.py
+<span class="p">;</span>
+<span class="p">;</span> Из под какого пользователя запускать программу
+<span class="nv">user</span><span class="o">=</span>ttys
+<span class="p">;</span>
+<span class="p">;</span> При загрузке самого supervisor запускать программу
+<span class="nv">autostart</span><span class="o">=</span><span class="nb">true</span>
+<span class="p">;</span><span class="nv">autostart</span><span class="o">=</span><span class="nb">false</span>
+<span class="p">;</span>
+<span class="p">;</span> Если программа аварийно завершилась, то перезапускать её
+<span class="nv">autorestart</span><span class="o">=</span><span class="nb">true</span>
+<span class="p">;</span><span class="nv">autorestart</span><span class="o">=</span><span class="nb">false</span>
+<span class="p">;</span>
+<span class="p">;</span> Перенаправляет пришедший STDERR в ответ supervisor_у в STDOUT <span class="o">(</span>эквивалент /the/program <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="o">)</span>
+<span class="nv">redirect_stderr</span><span class="o">=</span><span class="nb">true</span>
+<span class="p">;</span>
+<span class="p">;</span> Таймаут в секундах, после которого supervisor пошлет SIGKILL процессу,
+<span class="p">;</span> которому до этого посылал SIGCHLD
+<span class="nv">stopwaitsecs</span><span class="o">=</span><span class="m">60</span>
+<span class="p">;</span>
+<span class="p">;</span> Какой сигнал посылать для остановки программы
+<span class="nv">stopsignal</span><span class="o">=</span>INT
+<span class="p">;</span>
+<span class="p">;</span> Путь до error-лога
+<span class="nv">stderr_logfile</span><span class="o">=</span>/var/log/supervisor/pybitmessage_err.log
+<span class="p">;</span>
+<span class="p">;</span> Путь до output-лога
+<span class="nv">stdout_logfile</span><span class="o">=</span>/var/log/supervisor/out.log
+<span class="p">;</span>
+<span class="p">;</span> Максимальный размер файла output-лога, после чего будет <span class="s2">&quot;rotate&quot;</span>
+<span class="nv">stdout_logfile_maxbytes</span><span class="o">=</span>100MB
+<span class="p">;</span>
+<span class="p">;</span> Количество файлов output-лога
+<span class="nv">stdout_logfile_backups</span><span class="o">=</span><span class="m">30</span>
+<span class="p">;</span>
+<span class="p">;</span> Размер буфера для output-лога
+<span class="nv">stdout_capture_maxbytes</span><span class="o">=</span>10MB
+<span class="p">;</span>
+</pre></div>
+<p>Пример конфига для враппера</p>
+<div class="highlight"><pre><span></span><span class="o">[</span>program:bmwrapper<span class="o">]</span>
+<span class="p">;</span>
+<span class="p">;</span> Имя программы в supervisor, например будет выводится в supervisorctl
+<span class="nv">process_name</span><span class="o">=</span>%<span class="o">(</span>program_name<span class="o">)</span>s
+<span class="p">;</span>
+<span class="p">;</span> Вы можете указать сколько таких процессов надо запустить, по умолчанию <span class="m">1</span>
+<span class="nv">numprocs</span><span class="o">=</span><span class="m">1</span>
+<span class="p">;</span>
+<span class="p">;</span> Путь до проекта <span class="o">(</span>chdir<span class="o">)</span>
+<span class="nv">directory</span><span class="o">=</span>/home/ttys/bin/bmwrapper
+<span class="p">;</span>
+<span class="p">;</span> Команда для запуска программы
+<span class="nv">command</span><span class="o">=</span>/home/ttys/bin/bmwrapper/main.py
+<span class="p">;</span>
+<span class="p">;</span> Из под какого пользователя запускать программу
+<span class="nv">user</span><span class="o">=</span>ttys
+<span class="p">;</span>
+<span class="p">;</span> При загрузке самого supervisor запускать программу
+<span class="nv">autostart</span><span class="o">=</span><span class="nb">true</span>
+<span class="p">;</span><span class="nv">autostart</span><span class="o">=</span><span class="nb">false</span>
+<span class="p">;</span>
+<span class="p">;</span> Если программа аварийно завершилась, то перезапускать её
+<span class="nv">autorestart</span><span class="o">=</span><span class="nb">true</span>
+<span class="p">;</span><span class="nv">autorestart</span><span class="o">=</span><span class="nb">false</span>
+<span class="p">;</span>
+<span class="p">;</span> Перенаправляет пришедший STDERR в ответ supervisor_у в STDOUT <span class="o">(</span>эквивалент /the/program <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="o">)</span>
+<span class="nv">redirect_stderr</span><span class="o">=</span><span class="nb">true</span>
+<span class="p">;</span>
+<span class="p">;</span> Таймаут в секундах, после которого supervisor пошлет SIGKILL процессу,
+<span class="p">;</span> которому до этого посылал SIGCHLD
+<span class="nv">stopwaitsecs</span><span class="o">=</span><span class="m">60</span>
+<span class="p">;</span>
+<span class="p">;</span> Какой сигнал посылать для остановки программы
+<span class="nv">stopsignal</span><span class="o">=</span>INT
+<span class="p">;</span>
+<span class="p">;</span> Путь до error-лога
+<span class="nv">stderr_logfile</span><span class="o">=</span>/var/log/supervisor/bmwrapper_err.log
+<span class="p">;</span>
+<span class="p">;</span> Путь до output-лога
+<span class="nv">stdout_logfile</span><span class="o">=</span>/var/log/supervisor/bmwrapper.log
+<span class="p">;</span>
+<span class="p">;</span> Максимальный размер файла output-лога, после чего будет <span class="s2">&quot;rotate&quot;</span>
+<span class="nv">stdout_logfile_maxbytes</span><span class="o">=</span>100MB
+<span class="p">;</span>
+<span class="p">;</span> Количество файлов output-лога
+<span class="nv">stdout_logfile_backups</span><span class="o">=</span><span class="m">30</span>
+<span class="p">;</span>
+<span class="p">;</span> Размер буфера для output-лога
+<span class="nv">stdout_capture_maxbytes</span><span class="o">=</span>10MB
+<span class="p">;</span>
+</pre></div>
+<p>Скрипт автостарта для битмесседжа (на мой взгляд бесполезно)</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># /etc/init.d/bitmessage</span>
+
+<span class="c1">### BEGIN INIT INFO</span>
+<span class="c1"># Provides:          bitmessage</span>
+<span class="c1"># Required-Start:    $remote_fs $syslog</span>
+<span class="c1"># Required-Stop:     $remote_fs $syslog</span>
+<span class="c1"># Default-Start:     2 3 4 5</span>
+<span class="c1"># Default-Stop:      0 1 6</span>
+<span class="c1"># Short-Description: starts bitmessage as a background daemon, suitable for servers</span>
+<span class="c1"># Description:       This file should be used to construct scripts to be</span>
+<span class="c1">#                    placed in /etc/init.d.</span>
+<span class="c1">### END INIT INFO</span>
+
+<span class="c1">#Settings</span>
+<span class="nv">SERVICE</span><span class="o">=</span><span class="s1">&#39;bitmessage&#39;</span>
+<span class="nv">LOGFILE</span><span class="o">=</span><span class="s1">&#39;/dev/null&#39;</span> <span class="c1"># this disables logging</span>
+<span class="c1"># LOGFILE=&#39;/var/log/bitmessage.log&#39;</span>
+<span class="nv">COMMAND</span><span class="o">=</span><span class="s2">&quot;python bitmessagemain.py &gt; </span><span class="nv">$LOGFILE</span><span class="s2">&quot;</span>
+<span class="nv">USERNAME</span><span class="o">=</span><span class="s1">&#39;parnoik&#39;</span>
+<span class="nv">NICELEVEL</span><span class="o">=</span><span class="m">19</span>
+<span class="nv">HISTORY</span><span class="o">=</span><span class="m">1024</span>
+<span class="nv">PBM_LOCATION</span><span class="o">=</span><span class="s2">&quot;/home/paranoik/bin/PyBitmessage/src&quot;</span> <span class="c1">#  $HOME/PyBitmessage/src $HOME is the home of the the above USERNAME</span>
+<span class="nv">INVOCATION</span><span class="o">=</span><span class="s2">&quot;nice -n </span><span class="si">${</span><span class="nv">NICELEVEL</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">COMMAND</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nv">PATH</span><span class="o">=</span><span class="s1">&#39;/usr/lib/qt4/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/core_perl:/sbin:/usr/sbin:/bin&#39;</span>
+
+bm_start<span class="o">()</span> <span class="o">{</span>
+<span class="nb">echo</span> <span class="s2">&quot;Starting </span><span class="nv">$SERVICE</span><span class="s2">...&quot;</span>
+<span class="nb">cd</span> <span class="si">${</span><span class="nv">PBM_LOCATION</span><span class="si">}</span>
+su --command <span class="s2">&quot;screen -h </span><span class="si">${</span><span class="nv">HISTORY</span><span class="si">}</span><span class="s2"> -dmS </span><span class="si">${</span><span class="nv">SERVICE</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">INVOCATION</span><span class="si">}</span><span class="s2">&quot;</span> <span class="nv">$USERNAME</span>
+<span class="o">}</span>
+
+bm_stop<span class="o">()</span> <span class="o">{</span>
+<span class="nb">echo</span> <span class="s2">&quot;Stopping </span><span class="nv">$SERVICE</span><span class="s2">&quot;</span>
+su --command <span class="s2">&quot;screen -p 0 -S </span><span class="si">${</span><span class="nv">SERVICE</span><span class="si">}</span><span class="s2"> -X stuff &quot;</span><span class="s1">&#39;^C&#39;</span><span class="s2">&quot;&quot;</span> <span class="nv">$USERNAME</span>
+<span class="o">}</span>
+
+<span class="c1">#Start-Stop here</span>
+<span class="k">case</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> in
+  start<span class="o">)</span>
+    bm_start
+    <span class="p">;;</span>
+  stop<span class="o">)</span>
+    bm_stop
+    <span class="p">;;</span>
+  restart<span class="o">)</span>
+    bm_stop
+    sleep 60s
+    bm_start
+    <span class="p">;;</span>
+    *<span class="o">)</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Usage: </span><span class="nv">$0</span><span class="s2"> {start|stop|restart}&quot;</span>
+  <span class="nb">exit</span> <span class="m">1</span>
+  <span class="p">;;</span>
+<span class="k">esac</span>
+
+<span class="nb">exit</span> <span class="m">0</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="o">[</span>bitmessagesettings<span class="o">]</span>
+<span class="nv">settingsversion</span> <span class="o">=</span> <span class="m">10</span>
+<span class="nv">port</span> <span class="o">=</span> <span class="m">8444</span>
+<span class="nv">timeformat</span> <span class="o">=</span> %%a, %%d %%b %%Y  %%I:%%M %%p
+<span class="nv">blackwhitelist</span> <span class="o">=</span> black
+<span class="nv">startonlogon</span> <span class="o">=</span> False
+<span class="nv">minimizetotray</span> <span class="o">=</span> True
+<span class="nv">showtraynotifications</span> <span class="o">=</span> True
+<span class="nv">startintray</span> <span class="o">=</span> True
+<span class="nv">socksproxytype</span> <span class="o">=</span> SOCKS5
+<span class="nv">sockshostname</span> <span class="o">=</span> localhost
+<span class="nv">socksport</span> <span class="o">=</span> <span class="m">9050</span>
+<span class="nv">socksauthentication</span> <span class="o">=</span> False
+<span class="nv">sockslisten</span> <span class="o">=</span> True
+<span class="nv">socksusername</span> <span class="o">=</span>
+<span class="nv">sockspassword</span> <span class="o">=</span>
+<span class="nv">keysencrypted</span> <span class="o">=</span> <span class="nb">false</span>
+<span class="nv">messagesencrypted</span> <span class="o">=</span> <span class="nb">false</span>
+<span class="nv">defaultnoncetrialsperbyte</span> <span class="o">=</span> <span class="m">1000</span>
+<span class="nv">defaultpayloadlengthextrabytes</span> <span class="o">=</span> <span class="m">1000</span>
+<span class="nv">minimizeonclose</span> <span class="o">=</span> <span class="nb">false</span>
+<span class="nv">maxacceptablenoncetrialsperbyte</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">maxacceptablepayloadlengthextrabytes</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">userlocale</span> <span class="o">=</span> ru
+<span class="nv">useidenticons</span> <span class="o">=</span> True
+<span class="nv">identiconsuffix</span> <span class="o">=</span> XXXXxXXXXXxX
+<span class="nv">replybelow</span> <span class="o">=</span> False
+<span class="nv">maxdownloadrate</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">maxuploadrate</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">ttl</span> <span class="o">=</span> <span class="m">2424835</span>
+<span class="nv">stopresendingafterxdays</span> <span class="o">=</span>
+<span class="nv">stopresendingafterxmonths</span> <span class="o">=</span>
+<span class="nv">namecoinrpctype</span> <span class="o">=</span> namecoind
+<span class="nv">namecoinrpchost</span> <span class="o">=</span>
+<span class="nv">namecoinrpcuser</span> <span class="o">=</span>
+<span class="nv">namecoinrpcpassword</span> <span class="o">=</span>
+<span class="nv">namecoinrpcport</span> <span class="o">=</span>
+<span class="nv">sendoutgoingconnections</span> <span class="o">=</span> True
+<span class="nv">willinglysendtomobile</span> <span class="o">=</span> False
+<span class="nv">apienabled</span> <span class="o">=</span> <span class="nb">true</span>
+<span class="nv">apiport</span> <span class="o">=</span> <span class="m">8442</span>
+<span class="nv">apiinterface</span> <span class="o">=</span> <span class="m">127</span>.0.0.1
+<span class="nv">apiusername</span> <span class="o">=</span> username
+<span class="nv">apipassword</span> <span class="o">=</span> pa<span class="nv">$$</span>word
+<span class="nv">daemon</span> <span class="o">=</span> <span class="nb">true</span>
+
+<span class="o">[</span>BM-NBXFZ23TUZAjmk8ZYnNU4AEkpQ9k1kUa<span class="o">]</span>
+<span class="nv">label</span> <span class="o">=</span> paranoik
+<span class="nv">enabled</span> <span class="o">=</span> <span class="nb">true</span>
+<span class="nv">decoy</span> <span class="o">=</span> <span class="nb">false</span>
+<span class="nv">noncetrialsperbyte</span> <span class="o">=</span> <span class="m">1000</span>
+<span class="nv">payloadlengthextrabytes</span> <span class="o">=</span> <span class="m">1000</span>
+<span class="nv">privsigningkey</span> <span class="o">=</span> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+<span class="nv">privencryptionkey</span> <span class="o">=</span> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+<span class="nv">lastpubkeysendtime</span> <span class="o">=</span> <span class="m">1428405520</span>
+</pre></div>
+
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "bitmessage.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

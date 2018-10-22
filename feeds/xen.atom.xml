@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Денис Туляков wiki - Xen</title><link href="https://dtulyakov.github.io/" rel="alternate"></link><link href="http://www.dtulyakov.ru/feeds/xen.atom.xml" rel="self"></link><id>https://dtulyakov.github.io/</id><updated>2016-06-15T14:50:00+03:00</updated><entry><title>Проброс usb-key в гостевую ОС из гипервизора Xen</title><link href="https://dtulyakov.github.io/usb2xen.html" rel="alternate"></link><published>2015-01-21T10:02:00+03:00</published><updated>2016-06-15T14:50:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:dtulyakov.github.io,2015-01-21:/usb2xen.html</id><summary type="html">&lt;p&gt;Как я побеждал постоянный слёт лицензий эсодин(Ass Odin) app работающего в гипервизоре&lt;/p&gt;</summary><content type="html">&lt;p&gt;Если вы ещё не успели вступить в каку под названием &lt;strong&gt;"1С 8"&lt;/strong&gt; - &lt;strong&gt;подумайте пять раз прежде чем это делать!!!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Началось всё после очередного слёта (честно купленных) лицензионных ключей &lt;strong&gt;гавно-продукта&lt;/strong&gt; "1с 8.2". На запрос причины слётов и возможного решения 1с-ники ответили, что слетел ключ лицензий из за изменения частоты процессора:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;вариант привязки защиты
+CPU4, Intel64 Family 6 Model 45 Stepping 7, 64, 64, **__2293__**, 0789FBFF000206D7, 11527, CPU 5
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;вариант почему слетела защита
+CPU4, Intel64 Family 6 Model 45 Stepping 7, 64, 64, **__2294__**, 0789FBFF000206D7, 11527, CPU 5
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Но самое интересное дальше - 1с заявила, что они не собираются, что либо делать и этоа проблема их особо не волнует., порекомендовали &lt;strong&gt;при каждом слёте заказывать новый пин&lt;/strong&gt;!
+Отношение к этой &lt;strong&gt;гавно-конторе под названием "1с"&lt;/strong&gt; у меня в край стало отрицательным, если не сказать "враждебным". Но уже деньги уплачены а работать как то надо. В связи с этим было найден один из вариантов решения этой проблемы. Как известно, что хардовые ключи не слетают (т.к. нечему там слетать) было решено попробовать пробросить их в ВМ. Но т.к. непонятно как себя поведёт этот самый ключ проброшенный в ВМ, я решил пробросить весь USB контролер.&lt;/p&gt;
+&lt;p&gt;Вот сам ход эксперемента:&lt;/p&gt;
+&lt;p&gt;Заходим на гипервизор и смотрим как у нас обстоит дело с USB&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3
+4&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;lspci &lt;span class="p"&gt;|&lt;/span&gt;grep -i usb
+&lt;span class="m"&gt;00&lt;/span&gt;:1a.0 USB controller: Intel Corporation C600/X79 series chipset USB2 Enhanced Host Controller &lt;span class="c1"&gt;#2 (rev 05)&lt;/span&gt;
+&lt;span class="m"&gt;00&lt;/span&gt;:1d.0 USB controller: Intel Corporation C600/X79 series chipset USB2 Enhanced Host Controller &lt;span class="c1"&gt;#1 (rev 05)&lt;/span&gt;
+&lt;span class="m"&gt;01&lt;/span&gt;:00.4 USB controller: Hewlett-Packard Company Integrated Lights-Out Standard Virtual USB Controller &lt;span class="o"&gt;(&lt;/span&gt;rev &lt;span class="m"&gt;02&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;После чего выясняем какой &lt;strong&gt;uuid&lt;/strong&gt; у нашей ВМ с "1с"&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3
+4
+5
+6
+7
+8
+9&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;xe vm-list
+uuid &lt;span class="o"&gt;(&lt;/span&gt; RO&lt;span class="o"&gt;)&lt;/span&gt;           : 716add21-05a2-b372-85ae-41c1d9a48fe1
+     name-label &lt;span class="o"&gt;(&lt;/span&gt; RW&lt;span class="o"&gt;)&lt;/span&gt;: 1cbuh.local
+    power-state &lt;span class="o"&gt;(&lt;/span&gt; RO&lt;span class="o"&gt;)&lt;/span&gt;: running
+
+
+uuid &lt;span class="o"&gt;(&lt;/span&gt; RO&lt;span class="o"&gt;)&lt;/span&gt;           : 7b26526e-fa5e-4fe0-a5ae-e0ef9d55c4b3
+     name-label &lt;span class="o"&gt;(&lt;/span&gt; RW&lt;span class="o"&gt;)&lt;/span&gt;: Control domain on host: localhost
+    power-state &lt;span class="o"&gt;(&lt;/span&gt; RO&lt;span class="o"&gt;)&lt;/span&gt;: running
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Ну и теперь осталось пробросить в неё USB контролер&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;xe vm-param-set other-config:pci&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;/0000:00:1a.0 &lt;span class="nv"&gt;uuid&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;716add21-05a2-b372-85ae-41c1d9a48fe1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;После всего ещё раз убедился в правильности выбора гипервизора &lt;a href="http://www.xenproject.org/" rel="nofollow" target="_blank"&gt;Xen&lt;/a&gt; а не VMware&lt;/p&gt;
+&lt;p&gt;Рекомендую ознакомится со списком &lt;a href="https://dtulyakov.github.io/ecmerpcrmdms.html"&gt;аналогов/конкурентов 1с&lt;/a&gt; хотя для некоторых 1с не конкурент&lt;/p&gt;
+&lt;p&gt;Ссылки:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://habrahabr.ru/post/137327/" rel="nofollow" target="_blank"&gt;Проброс видеокарты в виртуальную машину&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://habrahabr.ru/post/151661/" rel="nofollow" target="_blank"&gt;Проброс видеокарты в гостевую ОС из гипервизора Xen&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://how-it.ru/public/virtual/258-xen__probros_usb_ustroistv_vnutr_hvm_virtualnoi_mashiny__windows__ili_usb_passthrough.html" rel="nofollow" target="_blank"&gt;Xen: проброс USB устройств внутрь HVM виртуальной машины (Windows) или USB passthrough&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="Xen"></category><category term="1C"></category><category term="Linux"></category><category term="Virtualization"></category></entry></feed>

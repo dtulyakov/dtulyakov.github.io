@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Обзор NoSQL базы данных"/>
+    <meta property="og:url" content="./nosql-comparison.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./nosql-comparison.html" />
+
+    <title>Обзор NoSQL базы данных | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li class="active"><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./nosql-comparison.html" rel="bookmark"
+             title="Permalink to Обзор NoSQL базы данных">Обзор NoSQL базы данных</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/wiki.html">wiki</a>
+
+    on 2016-03-06
+
+        |
+        tags:         <a href="./tag/sql.html">SQL</a>
+        <a href="./tag/nosql.html">NoSQL</a>
+
+
+        |
+        <a href="./nosql-comparison.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p><strong>Для 80-90% задач NoSQL не нужен.</strong></p>
+<ul class="simple">
+<li>Целостность данных важна всегда</li>
+<li>Очень большие объёмы данных встречаются не часто</li>
+<li>Реляционная модель достаточно гибкая</li>
+<li>Используйте нужную базу данных для своей нагрузки</li>
+<li>Не масштабируйте базу в отрыве от приложения</li>
+<li>Если вы знаете, как решить свою проблему</li>
+<li>NoSQL базой, значит вы знаете, как решить проблему и в RDBMS</li>
+<li>Не ленитесь думать и читать</li>
+</ul>
+<p><strong>Сравнительная таблица из википедии</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="14%" />
+<col width="21%" />
+<col width="14%" />
+<col width="14%" />
+<col width="18%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Data Model</th>
+<th class="head">Performance</th>
+<th class="head">Scalability</th>
+<th class="head">Flexibility</th>
+<th class="head">Complexity</th>
+<th class="head">Functionality</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Key–value Stores</td>
+<td>high</td>
+<td>high</td>
+<td>high</td>
+<td>none</td>
+<td>variable (none)</td>
+</tr>
+<tr><td>Column Store</td>
+<td>high</td>
+<td>high</td>
+<td>moderate</td>
+<td>low</td>
+<td>minimal</td>
+</tr>
+<tr><td>Document Store</td>
+<td>high</td>
+<td>variable (high)</td>
+<td>high</td>
+<td>low</td>
+<td>variable (low)</td>
+</tr>
+<tr><td>Graph Database</td>
+<td>variable</td>
+<td>variable</td>
+<td>high</td>
+<td>high</td>
+<td>graph theory</td>
+</tr>
+<tr><td>Relational Database</td>
+<td>variable</td>
+<td>variable</td>
+<td>low</td>
+<td>moderate</td>
+<td>relational algebra</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Более понятная для понимания таблица 1</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+<col width="30%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head" colspan="4">Сравнение возможностей I</th>
+</tr>
+<tr><th class="head">&nbsp;</th>
+<th class="head">Модель данных</th>
+<th class="head">API запросов</th>
+<th class="head">Система хранения данных</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Cassandra</td>
+<td>Семейства столбцов</td>
+<td>Thrift</td>
+<td>Memtable/SSTable</td>
+</tr>
+<tr><td>CouchDB</td>
+<td>Документы</td>
+<td>Map/Reduce</td>
+<td>Append-only-B-tree</td>
+</tr>
+<tr><td>Hbase</td>
+<td>Семейства столбцов</td>
+<td>Thrift, REST</td>
+<td>Memtable/SSTable on HDFS</td>
+</tr>
+<tr><td>MongoDB</td>
+<td>Документы</td>
+<td>Cursor</td>
+<td>B-tree</td>
+</tr>
+<tr><td>Neo4j</td>
+<td>Графы</td>
+<td>Graph</td>
+<td>On-disk linked lists</td>
+</tr>
+<tr><td>Riak</td>
+<td>Ключ/Значение</td>
+<td>Nested hashes, REST</td>
+<td>Hash</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Более понятная для понимания таблица 2</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="22%" />
+<col width="29%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head" colspan="4">Сравнение возможностей II</th>
+</tr>
+<tr><th class="head">&nbsp;</th>
+<th class="head">Вторичные индексы</th>
+<th class="head">MapReduce</th>
+<th class="head">Произвольные запросы</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Cassandra</td>
+<td>да</td>
+<td>нет</td>
+<td>CQL (no joins)</td>
+</tr>
+<tr><td>CouchDB</td>
+<td>да</td>
+<td>JavaScript</td>
+<td>временные представления</td>
+</tr>
+<tr><td>Hbase</td>
+<td>нет</td>
+<td>Hadoop</td>
+<td>слабая поддержка</td>
+</tr>
+<tr><td>MongoDB</td>
+<td>да</td>
+<td>JavaScript</td>
+<td>полный набор (no joins)</td>
+</tr>
+<tr><td>Neo4j</td>
+<td>да (с помощью Lucene)</td>
+<td>нет (графы и MapReduce?)</td>
+<td>обход графа, поиск</td>
+</tr>
+<tr><td>Riak</td>
+<td>да</td>
+<td>JavaScript, Erlang</td>
+<td>слабая поддержка, Lucene</td>
+</tr>
+</tbody>
+</table>
+<p>Riak: преимущества:</p>
+<ul class="simple">
+<li>Отказоустойчивость (кольцо)</li>
+<li>Links (ссылки на другие ключи) + фильтры ключей</li>
+<li>MapReduce (Erlang + JS)</li>
+<li>REST</li>
+<li>Подсистема поиска</li>
+<li>Возможность настройки параметров согласованности и доступности на уровне отдельного запроса</li>
+</ul>
+<p>Riak: недостатки:</p>
+<ul class="simple">
+<li>Бедные возможности запросов</li>
+<li>Нет ACID</li>
+<li>Неполноценная поддержка JavaScript</li>
+<li>Отсутствие поддержки структур данных</li>
+</ul>
+<p>Mongo: преимущества:</p>
+<ul class="simple">
+<li>Полноценный язык запросов Aggregation framework Mongo + Node.js + JS Хранение сложных денормализованных документов</li>
+<li>Большой выбор индексов (Btree, 2d, 3d)</li>
+<li>Репликация данных и сегментирование коллекций</li>
+<li>Community</li>
+</ul>
+<p>Mongo: недостатки:</p>
+<ul class="simple">
+<li>Ограничение на размер результата (16 Мб)</li>
+<li>Проблема четного числа узлов и сложные выборы</li>
+<li>Опечатка стоит дорого</li>
+<li>Над планированием кластера надо думать</li>
+<li>Иногда навязывает воспроизведение схемы в коде (проверка типов и т.д.)</li>
+</ul>
+<p>CouchDB: преимущества:</p>
+<ul class="simple">
+<li>Функции-фильтры и как следствие “псевдошардинг”</li>
+<li>Мобильная версия</li>
+<li>Простота встраивания и резервного копирования</li>
+<li>Функции-валидаторы, функции-представления, функции-фильтры сохраняются в текстовом виде в самой базе данных</li>
+</ul>
+<p>CouchDB: недостатки:</p>
+<ul class="simple">
+<li>Не всегда удобная система репликации (&quot;все или ничего&quot;)</li>
+<li>Неполноценный язык запросов, основанный на MapReduce операциях над представлениями</li>
+<li>Нет нормального механизма сегментирования</li>
+</ul>
+<p>HBase: преимущества:</p>
+<ul class="simple">
+<li>Версионирование и сжатие</li>
+<li>Горизонтальное масштабирование</li>
+<li>Первое место по обработке трудоемких запросов</li>
+<li>Быстрое восстановление после отказа</li>
+<li>Отзывчивое community энтузиастов</li>
+<li>Тесная интеграция с Hadoop</li>
+</ul>
+<p>HBase: недостатки:</p>
+<ul class="simple">
+<li>Суровая документация и высокий порог вхождения</li>
+<li>Заимствованная терминология из мира SQL скорее мешает</li>
+<li>Надо не менее 5 узлов</li>
+<li>Нет средств сортировки и индексирования</li>
+<li>Строгая согласованность без возможности изменений</li>
+</ul>
+<p>Cassandra: преимущества:</p>
+<ul class="simple">
+<li>Высокая доступность, восстановление на ходу</li>
+<li>Нет центральной точки отказа</li>
+<li>Datastax, Hector и все-все-все</li>
+<li>CQL - SQL без join</li>
+<li>Строка может динамически раcширяться до 2 миллиардов колонок</li>
+<li>Резервное копирование не нужно</li>
+</ul>
+<p>Cassandra: недостатки:</p>
+<ul class="simple">
+<li>Непростая (по сравнению с Hbase) интеграция с Hadoop</li>
+<li>Моделирование таблиц зависит от ваших запросов</li>
+<li>Нет ACID, нет откатов</li>
+<li>Сложность в моделировании (необходимо сильно поменять взгляд на моделирование данных)</li>
+<li>Требовательная к RAM</li>
+</ul>
+<p>Neo4j: преимущества:</p>
+<ul class="simple">
+<li>Оптимальна для сильносвязанных сущностей</li>
+<li>Вершины, ребра, атрибуты</li>
+<li>Индексы на значения атрибутов</li>
+<li>ACID</li>
+<li>REST API + Cypher</li>
+<li>Множество плагинов, включая 2d индекс</li>
+</ul>
+<p>Neo4j: недостатки:</p>
+<ul class="simple">
+<li>Нет полноценного горизонтального масштабирования</li>
+<li>Плохо приспособлен для размещения на нескольких машинах</li>
+<li>Для полноценного удаления приходится перезапускать сервер</li>
+</ul>
+<p>Фаза исследования Эту фазу не стоит пропускать, ибо это единственная фаза, которая позволяет вам экономить деньги. До ее начала необходимо ответить себе на вопросы о характере ваших данных и сформулировать требования по их использованию.
+Первая развилка: связи В вашем приложении есть сеть данных, граф знаний, а самый популярный запрос связан с обходом сложной иерархии объектов? Вы готовы отказаться размещения на нескольких машинах? Neo4j спешит на помощь!
+Вторая развилка: BigData Данные о достаточно большом количестве объектов, изменяющихся во времени и пространстве (движения звезд, личная переписка, фотки в Instagram)
+Вторая развилка: BigData Придется попрощаться с SQL и наращиванием мощности одного сервера. Впрочем и Neo4j для этого не готов
+Третья развилка: простота Нужно лишь чтение/запись по ключу, безграничное масштабирование, отсутствие точек общего отказа Между данными почти нет связей. Riak оставляет всех позади себя, добавляя возможность MapReduce над вашими данными.
+Четвертая развилка: иерархия Структура данных отличается высокой изменчивостью и большой вложенностью. Связность отдельных сегментов данных невысока. Riak уходит, на сцену выходит Mongo DB, кружась в смертельном танго с CouchDB.
+Пятая развилка: отчеты Необходима обработка и сложная агрегация данных при помощи Hadoop. Данные довольно плоские. Hbase царствует безраздельно, но Cassandra наступает ей на пятки, предлагая ряд преимуществ.</p>
+<div class="figure align-right">
+<img alt="NoSQL logo" src="images/nosql_logo.png" style="width: 300.0px; height: 300.0px;" />
+</div>
+<p><a class="reference external" href="http://www.slideshare.net/zaleslaw/nosql-29011549">http://www.slideshare.net/zaleslaw/nosql-29011549</a>
+<a class="reference external" href="https://youtu.be/ElQOHHayISI">https://youtu.be/ElQOHHayISI</a></p>
+<p><a class="reference external" href="http://cassandra.apache.org">http://cassandra.apache.org</a>
+<a class="reference external" href="http://www.aerospike.com/russian/">http://www.aerospike.com/russian/</a></p>
+
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "nosql-comparison.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

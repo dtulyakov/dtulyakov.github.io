@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Денис Туляков wiki</title><link href="http://www.dtulyakov.ru/" rel="alternate"></link><link href="http://www.dtulyakov.ru/feeds/all.atom.xml" rel="self"></link><id>http://www.dtulyakov.ru/</id><updated>2018-01-14T19:30:00+03:00</updated><entry><title>Туннель между FreeBSD и Linux</title><link href="http://www.dtulyakov.ru/ifreebsd-flash.html" rel="alternate"></link><published>2018-01-14T01:05:00+03:00</published><updated>2018-01-14T19:30:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:www.dtulyakov.ru,2018-01-14:/ifreebsd-flash.html</id><summary type="html">&lt;p&gt;Варианты туннелей&lt;/p&gt;</summary><content type="html">&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3
+4
+5
+6
+7
+8&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Server1:
+ОС: Linux
+Сетевой интерфейс: eth0
+IP: &lt;span class="m"&gt;100&lt;/span&gt;.100.100.100
+Server2:
+ОС: FreeBSD
+Сетевой интерфейс: fxp0
+IP: &lt;span class="m"&gt;200&lt;/span&gt;.200.200.200
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Нам необходимо получить IPv4 over IPv4 тунель со следующими параметрами между указанными серверами:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Server1: &lt;span class="m"&gt;10&lt;/span&gt;.0.0.1 / &lt;span class="m"&gt;255&lt;/span&gt;.255.255.252
+Server2: &lt;span class="m"&gt;10&lt;/span&gt;.0.0.2 / &lt;span class="m"&gt;255&lt;/span&gt;.255.255.252
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Для настройки описанной конфигурации на Linux-сервере нам нужно выполнить следующие шаги:&lt;/p&gt;
+&lt;p&gt;Создадим ipip-тунельный интерфейс:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;ip tunnel add tun0 mode ipip remote &lt;span class="m"&gt;200&lt;/span&gt;.200.200.200 &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="m"&gt;100&lt;/span&gt;.100.100.100 dev eth0
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Установим IP-адреса:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;ifconfig tun0 &lt;span class="m"&gt;10&lt;/span&gt;.0.0.1 netmask &lt;span class="m"&gt;255&lt;/span&gt;.255.255.252 pointopoint &lt;span class="m"&gt;10&lt;/span&gt;.0.0.2
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Установим MTU и поднимем интерфейс:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; ifconfig tun0 mtu &lt;span class="m"&gt;1500&lt;/span&gt; up
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Теперь на Linux-сервере мы имеем следующий интерфейс:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3
+4
+5
+6
+7
+8&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;ifconfig tun0 tun77 Link encap:IPIP Tunnel HWaddr
+
+inet addr:10.0.0.1  P-t-P:10.0.0.2  Mask:255.255.255.252
+UP POINTOPOINT RUNNING NOARP  MTU:1500  Metric:1
+RX packets:6 errors:0 dropped:0 overruns:0 frame:0
+TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+collisions:0 txqueuelen:0
+RX bytes:504 &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;504&lt;/span&gt;.0 b&lt;span class="o"&gt;)&lt;/span&gt;  TX bytes:624 &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;624&lt;/span&gt;.0 b&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Следующим шагом будет настройка конца тунеля на стороне FeeeBSD-сервера:&lt;/p&gt;
+&lt;p&gt;Создаем gif-интерфейс для тунеля:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;ifconfig gif0 create
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Устанавливаем транспортные IP-адреса:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gifconfig gif0 inet &lt;span class="m"&gt;200&lt;/span&gt;.200.200.200 &lt;span class="m"&gt;100&lt;/span&gt;.100.100.100
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Устанавливаем IP-адреса тунеля:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;ifconfig gif0 &lt;span class="m"&gt;10&lt;/span&gt;.0.0.2 netmask &lt;span class="m"&gt;255&lt;/span&gt;.255.255.252 &lt;span class="m"&gt;10&lt;/span&gt;.0.0.1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Устанавливаем MTU и поднимаем интерфейс:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;ifconfig gif0 mtu &lt;span class="m"&gt;1500&lt;/span&gt; up
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;В результате на стороне FreeBSD видим следующее:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;ifconfig gif0
+gif0: &lt;span class="nv"&gt;flags&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;8051&lt;/span&gt; mtu &lt;span class="m"&gt;1500&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;tunnel inet &lt;span class="m"&gt;200&lt;/span&gt;.200.200.200 --&amp;gt; &lt;span class="m"&gt;100&lt;/span&gt;.100.100.100
+inet &lt;span class="m"&gt;10&lt;/span&gt;.0.0.2 --&amp;gt; &lt;span class="m"&gt;10&lt;/span&gt;.0.0.1 netmask 0xfffffffc
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</content><category term="FreeBSD"></category><category term="Flash"></category></entry><entry><title>Load Average</title><link href="http://www.dtulyakov.ru/load-average.html" rel="alternate"></link><published>2017-08-16T21:35:00+03:00</published><updated>2017-08-16T21:37:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:www.dtulyakov.ru,2017-08-16:/load-average.html</id><summary type="html">&lt;p&gt;Что же показывает Load Average и когда надо паниковать?&lt;/p&gt;</summary><content type="html">&lt;p&gt;Самый простой способ это запустить &lt;code&gt;top&lt;/code&gt; или &lt;code&gt;uptime&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Ну или так:&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cat /proc/loadavg
+&lt;span class="m"&gt;0&lt;/span&gt;.50 &lt;span class="m"&gt;0&lt;/span&gt;.46 &lt;span class="m"&gt;0&lt;/span&gt;.44 &lt;span class="m"&gt;1&lt;/span&gt;/998 &lt;span class="m"&gt;10325&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Если не вдаваться в подробности то 3 показателя говорят о динамике нагрузки. Среднее значение за 1 минуту 5 минут и 15 минут.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Если показатели увеличиваются 1.50 2.46 3.44 то нагрузка идёт на спад.&lt;/li&gt;
+&lt;li&gt;Если наоборот 3.50 2.46 1.44 то нагрузка растёт и пора начинать смотреть что и как.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href="https://m.habrahabr.ru/company/mailru/blog/335326/" rel="nofollow" target="_blank"&gt;На хабре&lt;/a&gt; можно более детально почитать про эти показатели и про их метаморфозы в современных реалиях.&lt;/p&gt;</content><category term="LoadAverage"></category></entry><entry><title>Zabbix discoverer processes more than 75% busy</title><link href="http://www.dtulyakov.ru/zabbix-discoverer.html" rel="alternate"></link><published>2017-08-16T21:25:00+03:00</published><updated>2017-08-16T21:27:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:www.dtulyakov.ru,2017-08-16:/zabbix-discoverer.html</id><summary type="html">&lt;p&gt;Как победить Zabbix discoverer processes more than 75% busy?&lt;/p&gt;</summary><content type="html">&lt;p&gt;Выскакивает потому, что по умолчанию процесс для обнаружения используется один&lt;/p&gt;
+&lt;p&gt;Увеличить можно в конфиге&lt;/p&gt;
+&lt;p&gt;Например 4 процесса для обнаружения&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;StartDiscoverers&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;4&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Максимальное число 250 (но мне столько не надо)&lt;/p&gt;
+&lt;p&gt;В общем надо подбирать т.к. никто не скажет что для этого надо 2 и для того 22 &lt;/p&gt;</content><category term="Zabbix"></category></entry></feed>

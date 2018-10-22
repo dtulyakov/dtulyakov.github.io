@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Денис Туляков wiki - DevOps</title><link href="https://dtulyakov.github.io/" rel="alternate"></link><link href="http://www.dtulyakov.ru/feeds/devops.atom.xml" rel="self"></link><id>https://dtulyakov.github.io/</id><updated>2017-06-25T22:09:00+03:00</updated><entry><title>Backup инкрементальных изменений</title><link href="https://dtulyakov.github.io/rdiff.html" rel="alternate"></link><published>2017-06-22T09:20:00+03:00</published><updated>2017-06-25T22:09:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:dtulyakov.github.io,2017-06-22:/rdiff.html</id><summary type="html">&lt;p&gt;Как сделать инкрементальный бекап ФС&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;img src="/images/openssh.png" style="width: 300.0px;"&gt;&lt;/p&gt;
+&lt;p&gt;Как то в один момент я подумал, что бекапить каждый день один и тот же каталог с картинками (примерно 20Gb) - это идиотизм. При этом всём нет никакой гарантии, что последний бекап не будет пустой и не затрёт всё (бекапил я в tar)
+И тут я вспомнил, что есть &lt;a href="http://rdiff-backup.nongnu.org" rel="nofollow" target="_blank"&gt;&lt;strong&gt;Rdiff-backup&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Грубо говоря rdiff работает по принципу rsync копируя только изменённые файлы.&lt;/p&gt;
+&lt;p&gt;Дампы баз и архив картинок я сливаю по фтп (архи-небезопасно и надо поменять всё это)
+С примером rdiff бекап будет отправляться через &lt;a href="https://dtulyakov.github.io/ssh.html"&gt;&lt;strong&gt;ssh&lt;/strong&gt;&lt;/a&gt;, то можно быть спокойными за секурность своих данных. Вотличии от FTP протокола.
+Дампы переделаю на rsync, что бы отказаться от FTP&lt;/p&gt;
+&lt;p&gt;Установка происходит одной командой&lt;/p&gt;
+&lt;p&gt;Ubuntu/Debian&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt install rdiff-backup
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;FreeBSD&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;make install distclean -C /usr/ports/sysutils/rdiff-backup
+&lt;span class="c1"&gt;# or&lt;/span&gt;
+pkg install rdiff-backup
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Запускать можно с принимающего сервера и с отправляющего. Как запускать личное дело каждого. Но из личного опыта скажу, что проще контролировать если всё в одном месте.
+Что бы в кроне не было километровых путей я всё засовываю в скрипт&lt;/p&gt;
+&lt;p&gt;Пример как забекапить каталог /home с сервера server-02 на бекап сервер 192.168.10.20. При том, что ssh порт не стандартный (хотя всё это можно настроить в ~/.ssh/config)&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;rdiff-backup -v &lt;span class="m"&gt;5&lt;/span&gt; --ssh-no-compression /home &lt;span class="s2"&gt;&amp;quot;-p 1500 192.168.10.20&amp;quot;&lt;/span&gt;::/storage/backup/server-02
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Наоборот как забрать бекап с сервера 192.168.10.2 и удалить бекапы старше одного месяца&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;rdiff-backup -v &lt;span class="m"&gt;2&lt;/span&gt; --ssh-no-compression --remove-older-than 1M &lt;span class="m"&gt;192&lt;/span&gt;.168.10.2::/home /storage/backup/server-02
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Или как забрать бекап с сервера 192.168.10.2 и хранить только последние 7 бекапов&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;rdiff-backup -v &lt;span class="m"&gt;2&lt;/span&gt; --ssh-no-compression --remove-older-than 7B &lt;span class="m"&gt;192&lt;/span&gt;.168.10.2::/home /storage/backup/server-02
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;О формате времени можно прочитать в man подробно всё описано&lt;/p&gt;
+&lt;p&gt;Просмотр изменений за последние 7 дней&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;rdiff-backup --list-changed-since 7D /storage/backup/server-02
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Посмотреть список файлов 2 версии назад&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;rdiff-backup --list-at-time 2B /storage/backup/server-02
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Восстановление из бекапа 3 версии назад&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;rdiff-backup -r 3B /storage/backup/server-02 &lt;span class="m"&gt;192&lt;/span&gt;.168.10.2::/home
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</content><category term="rdiff"></category><category term="FreeBSD"></category><category term="Ubuntu"></category><category term="CentOS"></category><category term="Linux"></category></entry><entry><title>Payara установка</title><link href="https://dtulyakov.github.io/payara.html" rel="alternate"></link><published>2016-08-23T09:20:00+03:00</published><updated>2016-08-23T10:23:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:dtulyakov.github.io,2016-08-23:/payara.html</id><summary type="html">&lt;p&gt;Установка сервера приложений Payara&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;img src="/images/Payara_logo.png" style="width: 100.0px;"&gt;&lt;/p&gt;
+&lt;p&gt;Я уже описывал процесс установки сервера приложений &lt;a href="https://dtulyakov.github.io/glassfish.html"&gt;&lt;strong&gt;GlassFish&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Установка Payara Server полностью идентичная, за исключением того откуда брать сам &lt;a href="http://www.payara.fish/downloads" rel="nofollow" target="_blank"&gt;&lt;strong&gt;Payara Server&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Соответственно всё что касается GlassFish можно заменить на Payara а можно не менять т.к. в целом это улучшенный GlassFish&lt;/p&gt;
+&lt;p&gt;Настройка &lt;a href="https://dtulyakov.github.io/glassfish_secure_admin.html"&gt;&lt;strong&gt;Enable Secure Admin to access the DAS &lt;/strong&gt;&lt;/a&gt; производится так же как у GlassFish&lt;/p&gt;
+&lt;p&gt;Решил задеплоить war файл&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u glassfish ./bin/asadmin --user admin deploy /tmp/hello.war
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Удалить её так&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u glassfish ./bin/asadmin --user admin undeploy hello
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Оказалось приложение должно быть скрыто за прокси в целях безопасности, надо заставить сервер слушать только лупбек&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u glassfish ./bin/asadmin --user admin
+asadmin&amp;gt; &lt;span class="nb"&gt;set&lt;/span&gt; server-config.network-config.network-listeners.network-listener.http-listener-1.address&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</content><category term="Java"></category><category term="JavaEE"></category><category term="Payara"></category><category term="GlassFish"></category><category term="FreeBSD"></category><category term="Ubuntu"></category><category term="CentOS"></category><category term="Linux"></category></entry><entry><title>Glassfish установка</title><link href="https://dtulyakov.github.io/glassfish.html" rel="alternate"></link><published>2016-08-22T09:20:00+03:00</published><updated>2016-08-22T10:23:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:dtulyakov.github.io,2016-08-22:/glassfish.html</id><summary type="html">&lt;p&gt;Установка сервера приложений GlassFish (обновлённая)&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;img src="/images/GlassFish_logo.png" style="width: 100.0px;"&gt;&lt;/p&gt;
+&lt;p&gt;Я уже описывал процесс установки контейнера сервлетов - &lt;a href="https://dtulyakov.github.io/tomcat.html"&gt;&lt;strong&gt;Apache Tomcat&lt;/strong&gt;&lt;/a&gt;.
+Пришло время описать процесс установки для сервера приложений GlassFish как нибудь доберусь и до WildFly (бывший JBoss)
+Как я это делал
+Действия производятся на Ubuntu&lt;/p&gt;
+&lt;p&gt;Создаём группу (вообще можно создать а можно и не создавать)&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo groupadd java
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Создаём юзера для того что бы всё было сикурно&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo adduser --home /home/glassfish --system --shell /bin/bash glassfish
+sudo usermod -a -G java glassfish
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Либо сразу создаём с указанной группой&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo adduser --home /home/glassfish --system --shell /bin/bash --ingroup java glassfish
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Ставим jdk я выбрал open но можно взять и от oracle&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install openjdk-8-jdk
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Качаем сам сервер GlassFish&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /tmp
+wget -c http://dlc.sun.com.edgesuite.net/glassfish/4.1.1/release/glassfish-4.1.1.zip
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Распаковываем&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;unzip glassfish-4.1*zip
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Перемещаем туда где он будет теперь "жить"&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo mv glassfish4 /usr/local/bin/
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Далее стартовый скрипт для systemd&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo vim /etc/systemd/system/glassfish.service
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;Unit&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="nv"&gt;Description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; GlassFish Server v4.1
+&lt;span class="nv"&gt;After&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; syslog.target network.target
+
+&lt;span class="o"&gt;[&lt;/span&gt;Service&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="nv"&gt;User&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;glassfish
+&lt;span class="nv"&gt;ExecStart&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; /usr/bin/java -jar /usr/local/bin/glassfish4/glassfish/lib/client/appserver-cli.jar start-domain
+&lt;span class="nv"&gt;ExecStop&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; /usr/bin/java -jar /usr/local/bin/glassfish4/glassfish/lib/client/appserver-cli.jar stop-domain
+&lt;span class="nv"&gt;ExecReload&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; /usr/bin/java -jar /usr/local/bin/glassfish4/glassfish/lib/client/appserver-cli.jar restart-domain
+&lt;span class="nv"&gt;Type&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; forking
+
+&lt;span class="o"&gt;[&lt;/span&gt;Install&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="nv"&gt;WantedBy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; multi-user.target
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Включаем автостарт и стартуем&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; glassfish.service
+systemctl start glassfish.service
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;И стартовый скрипт для initd&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo vim /etc/init.d/glassfish
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# update-rc.d glassfish defaults&lt;/span&gt;
+&lt;span class="c1"&gt;# description: Startup script for Glassfish&lt;/span&gt;
+
+&lt;span class="nv"&gt;GLASSFISH_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/glassfish4/bin&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="nv"&gt;GLASSFISH_OWNER&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;glassfish&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="nv"&gt;GLASSFISH_ADMIN&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;admin&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="nv"&gt;GLASSFISH_DOMAIN&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;domain1&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="nv"&gt;GLASSFISH_PASSWORD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/glassfish/.asadminpwdgfish&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; GLASSFISH_HOME GLASSFISH_OWNER GLASSFISH_PASSWORD GLASSFISH_ADMIN GLASSFISH_DOMAIN
+
+start&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="nb"&gt;echo&lt;/span&gt; -n &lt;span class="s2"&gt;&amp;quot;Starting Glassfish: &amp;quot;&lt;/span&gt;
+  su &lt;span class="nv"&gt;$GLASSFISH_OWNER&lt;/span&gt; -c &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$GLASSFISH_HOME&lt;/span&gt;&lt;span class="s2"&gt;/asadmin start-domain --user \&lt;/span&gt;
+&lt;span class="s2"&gt;     &lt;/span&gt;&lt;span class="nv"&gt;$GLASSFISH_ADMIN&lt;/span&gt;&lt;span class="s2"&gt; --passwordfile &lt;/span&gt;&lt;span class="nv"&gt;$GLASSFISH_PASSWORD&lt;/span&gt;&lt;span class="s2"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$GLASSFISH_DOMAIN&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+     &lt;span class="c1"&gt;# одна строчка&lt;/span&gt;
+  &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;done&amp;quot;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+stop&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="nb"&gt;echo&lt;/span&gt; -n &lt;span class="s2"&gt;&amp;quot;Stopping Glassfish: &amp;quot;&lt;/span&gt;
+  su &lt;span class="nv"&gt;$GLASSFISH_OWNER&lt;/span&gt; -c &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$GLASSFISH_HOME&lt;/span&gt;&lt;span class="s2"&gt;/asadmin stop-domain &lt;/span&gt;&lt;span class="nv"&gt;$GLASSFISH_DOMAIN&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+  &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;done&amp;quot;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; in
+  start&lt;span class="o"&gt;)&lt;/span&gt;
+    start
+    &lt;span class="p"&gt;;;&lt;/span&gt;
+  stop&lt;span class="o"&gt;)&lt;/span&gt;
+    stop
+    &lt;span class="p"&gt;;;&lt;/span&gt;
+  restart&lt;span class="o"&gt;)&lt;/span&gt;
+    stop
+    start
+    &lt;span class="p"&gt;;;&lt;/span&gt;
+  *&lt;span class="o"&gt;)&lt;/span&gt;
+    &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;$&amp;quot;Usage: Glassfish {start|stop|restart}&amp;quot;&lt;/span&gt;
+    &lt;span class="nb"&gt;exit&lt;/span&gt;
+&lt;span class="k"&gt;esac&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Ну и не забываем сделать его исполняемым&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo chmod +x /etc/init.d/glassfish
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Меняем хозяина каталога&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo chown -R glassfish:java /usr/local/bin/glassfish4
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Взлетит ли ново установленный glassfish&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u glassfish /usr/local/bin/glassfish4/bin/asadmin start-domain domain1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Если ошибок нет то всё ок
+Тушим его и настроим автозапуск&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u glassfish /usr/local/bin/glassfish4/bin/asadmin stop-domain domain1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo update-rc.d glassfish defaults
+sudo update-rc.d glassfish &lt;span class="nb"&gt;enable&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Запускаем уже через стартовый скрипт&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo service glassfish start
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Вроде установка закончена осталось настроить админку&lt;/p&gt;
+&lt;p&gt;Настройка управление GlassFish будет через порт 4848, который по умолчанию слушает только петлю localhost:4848
+Так же есть консольный вариант управления &lt;code&gt;asadmin&lt;/code&gt;, с помощью которой можно выполнить всё тоже что и через веб и даже больше&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/usr/local/bin/glassfish4/bin/asadmin --user admin --passwordfile /usr/local/bin/glassfish4/glassfish/domains/domain1/config/admin-keyfile --secure&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;false&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;Настройка &lt;a href="https://dtulyakov.github.io/glassfish_secure_admin.html"&gt;&lt;strong&gt;Enable Secure Admin to access the DAS &lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;</content><category term="Java"></category><category term="JavaEE"></category><category term="Payara"></category><category term="GlassFish"></category><category term="FreeBSD"></category><category term="Ubuntu"></category><category term="CentOS"></category><category term="Linux"></category></entry></feed>

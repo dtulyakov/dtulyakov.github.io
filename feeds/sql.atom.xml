@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Денис Туляков wiki - SQL</title><link href="https://dtulyakov.github.io/" rel="alternate"></link><link href="http://www.dtulyakov.ru/feeds/sql.atom.xml" rel="self"></link><id>https://dtulyakov.github.io/</id><updated>2016-07-25T10:44:00+03:00</updated><entry><title>MySQL my.cnf</title><link href="https://dtulyakov.github.io/my-cnf.html" rel="alternate"></link><published>2016-07-25T10:16:00+03:00</published><updated>2016-07-25T10:44:00+03:00</updated><author><name>Денис Туляков</name></author><id>tag:dtulyakov.github.io,2016-07-25:/my-cnf.html</id><summary type="html">&lt;p&gt;Мой вариант настройки "май-кнф" для боевого проекта (черновик)&lt;/p&gt;</summary><content type="html">&lt;p&gt;Для начала я пользовался mysqltuner.pl.&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget https://raw.githubusercontent.com/major/MySQLTuner-perl/master/mysqltuner.pl
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Run program with --help to get a list of available options and with&lt;/span&gt;
+&lt;span class="c1"&gt;# --print-defaults to see which it would actually understand and use.&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;client&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="nv"&gt;port&lt;/span&gt;        &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;3306&lt;/span&gt;
+&lt;span class="nv"&gt;socket&lt;/span&gt;      &lt;span class="o"&gt;=&lt;/span&gt; /var/run/mysqld/mysqld.sock
+
+&lt;span class="o"&gt;[&lt;/span&gt;mysqld_safe&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="nv"&gt;socket&lt;/span&gt;      &lt;span class="o"&gt;=&lt;/span&gt; /var/run/mysqld/mysqld.sock
+&lt;span class="nv"&gt;nice&lt;/span&gt;        &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+
+&lt;span class="o"&gt;[&lt;/span&gt;mysqld&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# * Basic Settings&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="nv"&gt;default_time_zone&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;+03:00&amp;#39;&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="nv"&gt;user&lt;/span&gt;        &lt;span class="o"&gt;=&lt;/span&gt; mysql
+pid-file    &lt;span class="o"&gt;=&lt;/span&gt; /var/run/mysqld/mysqld.pid
+&lt;span class="nv"&gt;socket&lt;/span&gt;      &lt;span class="o"&gt;=&lt;/span&gt; /var/run/mysqld/mysqld.sock
+&lt;span class="nv"&gt;port&lt;/span&gt;        &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;3306&lt;/span&gt;
+&lt;span class="nv"&gt;basedir&lt;/span&gt;     &lt;span class="o"&gt;=&lt;/span&gt; /usr
+&lt;span class="nv"&gt;datadir&lt;/span&gt;     &lt;span class="o"&gt;=&lt;/span&gt; /var/lib/mysql
+&lt;span class="nv"&gt;tmpdir&lt;/span&gt;      &lt;span class="o"&gt;=&lt;/span&gt; /tmp
+&lt;span class="nv"&gt;lc_messages_dir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; /usr/share/mysql
+&lt;span class="nv"&gt;lc_messages&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; ru_RU
+skip-external-locking
+&lt;span class="c1"&gt;#bind-address       = 127.0.0.1&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# * Fine Tuning&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="nv"&gt;max_connections&lt;/span&gt;     &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;600&lt;/span&gt;
+&lt;span class="nv"&gt;connect_timeout&lt;/span&gt;     &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;5&lt;/span&gt;
+&lt;span class="nv"&gt;wait_timeout&lt;/span&gt;        &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;600&lt;/span&gt;
+&lt;span class="nv"&gt;max_allowed_packet&lt;/span&gt;  &lt;span class="o"&gt;=&lt;/span&gt; 16M
+&lt;span class="nv"&gt;thread_cache_size&lt;/span&gt;       &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;128&lt;/span&gt;
+&lt;span class="nv"&gt;sort_buffer_size&lt;/span&gt;    &lt;span class="o"&gt;=&lt;/span&gt; 4M
+&lt;span class="nv"&gt;bulk_insert_buffer_size&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 16M
+&lt;span class="nv"&gt;tmp_table_size&lt;/span&gt;      &lt;span class="o"&gt;=&lt;/span&gt; 32M
+&lt;span class="nv"&gt;max_heap_table_size&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 32M
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# * MyISAM&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="nv"&gt;myisam_recover_options&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; BACKUP
+&lt;span class="nv"&gt;key_buffer_size&lt;/span&gt;     &lt;span class="o"&gt;=&lt;/span&gt; 254M
+&lt;span class="c1"&gt;#open-files-limit   = 2000&lt;/span&gt;
+&lt;span class="nv"&gt;table_open_cache&lt;/span&gt;    &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;400&lt;/span&gt;
+&lt;span class="nv"&gt;myisam_sort_buffer_size&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 512M
+&lt;span class="c1"&gt;#concurrent_insert  = AUTO&lt;/span&gt;
+&lt;span class="nv"&gt;concurrent_insert&lt;/span&gt;   &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;
+&lt;span class="nv"&gt;read_buffer_size&lt;/span&gt;    &lt;span class="o"&gt;=&lt;/span&gt; 2M
+&lt;span class="nv"&gt;read_rnd_buffer_size&lt;/span&gt;    &lt;span class="o"&gt;=&lt;/span&gt; 1M
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# * Query Cache Configuration&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="nv"&gt;query_cache_limit&lt;/span&gt;       &lt;span class="o"&gt;=&lt;/span&gt; 128K
+&lt;span class="c1"&gt;#query_cache_limit      = 1024K&lt;/span&gt;
+&lt;span class="nv"&gt;query_cache_size&lt;/span&gt;        &lt;span class="o"&gt;=&lt;/span&gt; 64M
+&lt;span class="c1"&gt;# for more write intensive setups, set to DEMAND or OFF&lt;/span&gt;
+&lt;span class="nv"&gt;query_cache_type&lt;/span&gt;        &lt;span class="o"&gt;=&lt;/span&gt; OFF
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# * Logging and Replication&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;#general_log_file        = /var/log/mysql/mysql.log&lt;/span&gt;
+&lt;span class="c1"&gt;#general_log             = 1&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# Error logging goes to syslog due to /etc/mysql/conf.d/mysqld_safe_syslog.cnf.&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# we do want to know about network errors and such&lt;/span&gt;
+&lt;span class="nv"&gt;log_warnings&lt;/span&gt;        &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# Enable the slow query log to see queries with especially long duration&lt;/span&gt;
+&lt;span class="c1"&gt;#slow_query_log[={0|1}]&lt;/span&gt;
+&lt;span class="nv"&gt;slow_query_log&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;
+&lt;span class="nv"&gt;slow_query_log_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; /var/log/mysql/mariadb-slow.log
+&lt;span class="nv"&gt;long_query_time&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;5&lt;/span&gt;
+&lt;span class="c1"&gt;#log_slow_rate_limit    = 1000&lt;/span&gt;
+&lt;span class="nv"&gt;log_slow_verbosity&lt;/span&gt;  &lt;span class="o"&gt;=&lt;/span&gt; query_plan
+
+&lt;span class="c1"&gt;#log-queries-not-using-indexes&lt;/span&gt;
+&lt;span class="c1"&gt;#log_slow_admin_statements&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;#server-id      = 1&lt;/span&gt;
+&lt;span class="c1"&gt;#report_host        = master1&lt;/span&gt;
+&lt;span class="c1"&gt;#auto_increment_increment = 2&lt;/span&gt;
+&lt;span class="c1"&gt;#auto_increment_offset  = 1&lt;/span&gt;
+&lt;span class="c1"&gt;#log_bin            = /var/log/mysql/mariadb-bin&lt;/span&gt;
+&lt;span class="c1"&gt;#log_bin_index      = /var/log/mysql/mariadb-bin.index&lt;/span&gt;
+&lt;span class="c1"&gt;# not fab for performance, but safer&lt;/span&gt;
+&lt;span class="c1"&gt;#sync_binlog        = 1&lt;/span&gt;
+&lt;span class="nv"&gt;expire_logs_days&lt;/span&gt;    &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;
+&lt;span class="nv"&gt;max_binlog_size&lt;/span&gt;         &lt;span class="o"&gt;=&lt;/span&gt; 100M
+&lt;span class="c1"&gt;# slaves&lt;/span&gt;
+&lt;span class="c1"&gt;#relay_log      = /var/log/mysql/relay-bin&lt;/span&gt;
+&lt;span class="c1"&gt;#relay_log_index    = /var/log/mysql/relay-bin.index&lt;/span&gt;
+&lt;span class="c1"&gt;#relay_log_info_file    = /var/log/mysql/relay-bin.info&lt;/span&gt;
+&lt;span class="c1"&gt;#log_slave_updates&lt;/span&gt;
+&lt;span class="c1"&gt;#read_only&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;#sql_mode       = NO_ENGINE_SUBSTITUTION,TRADITIONAL&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# * InnoDB&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="nv"&gt;default_storage_engine&lt;/span&gt;  &lt;span class="o"&gt;=&lt;/span&gt; InnoDB
+&lt;span class="c1"&gt;#innodb_log_file_size   = 50M&lt;/span&gt;
+&lt;span class="c1"&gt;# 5 Gb на всё и по 1Gb на каждый инстанс т.к. 5 Gb / 5 instans = 1Gb &lt;/span&gt;
+&lt;span class="c1"&gt;# это для instans (не ставить 256 в поле инстанс с надеждой получить 256 Мб или ещё чего то!!!)&lt;/span&gt;
+&lt;span class="nv"&gt;innodb_buffer_pool_size&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 5G
+&lt;span class="nv"&gt;innodb_buffer_pool_instances&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;5&lt;/span&gt;
+&lt;span class="nv"&gt;innodb_log_buffer_size&lt;/span&gt;  &lt;span class="o"&gt;=&lt;/span&gt; 8M
+&lt;span class="nv"&gt;innodb_file_per_table&lt;/span&gt;   &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;span class="nv"&gt;innodb_open_files&lt;/span&gt;   &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;400&lt;/span&gt;
+&lt;span class="nv"&gt;innodb_io_capacity&lt;/span&gt;  &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;400&lt;/span&gt;
+&lt;span class="nv"&gt;innodb_flush_method&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; O_DIRECT
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# * Security Features&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# Read the manual, too, if you want chroot!&lt;/span&gt;
+&lt;span class="c1"&gt;# chroot = /var/lib/mysql/&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# ssl-ca=/etc/mysql/cacert.pem&lt;/span&gt;
+&lt;span class="c1"&gt;# ssl-cert=/etc/mysql/server-cert.pem&lt;/span&gt;
+&lt;span class="c1"&gt;# ssl-key=/etc/mysql/server-key.pem&lt;/span&gt;
+
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# * Galera-related settings&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;galera&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="c1"&gt;# Mandatory settings&lt;/span&gt;
+&lt;span class="c1"&gt;#wsrep_on=ON&lt;/span&gt;
+&lt;span class="c1"&gt;#wsrep_provider=&lt;/span&gt;
+&lt;span class="c1"&gt;#wsrep_cluster_address=&lt;/span&gt;
+&lt;span class="c1"&gt;#binlog_format=row&lt;/span&gt;
+&lt;span class="c1"&gt;#default_storage_engine=InnoDB&lt;/span&gt;
+&lt;span class="c1"&gt;#innodb_autoinc_lock_mode=2&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# Allow server to accept connections on all interfaces.&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;#bind-address=0.0.0.0&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;# Optional setting&lt;/span&gt;
+&lt;span class="c1"&gt;#wsrep_slave_threads=1&lt;/span&gt;
+&lt;span class="c1"&gt;#innodb_flush_log_at_trx_commit=0&lt;/span&gt;
+
+&lt;span class="o"&gt;[&lt;/span&gt;mysqldump&lt;span class="o"&gt;]&lt;/span&gt;
+quick
+quote-names
+&lt;span class="nv"&gt;max_allowed_packet&lt;/span&gt;  &lt;span class="o"&gt;=&lt;/span&gt; 16M
+
+&lt;span class="o"&gt;[&lt;/span&gt;mysql&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="c1"&gt;#no-auto-rehash # faster start of mysql but no tab completion&lt;/span&gt;
+
+&lt;span class="o"&gt;[&lt;/span&gt;isamchk&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="nv"&gt;key_buffer&lt;/span&gt;      &lt;span class="o"&gt;=&lt;/span&gt; 16M
+
+&lt;span class="c1"&gt;#&lt;/span&gt;
+!includedir /etc/mysql/conf.d/
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</content><category term="MySQL"></category><category term="SQL"></category></entry></feed>

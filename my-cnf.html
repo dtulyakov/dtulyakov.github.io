@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="MySQL my.cnf"/>
+    <meta property="og:url" content="./my-cnf.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./my-cnf.html" />
+
+    <title>MySQL my.cnf | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li class="active"><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li ><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./my-cnf.html" rel="bookmark"
+             title="Permalink to MySQL my.cnf">MySQL my.cnf</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/sql.html">SQL</a>
+
+    on 2016-07-25
+
+        |
+        tags:         <a href="./tag/mysql.html">MySQL</a>
+        <a href="./tag/sql.html">SQL</a>
+
+
+        |
+        <a href="./my-cnf.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p>Для начала я пользовался mysqltuner.pl.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>wget https://raw.githubusercontent.com/major/MySQLTuner-perl/master/mysqltuner.pl
+</pre></div>
+</td></tr></table>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Run program with --help to get a list of available options and with</span>
+<span class="c1"># --print-defaults to see which it would actually understand and use.</span>
+<span class="c1">#</span>
+<span class="o">[</span>client<span class="o">]</span>
+<span class="nv">port</span>        <span class="o">=</span> <span class="m">3306</span>
+<span class="nv">socket</span>      <span class="o">=</span> /var/run/mysqld/mysqld.sock
+
+<span class="o">[</span>mysqld_safe<span class="o">]</span>
+<span class="nv">socket</span>      <span class="o">=</span> /var/run/mysqld/mysqld.sock
+<span class="nv">nice</span>        <span class="o">=</span> <span class="m">0</span>
+
+<span class="o">[</span>mysqld<span class="o">]</span>
+<span class="c1">#</span>
+<span class="c1"># * Basic Settings</span>
+<span class="c1">#</span>
+<span class="nv">default_time_zone</span> <span class="o">=</span> <span class="s1">&#39;+03:00&#39;</span>
+<span class="c1">#</span>
+<span class="nv">user</span>        <span class="o">=</span> mysql
+pid-file    <span class="o">=</span> /var/run/mysqld/mysqld.pid
+<span class="nv">socket</span>      <span class="o">=</span> /var/run/mysqld/mysqld.sock
+<span class="nv">port</span>        <span class="o">=</span> <span class="m">3306</span>
+<span class="nv">basedir</span>     <span class="o">=</span> /usr
+<span class="nv">datadir</span>     <span class="o">=</span> /var/lib/mysql
+<span class="nv">tmpdir</span>      <span class="o">=</span> /tmp
+<span class="nv">lc_messages_dir</span> <span class="o">=</span> /usr/share/mysql
+<span class="nv">lc_messages</span> <span class="o">=</span> ru_RU
+skip-external-locking
+<span class="c1">#bind-address       = 127.0.0.1</span>
+<span class="c1">#</span>
+<span class="c1"># * Fine Tuning</span>
+<span class="c1">#</span>
+<span class="nv">max_connections</span>     <span class="o">=</span> <span class="m">600</span>
+<span class="nv">connect_timeout</span>     <span class="o">=</span> <span class="m">5</span>
+<span class="nv">wait_timeout</span>        <span class="o">=</span> <span class="m">600</span>
+<span class="nv">max_allowed_packet</span>  <span class="o">=</span> 16M
+<span class="nv">thread_cache_size</span>       <span class="o">=</span> <span class="m">128</span>
+<span class="nv">sort_buffer_size</span>    <span class="o">=</span> 4M
+<span class="nv">bulk_insert_buffer_size</span> <span class="o">=</span> 16M
+<span class="nv">tmp_table_size</span>      <span class="o">=</span> 32M
+<span class="nv">max_heap_table_size</span> <span class="o">=</span> 32M
+<span class="c1">#</span>
+<span class="c1"># * MyISAM</span>
+<span class="c1">#</span>
+<span class="nv">myisam_recover_options</span> <span class="o">=</span> BACKUP
+<span class="nv">key_buffer_size</span>     <span class="o">=</span> 254M
+<span class="c1">#open-files-limit   = 2000</span>
+<span class="nv">table_open_cache</span>    <span class="o">=</span> <span class="m">400</span>
+<span class="nv">myisam_sort_buffer_size</span> <span class="o">=</span> 512M
+<span class="c1">#concurrent_insert  = AUTO</span>
+<span class="nv">concurrent_insert</span>   <span class="o">=</span> <span class="m">2</span>
+<span class="nv">read_buffer_size</span>    <span class="o">=</span> 2M
+<span class="nv">read_rnd_buffer_size</span>    <span class="o">=</span> 1M
+<span class="c1">#</span>
+<span class="c1"># * Query Cache Configuration</span>
+<span class="c1">#</span>
+<span class="nv">query_cache_limit</span>       <span class="o">=</span> 128K
+<span class="c1">#query_cache_limit      = 1024K</span>
+<span class="nv">query_cache_size</span>        <span class="o">=</span> 64M
+<span class="c1"># for more write intensive setups, set to DEMAND or OFF</span>
+<span class="nv">query_cache_type</span>        <span class="o">=</span> OFF
+<span class="c1">#</span>
+<span class="c1"># * Logging and Replication</span>
+<span class="c1">#</span>
+<span class="c1">#general_log_file        = /var/log/mysql/mysql.log</span>
+<span class="c1">#general_log             = 1</span>
+<span class="c1">#</span>
+<span class="c1"># Error logging goes to syslog due to /etc/mysql/conf.d/mysqld_safe_syslog.cnf.</span>
+<span class="c1">#</span>
+<span class="c1"># we do want to know about network errors and such</span>
+<span class="nv">log_warnings</span>        <span class="o">=</span> <span class="m">2</span>
+<span class="c1">#</span>
+<span class="c1"># Enable the slow query log to see queries with especially long duration</span>
+<span class="c1">#slow_query_log[={0|1}]</span>
+<span class="nv">slow_query_log</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">slow_query_log_file</span> <span class="o">=</span> /var/log/mysql/mariadb-slow.log
+<span class="nv">long_query_time</span> <span class="o">=</span> <span class="m">5</span>
+<span class="c1">#log_slow_rate_limit    = 1000</span>
+<span class="nv">log_slow_verbosity</span>  <span class="o">=</span> query_plan
+
+<span class="c1">#log-queries-not-using-indexes</span>
+<span class="c1">#log_slow_admin_statements</span>
+<span class="c1">#</span>
+<span class="c1">#server-id      = 1</span>
+<span class="c1">#report_host        = master1</span>
+<span class="c1">#auto_increment_increment = 2</span>
+<span class="c1">#auto_increment_offset  = 1</span>
+<span class="c1">#log_bin            = /var/log/mysql/mariadb-bin</span>
+<span class="c1">#log_bin_index      = /var/log/mysql/mariadb-bin.index</span>
+<span class="c1"># not fab for performance, but safer</span>
+<span class="c1">#sync_binlog        = 1</span>
+<span class="nv">expire_logs_days</span>    <span class="o">=</span> <span class="m">10</span>
+<span class="nv">max_binlog_size</span>         <span class="o">=</span> 100M
+<span class="c1"># slaves</span>
+<span class="c1">#relay_log      = /var/log/mysql/relay-bin</span>
+<span class="c1">#relay_log_index    = /var/log/mysql/relay-bin.index</span>
+<span class="c1">#relay_log_info_file    = /var/log/mysql/relay-bin.info</span>
+<span class="c1">#log_slave_updates</span>
+<span class="c1">#read_only</span>
+<span class="c1">#</span>
+<span class="c1">#sql_mode       = NO_ENGINE_SUBSTITUTION,TRADITIONAL</span>
+<span class="c1">#</span>
+<span class="c1"># * InnoDB</span>
+<span class="c1">#</span>
+<span class="nv">default_storage_engine</span>  <span class="o">=</span> InnoDB
+<span class="c1">#innodb_log_file_size   = 50M</span>
+<span class="c1"># 5 Gb на всё и по 1Gb на каждый инстанс т.к. 5 Gb / 5 instans = 1Gb </span>
+<span class="c1"># это для instans (не ставить 256 в поле инстанс с надеждой получить 256 Мб или ещё чего то!!!)</span>
+<span class="nv">innodb_buffer_pool_size</span> <span class="o">=</span> 5G
+<span class="nv">innodb_buffer_pool_instances</span> <span class="o">=</span> <span class="m">5</span>
+<span class="nv">innodb_log_buffer_size</span>  <span class="o">=</span> 8M
+<span class="nv">innodb_file_per_table</span>   <span class="o">=</span> <span class="m">1</span>
+<span class="nv">innodb_open_files</span>   <span class="o">=</span> <span class="m">400</span>
+<span class="nv">innodb_io_capacity</span>  <span class="o">=</span> <span class="m">400</span>
+<span class="nv">innodb_flush_method</span> <span class="o">=</span> O_DIRECT
+<span class="c1">#</span>
+<span class="c1"># * Security Features</span>
+<span class="c1">#</span>
+<span class="c1"># Read the manual, too, if you want chroot!</span>
+<span class="c1"># chroot = /var/lib/mysql/</span>
+<span class="c1">#</span>
+<span class="c1"># ssl-ca=/etc/mysql/cacert.pem</span>
+<span class="c1"># ssl-cert=/etc/mysql/server-cert.pem</span>
+<span class="c1"># ssl-key=/etc/mysql/server-key.pem</span>
+
+<span class="c1">#</span>
+<span class="c1"># * Galera-related settings</span>
+<span class="c1">#</span>
+<span class="o">[</span>galera<span class="o">]</span>
+<span class="c1"># Mandatory settings</span>
+<span class="c1">#wsrep_on=ON</span>
+<span class="c1">#wsrep_provider=</span>
+<span class="c1">#wsrep_cluster_address=</span>
+<span class="c1">#binlog_format=row</span>
+<span class="c1">#default_storage_engine=InnoDB</span>
+<span class="c1">#innodb_autoinc_lock_mode=2</span>
+<span class="c1">#</span>
+<span class="c1"># Allow server to accept connections on all interfaces.</span>
+<span class="c1">#</span>
+<span class="c1">#bind-address=0.0.0.0</span>
+<span class="c1">#</span>
+<span class="c1"># Optional setting</span>
+<span class="c1">#wsrep_slave_threads=1</span>
+<span class="c1">#innodb_flush_log_at_trx_commit=0</span>
+
+<span class="o">[</span>mysqldump<span class="o">]</span>
+quick
+quote-names
+<span class="nv">max_allowed_packet</span>  <span class="o">=</span> 16M
+
+<span class="o">[</span>mysql<span class="o">]</span>
+<span class="c1">#no-auto-rehash # faster start of mysql but no tab completion</span>
+
+<span class="o">[</span>isamchk<span class="o">]</span>
+<span class="nv">key_buffer</span>      <span class="o">=</span> 16M
+
+<span class="c1">#</span>
+!includedir /etc/mysql/conf.d/
+</pre></div>
+</td></tr></table>
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "my-cnf.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

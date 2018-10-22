@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="author" content="Денис Туляков" />
+    <meta name="robots" content="index, follow"/>
+
+    <meta property="og:title" content="Чем бы помониторить да ещё и онлайн"/>
+    <meta property="og:url" content="./monitoring.html"/>
+    <meta property="og:site_name" content="Денис Туляков wiki"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:locale" content="ru_RU" />
+
+    <link rel="canonical" href="./monitoring.html" />
+
+    <title>Чем бы помониторить да ещё и онлайн | Денис Туляков wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./theme/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link href="http://www.dtulyakov.ru/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Денис Туляков wiki Atom Feed" />
+    <link href="http://www.dtulyakov.ru/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Денис Туляков wiki RSS Feed" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+<a class="hidden-phone" href="https://github.com/dtulyakov">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" />
+</a>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="./">Денис Туляков wiki </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li ><a href="./category/devops.html">DevOps</a></li>
+                            <li ><a href="./category/ecm.html">ECM</a></li>
+                            <li ><a href="./category/man.html">man</a></li>
+                            <li ><a href="./category/python.html">Python</a></li>
+                            <li ><a href="./category/sql.html">SQL</a></li>
+                            <li ><a href="./category/web.html">Web</a></li>
+                            <li class="active"><a href="./category/wiki.html">wiki</a></li>
+                            <li ><a href="./category/xen.html">Xen</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+<div class="span10 offset1">
+  <section>
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="./monitoring.html" rel="bookmark"
+             title="Permalink to Чем бы помониторить да ещё и онлайн">Чем бы помониторить да ещё и онлайн</a></h1>
+      </header>
+      <div class="entry-content">
+<footer class="post-info">
+    <address class="vcard author">
+        by <a class="url fn" href="./author/denis-tuliakov.html">Денис Туляков</a>
+    </address>
+
+    in <a href="./category/wiki.html">wiki</a>
+
+    on 2016-03-10
+
+        |
+        tags:         <a href="./tag/monitoring.html">Monitoring</a>
+
+
+        |
+        <a href="./monitoring.html#disqus_thread">comments</a>
+
+    
+</footer><!-- /.post-info -->
+
+        <p><strong>Системы мониторинга деляться на 2 типа</strong></p>
+<p>Консольные онлайновые</p>
+<ul class="simple">
+<li>top Все мы знаем top — самую простую и самую распространённую утилиту из этого списка. Показывает примерно то же, что утилита vmstat, плюс рейтинг процессов по потреблению памяти или процессора. Совсем ничего не знает про загрузку сети или дисков. Позволяет минимальный набор операций с процессом: renice, kill (в смысле отправки сигнала, убийство — частный случай). По имени top суффикс &quot;-top&quot; получили и все остальные подобные утилиты в этом обзоре.</li>
+<li>atop Atop имеет два режима работы — сбор статистики и наблюдение за системой в реальном времени. В режиме сбора статистики atop запускается как демон и раз в N времени (обычно 10 мин) скидывает состояние в двоичный журнал. Потом по этому журналу atop'ом же (ключ -r и имя лог-файла) можно бегать вперёд-назад кнопками T и t, наблюдая показания atop'а с усреднением за 10 минут в любой интересный момент времени.
+В отличие от top отлично знает про существование блочных устройств и сетевых интерфейса, способен показывать их загрузку в процентах (на 10G, правда, процентов не получается, но хотя бы показывается количество мегабит).
+Незаменимое средство для поиска источников лагов на сервере, так как сохраняет не только статистику загрузки системы, но и показатели каждого процесса — то есть «долистав» до нужного момента времени можно увидеть, кто этот счастливый момент с LA &gt; 30 создал. И что именно было причиной — IO программ, своп (нехватка памяти), процесор или что-то ещё. Помимо большего количества информации ещё способен двумя цветами подсказывать, какие параметры выходят за разумные пределы.</li>
+<li>htop В отличие от atop, htop не собирает статистику и просто показывает текущее состояние. Второе яркое отличие — нортоноподобная панелька с подсказками кнопок снизу и возможность «навигации» по списку процессов.
+Поддерживает выделение процессов и выполнения над ними групповых операций (впрочем, с форк бомбой им не справиться).
+Общей статистике по системе показыват мало (зато с шкалой а-ля прогресс-бар), зато имеет обширнейшие инструменты для анализа процессов, включая баловство с скедулингом (приоритеты, affinity), просмотр списка открытых файлов, strace и массу мелких, но приятных фич, таких как контекстный поиск по имени процесса, режим «слежения» за процессом, быстрые операции с процессом и т.д.</li>
+<li>iotop Специализированная утилита для анализа потребления дисковой полосы. К сожалению, не показывает иопсы (это вообще возможно?) Благодаря показу kernel threads способен указать на kcopy/swapper/kflush как источник хруста винта (чего не может atop). Заодно показывает общую загруженность IO системы в Мб/с (чего так же не может atop). Довольно быстрый.</li>
+<li>iftop Опять же, специализированная утилита, позволяющая наблюдать за трафиком в реальном времени. Требует очень рутовых прав и pcap, т.к. работает почти аналогичо tcpdump'у. Показывает загруженность интерфейса (поддерживается только один интерфейс в одной копии), направления трафика и интенсивность трафика.
+На средне-загруженном сервере, который внезапно начал жрать инет позволяет очень быстро найти направление, в которое идёт больше всего трафика (в любую сторону). К сожалению, не показывает распределение трафика по процессам.</li>
+<li>powertop Специализированная (ага, снова) утилита от intel для мониторинга потребления мощности (электрической мощности!) разными процессами. В реальности никаких ваттов не показывает, а показывает время, затраченное на обслуживание процессором. Уникальна тем, что показывает прерывания и прочие события ядра на одном уровне с процессами (что позволяет находить нетривиальные ситуации перегрузки сервера и даже определять, от какой железки это исходит). При равной нагрузке позволяет оценить, чей драйвер шустрее работает.
+Кроме того, во вкладке device stats позволяет оценить степень загруженности устройства (точнее, драйвера устройства). Для сетевых карт (включая виртуальные, типа tun) показывает pps (packets per seconds).
+Во вкладке idle status показывает распределение состояний процессора (C1, C2, C3), что весьма полезно при выяснении «батарейка дохлая или что-то не так с системой?» на ноутбуках.</li>
+<li>itop Ну очень специализированная утилита для мониторинга прерываний (настоящих прерываний, идентификацией их по номеру).</li>
+<li>kerneltop Наверное, должен показывать что-то интересное про ядро. У меня дома ему не понравился System.map, а на сервере — отсутствие /proc/profile.</li>
+<li>dnstop Специализированный анализатор DNS-трафика на интерфейсе. Наверное, был бы очень полезен при починке DNS на контроллере домена, к сожалению, Active Directory на линуксе работает не очень хорошо.
+Безусловно полезно для нахождения засранца, загоняющего бинд в неприличный LA.</li>
+<li>jnettop Почти клон iftop, однако имеет забавный режим, когда может слушать соседей и показывать top по их трафику. Не очень работает в эпоху коммутаторов.
+Ещё умеет агрегацию адресов (так, чтобы показывать их трафик одной строкой).</li>
+<li>sntop Замечательная штука для скринсейвера или публичного монитора — по конфигу рассылает пинги и показывает, если какой-то хост лёг. В принципе, в рабочих условиях при настроенном конфиге позволяет быстро оценить состояние не очень большого парка серверов (запустили — и сразу красным видно, кто лежит).</li>
+<li>latencytop Я бы с интересом на него посмотрел, но оно требует особого конфига ядра…</li>
+<li>xrestop Монитор потребления ресурсов X-сервера разными приложениями, которые к нему подключились. (Обнаружил, что хром жрёт ресурсов х-сервера много больше, чем опера).</li>
+<li>slabtop Специализируется на структурах данных SLAB ядра, фактически, показывает использование памяти в более тонких категориях, чем «свободно/занято/кеш». View only, несколько режимов сортировки.
+Software specific</li>
+<li>apachetop Не столь полезен, как хотелось бы, показывает статистику ответов на запросы. Никакой магии, просто читает логи апача.</li>
+<li>sqtop Топ по логам сквида. С учётом скорости их роста, сначала генерирует промежуточную статистику, а потом уже даёт по ней шариться.</li>
+<li>pg_top Пакет в debian почему-то называется ptop. Мониторит загрузку postgresql.</li>
+<li>mytop Мониторит mysql. Есть альтернативный mtop, делает примерно то же, но заброшен и (в дебиане) выпилен в районе lenny -&gt; squeeze.</li>
+<li>xentop Мониториг доменов xen'а. Интересен тем, что показывает не только память-процессор, но и дисковые операции с сетью. К сожалению, никакого управления, view only. Единственный из всех top'ов, не влазящий в 80 столбцов при выводе.
+Список топов, которые я глазами не посмотрел:</li>
+<li>hatop — мониторинг haproxy</li>
+<li>virt-top — мониторинг за работой libvirt</li>
+<li>mctop — мониторинг состояния memcached</li>
+<li>perf-top — нашёл документацию, самого perf-top в виде тарбола или пакета не нашёл.</li>
+<li>offTOP</li>
+</ul>
+<p>Сначала ложные топы кратко</p>
+<ul class="simple">
+<li>gkrelmtop — плагин под gkrelm (монитор производительности в гуе) — оффтопик.</li>
+<li>ntop — нарушает text-based традицию интерактивных программ и ставится как сайт для апача.</li>
+<li>libgtop — библиотека для мониторигна производительности</li>
+<li>nload — консольный монитор сетевой активности, в отличие от обычных top'ов не выводит рейтинг, а рисует текстовый график.
+А потом настоящие топы без уважительного суффикса 'top' в названии.</li>
+<li>nethogs Отображает сетевой трафик от конкретных приложений.</li>
+<li>iptstate Монитор contrack из iptables, показывает активные трансляции с возможностью их прибить. Фактически, близок к цисковому sh ip nat tra, но удобнее</li>
+</ul>
+<p><a class="reference external" href="https://habrahabr.ru/post/114082/">https://habrahabr.ru/post/114082/</a></p>
+
+
+      </div><!-- /.entry-content -->
+      <div class="comments">
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_identifier = "monitoring.html";
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//dtulyakov.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+      </div>
+
+    </article>
+  </section>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        Сгенерировано генератором статики <a href="https://getpelican.com/">Pelican</a>, работает на <a href="https://python.org">Python</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-78861300-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37825360 = new Ya.Metrika({
+                    id:37825360,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37825360" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var disqus_shortname = 'dtulyakov';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

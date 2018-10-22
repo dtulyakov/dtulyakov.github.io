@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /tag/
+Disallow: /category/
+#Disallow: /examples/
+
+Sitemap: https://dtulyakov.github.io/sitemap.xml
+Host: https://dtulyakov.github.io
+#EOF
